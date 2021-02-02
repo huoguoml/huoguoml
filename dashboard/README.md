@@ -1,4 +1,4 @@
-# Dashboard
+# HuoguoML Dashboard
 
 Install dependencies
 ```

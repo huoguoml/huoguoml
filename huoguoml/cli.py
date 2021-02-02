@@ -1,4 +1,5 @@
 import argparse
+import os
 import sys
 
 from huoguoml import __version__
@@ -46,8 +47,9 @@ def _cli(parser):
 
 
 def cli():
-    parser = argparse.ArgumentParser(description="""The HuoguoML CLI.\n\nStart the HuoguoML tracking server with 'huoguoml server'
-                                                 or a Serving service with 'huoguoml service'""",
+    parser = argparse.ArgumentParser(description=
+                                     """The HuoguoML CLI.\n\nStart the HuoguoML tracking server with 
+                                     'huoguoml server' or a Serving service with 'huoguoml service'""",
                                      add_help=False)
     _cli(parser)
 
@@ -68,21 +70,27 @@ def cli():
     service_parser = commands.add_parser(name='service',
                                          help='Run a HuoguoML Serving service',
                                          add_help=False)
-
+    service_parser.add_argument('--service_dir', action='store_const',
+                                const=str, default=os.getcwd(),
+                                help='The port to listen on (default: ./).')
     _cli(service_parser)
     args = parse_args(parser, commands)
+    print(args)
     if args.server:
-        server(args.host, args.port)
+        server_args = args.server
+        start_server(server_args.host, server_args.port)
     else:
-        service(args.host, args.port)
+        service_args = args.service
+        start_service(service_args.host, service_args.port, service_args.service_dir)
 
 
-def server(host, port):
+def start_server(host, port):
     print("Start server")
 
 
-def service(host, port):
+def start_service(host: str, port: int, service_dir: str):
     print("Start service")
+    print(host, port, service_dir)
 
 
 if __name__ == "__main__":
