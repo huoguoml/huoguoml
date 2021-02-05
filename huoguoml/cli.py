@@ -34,7 +34,7 @@ def _cli(parser):
                         const=str, default="127.0.0.1",
                         help='The network address to listen on (default: 127.0.0.1). \
                               Use 0.0.0.0 to bind to all addresses if you want to \
-                              access the tracking server from other machines.')
+                              access the model server from other machines.')
     parser.add_argument('--port', action='store_const',
                         const=int, default=8080,
                         help='The port to listen on (default: 8080).')
@@ -48,8 +48,8 @@ def _cli(parser):
 
 def cli():
     parser = argparse.ArgumentParser(description=
-                                     """The HuoguoML CLI.\n\nStart the HuoguoML tracking server with 
-                                     'huoguoml server' or a Serving service with 'huoguoml service'""",
+                                     """The HuoguoML CLI.\n\nStart the HuoguoML model server with 
+                                     'huoguoml server' or a Serving internal with 'huoguoml internal'""",
                                      add_help=False)
     _cli(parser)
 
@@ -57,18 +57,18 @@ def cli():
 
     # SERVER
     server_parser = commands.add_parser(name='server',
-                                        description="Run the HuoguoML tracking server.\n\n\
+                                        description="Run the HuoguoML model server.\n\n\
     The server listens on http://localhost:5000 by default, and only\
     accept connections from the local machine. To let the server accept\
     connections from other machines, you will need to pass ``--host 0.0.0.0``\
     to listen on all network interfaces (or a specific interface address).",
-                                        help='Run a HuoguoML service',
+                                        help='Run a HuoguoML internal',
                                         add_help=False)
     _cli(server_parser)
 
     # SERVICE
-    service_parser = commands.add_parser(name='service',
-                                         help='Run a HuoguoML Serving service',
+    service_parser = commands.add_parser(name='internal',
+                                         help='Run a HuoguoML Serving internal',
                                          add_help=False)
     service_parser.add_argument('--service_dir', action='store_const',
                                 const=str, default=os.getcwd(),
@@ -89,7 +89,7 @@ def start_server(host, port):
 
 
 def start_service(host: str, port: int, service_dir: str):
-    print("Start service")
+    print("Start internal")
     print(host, port, service_dir)
 
 

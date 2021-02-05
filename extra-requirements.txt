@@ -1,12 +1,10 @@
-# https://hanxiao.io/2019/11/07/A-Better-Practice-for-Managing-extras-require-Dependencies-in-Python/
-# FORMAT
-# Put your extra requirements here in the following format
+# SOURCE: https://hanxiao.io/2019/11/07/A-Better-Practice-for-Managing-extras-require-Dependencies-in-Python/
 #
+# FORMAT
 # package[version]: tag1, tag2, ...
 #
 # AVAILABLE TAGS
-#
-# TBD
+# core, service, test
 #
 # REMARKS ON TAGS
 # 1. Try to reuse the existing tags if possible.
@@ -16,5 +14,6 @@
 # 3. Tag order doesn't matter; case-sensitive; duplicated tag will be ignored
 # 4. Tag `all` is reserved for representing all packages
 
+fastapi:                    core
 uvicorn[standard]:          core
-fastapi:                    core, service
+pytest:                     test

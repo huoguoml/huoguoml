@@ -48,7 +48,7 @@ def package_files(directory):
     return paths
 
 
-js_files = package_files("huoguoml/dashboard")
+js_files = package_files("huoguoml/server/dashboard")
 
 # package configuration - for reference see:
 # https://setuptools.readthedocs.io/en/latest/setuptools.html#id9
