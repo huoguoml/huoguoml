@@ -1,5 +1,4 @@
 import argparse
-import os
 import sys
 
 from huoguoml import __version__
@@ -26,71 +25,78 @@ def parse_args(parser, commands):
     return args
 
 
-def _cli(parser):
-    parser._positionals.title = 'Arguments'
-    parser._optionals.title = 'Options'
+def _cli_help_version(parser):
+    parser._positionals.title = "Arguments"
+    parser._optionals.title = "Options"
 
-    parser.add_argument('--host', action='store_const',
+    parser.add_argument("--version", action="version",
+                        version="HuoguoML version {}".format(__version__),
+                        help="Show version number.")
+    parser.add_argument("--help", action="help", default=argparse.SUPPRESS,
+                        help="Show help message.")
+
+
+def _cli_host_port_dir(parser):
+    parser.add_argument("--host", action="store_const",
                         const=str, default="127.0.0.1",
-                        help='The network address to listen on (default: 127.0.0.1). \
+                        help="The network address to listen on (default: 127.0.0.1). \
                               Use 0.0.0.0 to bind to all addresses if you want to \
-                              access the model server from other machines.')
-    parser.add_argument('--port', action='store_const',
+                              access the model server from other machines.")
+    parser.add_argument("--port", action="store_const",
                         const=int, default=8080,
-                        help='The port to listen on (default: 8080).')
-
-    parser.add_argument('--version', action='version',
-                        version='HuoguoML version {}'.format(__version__),
-                        help="Show version number and exit.")
-    parser.add_argument('--help', action='help', default=argparse.SUPPRESS,
-                        help='Show help message and exit.')
+                        help="The port to listen on (default: 8080).")
+    parser.add_argument("--huoguoml_dlr", action="store_const",
+                        const=str, default="./huoguoml",
+                        help="The location of the HuoguoML directory (default: ./huoguoml).")
 
 
 def cli():
     parser = argparse.ArgumentParser(description=
-                                     """The HuoguoML CLI.\n\nStart the HuoguoML model server with 
-                                     'huoguoml server' or a Serving internal with 'huoguoml internal'""",
+                                     """The HuoguoML CLI. Start the HuoguoML model server with 
+                                     'huoguoml server' or a service with 'huoguoml service'""",
                                      add_help=False)
-    _cli(parser)
+    _cli_help_version(parser)
 
     commands = parser.add_subparsers(title="Commands")
 
     # SERVER
-    server_parser = commands.add_parser(name='server',
-                                        description="Run the HuoguoML model server.\n\n\
+    server_parser = commands.add_parser(name="server",
+                                        description="Run the HuoguoML model server.\
     The server listens on http://localhost:5000 by default, and only\
     accept connections from the local machine. To let the server accept\
     connections from other machines, you will need to pass ``--host 0.0.0.0``\
     to listen on all network interfaces (or a specific interface address).",
-                                        help='Run a HuoguoML internal',
+                                        help="Start a HuoguoML server",
                                         add_help=False)
-    _cli(server_parser)
+    _cli_host_port_dir(server_parser)
+    _cli_help_version(server_parser)
 
     # SERVICE
-    service_parser = commands.add_parser(name='internal',
-                                         help='Run a HuoguoML Serving internal',
+    service_parser = commands.add_parser(name="service",
+                                         help="Start a HuoguoML service",
                                          add_help=False)
-    service_parser.add_argument('--service_dir', action='store_const',
-                                const=str, default=os.getcwd(),
-                                help='The port to listen on (default: ./).')
-    _cli(service_parser)
+    _cli_host_port_dir(service_parser)
+    _cli_help_version(service_parser)
+
     args = parse_args(parser, commands)
-    print(args)
     if args.server:
         server_args = args.server
-        start_server(server_args.host, server_args.port)
-    else:
+        server(server_args.host, server_args.port, server_args.huoguoml_dlr)
+    elif args.service:
         service_args = args.service
-        start_service(service_args.host, service_args.port, service_args.service_dir)
+        service(service_args.host, service_args.port)
+    else:
+        parser.print_help()
+    exit(0)
 
 
-def start_server(host, port):
+def server(host: str, port: int, huoguoml_dlr: str):
     print("Start server")
 
 
-def start_service(host: str, port: int, service_dir: str):
-    print("Start internal")
-    print(host, port, service_dir)
+def service(host: str, port: int):
+    print("Start service")
+    print(host, port)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@
 # package[version]: tag1, tag2, ...
 #
 # AVAILABLE TAGS
-# core, service, test
+# service, test
 #
 # REMARKS ON TAGS
 # 1. Try to reuse the existing tags if possible.
@@ -14,6 +14,7 @@
 # 3. Tag order doesn't matter; case-sensitive; duplicated tag will be ignored
 # 4. Tag `all` is reserved for representing all packages
 
-fastapi:                    core
-uvicorn[standard]:          core
+fastapi:                    service
+uvicorn[standard]:          service
+flake8:                     test
 pytest:                     test

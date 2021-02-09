@@ -5,7 +5,6 @@ from setuptools import setup
 
 
 def get_extra_requires(path, add_all=True):
-    import re
     from collections import defaultdict
 
     with open(path) as fp:
@@ -16,7 +15,7 @@ def get_extra_requires(path, add_all=True):
                 if ':' in k:
                     k, v = k.split(':')
                     tags.update(vv.strip() for vv in v.split(','))
-                tags.add(re.split('[<=>]', k)[0])
+                # tags.add(re.split('[<=>]', k)[0])
                 for t in tags:
                     extra_deps[t].add(k)
 
