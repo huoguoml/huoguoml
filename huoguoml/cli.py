@@ -2,6 +2,7 @@ import argparse
 import sys
 
 from huoguoml import __version__
+from huoguoml.service.service import _create_service
 
 
 def parse_args(parser, commands):
@@ -45,7 +46,7 @@ def _cli_host_port_dir(parser):
     parser.add_argument("--port", action="store_const",
                         const=int, default=8080,
                         help="The port to listen on (default: 8080).")
-    parser.add_argument("--huoguoml_dlr", action="store_const",
+    parser.add_argument("--huoguoml_dir", action="store_const",
                         const=str, default="./huoguoml",
                         help="The location of the HuoguoML directory (default: ./huoguoml).")
 
@@ -79,12 +80,13 @@ def cli():
     _cli_help_version(service_parser)
 
     args = parse_args(parser, commands)
+    print(args)
     if args.server:
         server_args = args.server
-        server(server_args.host, server_args.port, server_args.huoguoml_dlr)
+        server(server_args.host, server_args.port, server_args.huoguoml_dir)
     elif args.service:
         service_args = args.service
-        service(service_args.host, service_args.port)
+        service(service_args.host, service_args.port, "artifact")
     else:
         parser.print_help()
     exit(0)
@@ -94,9 +96,10 @@ def server(host: str, port: int, huoguoml_dlr: str):
     print("Start server")
 
 
-def service(host: str, port: int):
+def service(host: str, port: int, huoguoml_dlr: str):
     print("Start service")
     print(host, port)
+    _create_service(huoguoml_dlr)
 
 
 if __name__ == "__main__":

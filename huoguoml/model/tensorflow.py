@@ -68,10 +68,11 @@ def log_model(
     for input_tensor in saved_model.structured_input_signature:
         if input_tensor:
             for tensor_name, tensor_spec in input_tensor.items():
-                signature["inputs"][tensor_name] = [tensor_spec.shape.as_list,
-                                                    tensor_spec.dtype.name]
+                signature["inputs"][tensor_name] = {"shape": tensor_spec.shape.as_list(),
+                                                    "dtype": tensor_spec.dtype.name}
     for tensor_name, tensor_spec in saved_model.structured_outputs.items():
-        signature["outputs"][tensor_name] = [tensor_spec.shape, tensor_spec.dtype]
+        signature["outputs"][tensor_name] = {"shape": tensor_spec.shape.as_list(),
+                                             "dtype": tensor_spec.dtype.name}
 
     # TODO: create seperate class for logging config.yaml
     config = {"requirements_path": requirements_path,
