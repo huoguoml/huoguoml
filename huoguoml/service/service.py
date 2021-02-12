@@ -16,7 +16,7 @@ def _read_yaml(yaml_path):
             raise exc
 
 
-def _create_service(artifact_dir, model_name="model"):
+def _create_service(artifact_dir, model_name="tracking"):
     config = _read_yaml(os.path.join(artifact_dir, "config.yaml"))
     # Inputs
     fields = {}

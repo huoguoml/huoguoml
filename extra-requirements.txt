@@ -18,3 +18,4 @@ fastapi:                    service
 uvicorn[standard]:          service
 flake8:                     test
 pytest:                     test
+click:

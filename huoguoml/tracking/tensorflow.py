@@ -8,7 +8,7 @@ import yaml
 
 def get_requirements() -> List[str]:
     """
-    Returns a list of requirements that are required for a Tensorflow model.
+    Returns a list of requirements that are required for a Tensorflow tracking.
     """
     import tensorflow as tf
     import huoguoml
@@ -44,7 +44,7 @@ def log_model(
 
     # TODO: replace print with logger.info()
     print(
-        "Validating the specified TensorFlow model by attempting to load it in a new TensorFlow"
+        "Validating the specified TensorFlow tracking by attempting to load it in a new TensorFlow"
         " graph..."
     )
     saved_model = _load_saved_model(
@@ -54,8 +54,8 @@ def log_model(
     )
     print("Validation succeeded!")
 
-    # copy model
-    model_dir = os.path.join(artifact_dir, "model")
+    # copy tracking
+    model_dir = os.path.join(artifact_dir, "tracking")
     shutil.copytree(tf_saved_model_dir, model_dir)
 
     # requirements.txt
@@ -76,7 +76,7 @@ def log_model(
 
     # TODO: create seperate class for logging config.yaml
     config = {"requirements_path": requirements_path,
-              "model": {
+              "tracking": {
                   "module": "tensorflow",
                   load_model.__name__: {
                       "tf_saved_model_dir": model_dir,
