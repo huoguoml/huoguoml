@@ -2,22 +2,15 @@ import os
 from typing import List
 
 import uvicorn
-import yaml
 from fastapi import FastAPI
 from pydantic import create_model
 
-
-def _read_yaml(yaml_path):
-    with open(yaml_path, 'r') as stream:
-        try:
-            config = yaml.safe_load(stream)
-            return config
-        except yaml.YAMLError as exc:
-            raise exc
+from huoguoml.constants import HUOGUOML_EXPERIMENT_RUN_JSON
+from huoguoml.utils import read_json
 
 
-def _create_service(artifact_dir, model_name="tracking"):
-    config = _read_yaml(os.path.join(artifact_dir, "config.yaml"))
+def create_service(artifact_dir, model_name="tracking"):
+    config = read_json(os.path.join(artifact_dir, HUOGUOML_EXPERIMENT_RUN_JSON))
     # Inputs
     fields = {}
     for name, spec in config["signature"]["inputs"].items():
@@ -32,7 +25,7 @@ def _create_service(artifact_dir, model_name="tracking"):
 
     app = FastAPI()
 
-    @app.post("/models/{}/predict".format(model_name), response_model=output_model)
+    @app.post("/types/{}/predict".format(model_name), response_model=output_model)
     async def predict(data: input_model):
         return {"message": "Hello World"}
 

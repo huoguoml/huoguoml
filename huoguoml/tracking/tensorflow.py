@@ -1,9 +1,16 @@
+"""
+The huoguoml.tracking module provides the options for tracking tensorflow experiments
+"""
+
 import os
 import shutil
-from datetime import datetime
+import time
 from typing import List
 
-import yaml
+import huoguoml
+from huoguoml.constants import HUOGUOML_DEFAULT_REQUIREMENTS, HUOGUOML_EXPERIMENT_RUN_FILE
+from huoguoml.types import Request, Run, Tracking, RequestSpecification
+from huoguoml.utils import create_hash, save_json
 
 
 def get_requirements() -> List[str]:
@@ -11,12 +18,16 @@ def get_requirements() -> List[str]:
     Returns a list of requirements that are required for a Tensorflow tracking.
     """
     import tensorflow as tf
-    import huoguoml
-    return ["tensorflow={}".format(tf.__version__),
-            "huoguoml={}".format(huoguoml.__version__)]
+
+    requirements = HUOGUOML_DEFAULT_REQUIREMENTS.copy()
+    requirements.append("tensorflow={}".format(tf.__version__))
+    return requirements
 
 
 def _load_saved_model(tf_saved_model_dir: str, tf_meta_graph_tags: str, tf_signature_def_key: str):
+    """
+    Loads a TF SavedModel
+    """
     import tensorflow as tf
 
     model = tf.saved_model.load(
@@ -35,62 +46,46 @@ def _load_saved_model(tf_saved_model_dir: str, tf_meta_graph_tags: str, tf_signa
 def log_model(
         tf_saved_model_dir: str,
         tf_meta_graph_tags: str,
-        tf_signature_def_key: str,
-        artifact_dir: str,
-):
+        tf_signature_def_key: str):
     import tensorflow as tf
     if tf.__version__ < "2.0.0":
         raise NotImplementedError("HuoguoML does not support Tensorflow 1.X")
 
-    # TODO: replace print with logger.info()
-    print(
-        "Validating the specified TensorFlow tracking by attempting to load it in a new TensorFlow"
-        " graph..."
-    )
     saved_model = _load_saved_model(
         tf_saved_model_dir=tf_saved_model_dir,
         tf_meta_graph_tags=tf_meta_graph_tags,
         tf_signature_def_key=tf_signature_def_key,
     )
-    print("Validation succeeded!")
 
-    # copy tracking
-    model_dir = os.path.join(artifact_dir, "tracking")
+    run_id = create_hash(value=str(time.time()), algorithm="md5")
+    run_dir = os.path.join(huoguoml.experiment_dir, run_id)
+    model_dir = os.path.join(run_dir, "model")
     shutil.copytree(tf_saved_model_dir, model_dir)
 
-    # requirements.txt
-    requirements_path = os.path.join(artifact_dir, "requirements.txt")
-    with open(requirements_path, "w+") as file:
-        file.writelines(get_requirements())
+    requirements = get_requirements()
 
-    signature = {"inputs": {},
-                 "outputs": {}}
+    inputs = {}
     for input_tensor in saved_model.structured_input_signature:
         if input_tensor:
             for tensor_name, tensor_spec in input_tensor.items():
-                signature["inputs"][tensor_name] = {"shape": tensor_spec.shape.as_list(),
-                                                    "dtype": tensor_spec.dtype.name}
+                inputs[tensor_name] = RequestSpecification(shape=tensor_spec.shape.as_list(),
+                                                           dtype=tensor_spec.dtype.name)
+    outputs = {}
     for tensor_name, tensor_spec in saved_model.structured_outputs.items():
-        signature["outputs"][tensor_name] = {"shape": tensor_spec.shape.as_list(),
-                                             "dtype": tensor_spec.dtype.name}
+        outputs[tensor_name] = RequestSpecification(shape=tensor_spec.shape.as_list(),
+                                                    dtype=tensor_spec.dtype.name)
+    request = Request(inputs=inputs, outputs=outputs)
 
-    # TODO: create seperate class for logging config.yaml
-    config = {"requirements_path": requirements_path,
-              "tracking": {
-                  "module": "tensorflow",
-                  load_model.__name__: {
-                      "tf_saved_model_dir": model_dir,
-                      "tf_meta_graph_tags": tf_meta_graph_tags,
-                      "tf_signature_def_key": tf_signature_def_key,
-                  }
-              },
-              "time_created": str(datetime.utcnow()),
-              "id": "1",
-              "signature": signature
-              }
-    config_path = os.path.join(artifact_dir, "config.yaml")
-    with open(config_path, 'w+') as file:
-        yaml.dump(config, file, default_flow_style=False)
+    tracking = Tracking(module="tensorflow",
+                        arguments={
+                            "tf_saved_model_dir": "model",
+                            "tf_meta_graph_tags": tf_meta_graph_tags,
+                            "tf_signature_def_key": tf_signature_def_key,
+                        },
+                        name="load_model")
+
+    run = Run(request=request, tracking=tracking, id=run_id, requirements=requirements)
+    save_json(json_path=os.path.join(run_dir, HUOGUOML_EXPERIMENT_RUN_FILE), data=run.json())
 
 
 # TODO: Refactor code, Update TFModel
@@ -98,15 +93,26 @@ def load_model(tf_saved_model_dir: str, tf_meta_graph_tags: str, tf_signature_de
     saved_model = _load_saved_model(tf_saved_model_dir=tf_saved_model_dir,
                                     tf_meta_graph_tags=tf_meta_graph_tags,
                                     tf_signature_def_key=tf_signature_def_key)
-    return _TF2Model(saved_model=saved_model)
+    return TFModel(saved_model=saved_model)
 
 
-class _TF2Model(object):
+class TFModel(object):
+    """
+    TFModel used for predictions
+    """
 
     def __init__(self, saved_model):
         self.saved_model = saved_model
 
     def predict(self, data):
+        """
+
+        Args:
+            data:
+
+        Returns:
+
+        """
         import tensorflow as tf
 
         data_ten = tf.constant(data)

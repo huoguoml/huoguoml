@@ -1,6 +1,9 @@
+"""
+The huoguoml.cli module contains code for the HuoguoML CLI
+"""
 import click
 
-from huoguoml.service.service import _create_service
+from huoguoml.service.service import create_service
 
 
 @click.group()
@@ -25,11 +28,11 @@ def cli():
     help="The port to listen on (default: 8080).",
 )
 @click.option(
-    "--huoguoml_dir",
+    "--huoguoml_path",
     default="./huoguoml",
     help="The location of the HuoguoML directory (default: ./huoguoml).",
 )
-def server(host: str, port: int, huoguoml_dir: str):
+def server(host: str, port: int, huoguoml_path: str):
     """
     Run the HuoguoML tracking server.
     The server listens on http://localhost:5000 by default, and only
@@ -66,7 +69,7 @@ def service(host: str, port: int, artifact_dir: str):
     """
     print("Start service")
     print(host, port)
-    _create_service(artifact_dir)
+    create_service(artifact_dir)
 
 
 if __name__ == "__main__":

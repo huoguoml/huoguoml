@@ -5,6 +5,8 @@ from setuptools import setup
 
 
 def get_extra_requires(path, add_all=True):
+    """Returns a dict with all tags as key and a list of their respective packages
+    """
     from collections import defaultdict
 
     with open(path) as fp:
@@ -28,7 +30,7 @@ def get_extra_requires(path, add_all=True):
 # get all packages in requirements file
 dependencies = get_extra_requires('extra-requirements.txt')
 
-# get key package details from py_pkg/__version__.py
+# get key package details from py_pkg/version.py
 about = {}  # type: ignore
 here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'huoguoml', '__init__.py')) as f:
@@ -47,13 +49,9 @@ def package_files(directory):
     return paths
 
 
-js_files = package_files("huoguoml/server/dashboard")
-
-# package configuration - for reference see:
-# https://setuptools.readthedocs.io/en/latest/setuptools.html#id9
 setup(
     name="HuoguoML",
-    description="A platform for managing and serving Machine Learning models.",
+    description="A platform for managing and serving Machine Learning types.",
     long_description=readme,
     long_description_content_type='text/markdown',
     version=about['__version__'],
@@ -61,7 +59,7 @@ setup(
     url="huoguoml.github.io",
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
-    package_data={'huoguoml': js_files},
+    package_data={'huoguoml': package_files("huoguoml/server/dashboard")},
     python_requires=">=3.7.*",
     install_requires=list(dependencies['all']),
     license=about['__license__'],
@@ -88,5 +86,5 @@ setup(
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    keywords='huoguo machine learning deployment serving models management'
+    keywords='huoguo machine learning deployment serving types management'
 )
