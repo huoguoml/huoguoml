@@ -9,21 +9,33 @@ HuoguoML is a platform for managing and serving Machine Learning models. The hig
 
 ## Installation
 
+```bash
+pip install huoguoml
+```
+
 ## Examples
+
 Just starting out? Try out our examples:
 
+| Example                          | Description   | 
+| --------------------------       | -------------| 
+| [MNIST](examples/mnist.ipynb)    | Deployment of a MNIST classifier with HuoguoML | 
+
 ## Documentation
+
 Apart from learning from the examples, we highly recommended you go through our [documentation](huoguoml.github.io).
 
-Our docs are built on every push, merge, and release of the master branch. 
+Our docs are built on every push, merge, and release of the master branch.
 
 ## Contributing
-We welcome all kinds of contributions from the open-source community, individuals and partners. We owe our success to your active involvement. 
+
+We welcome all kinds of contributions from the open-source community, individuals and partners. We owe our success to
+your active involvement.
 
 ## Contributors
+
 We happily welcome contributions to HuoguoML. Please see our [contribution guide](CONTRIBUTING.md]) for details.
 
-
-## Community
-
 ## License
+
+Apache License Version 2.0, see [LICENSE](LICENSE)
