@@ -29,6 +29,7 @@ def create_hash(value: str, algorithm: str) -> str:
     """
     Returns the hash value for a given string value with the given algorithm.
     Supported hash algorithms can be seen with following lines of code:
+
         import hashlib
         print(hashlib.algorithms_available)
     """

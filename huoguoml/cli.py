@@ -3,7 +3,9 @@ The huoguoml.cli module contains code for the HuoguoML CLI
 """
 import click
 
-from huoguoml.service.service import create_service
+from huoguoml.server.main import start_huoguoml_server
+from huoguoml.server.legacy.repository import Repository
+from huoguoml.service.main import start_huoguoml_service
 
 
 @click.group()
@@ -28,11 +30,11 @@ def cli():
     help="The port to listen on (default: 8080).",
 )
 @click.option(
-    "--huoguoml_path",
+    "--huoguoml_dir",
     default="./huoguoml",
     help="The location of the HuoguoML directory (default: ./huoguoml).",
 )
-def server(host: str, port: int, huoguoml_path: str):
+def server(host: str, port: int, huoguoml_dir: str):
     """
     Run the HuoguoML tracking server.
     The server listens on http://localhost:5000 by default, and only
@@ -41,6 +43,9 @@ def server(host: str, port: int, huoguoml_path: str):
     to listen on all network interfaces (or a specific interface address).
     """
     print("Start server")
+    start_huoguoml_server(huoguoml_dir=huoguoml_dir,
+                          host=host,
+                          port=port)
 
 
 @cli.command()
@@ -69,7 +74,7 @@ def service(host: str, port: int, artifact_dir: str):
     """
     print("Start service")
     print(host, port)
-    create_service(artifact_dir)
+    start_huoguoml_service(artifact_dir)
 
 
 if __name__ == "__main__":

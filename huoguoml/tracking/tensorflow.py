@@ -2,15 +2,11 @@
 The huoguoml.tracking module provides the options for tracking tensorflow experiments
 """
 
-import os
-import shutil
-import time
 from typing import List
 
 import huoguoml
-from huoguoml.constants import HUOGUOML_DEFAULT_REQUIREMENTS, HUOGUOML_EXPERIMENT_RUN_FILE
-from huoguoml.types import Request, Run, Tracking, RequestSpecification
-from huoguoml.utils import create_hash, save_json
+from huoguoml.constants import HUOGUOML_DEFAULT_REQUIREMENTS, HUOGUOML_DEFAULT_MODEL_FOLDER
+from huoguoml.schemas import ModelNode, ModelDefinition, ModelAPI
 
 
 def get_requirements() -> List[str]:
@@ -51,16 +47,12 @@ def log_model(
     if tf.__version__ < "2.0.0":
         raise NotImplementedError("HuoguoML does not support Tensorflow 1.X")
 
+    # check if saved model is valid
     saved_model = _load_saved_model(
         tf_saved_model_dir=tf_saved_model_dir,
         tf_meta_graph_tags=tf_meta_graph_tags,
         tf_signature_def_key=tf_signature_def_key,
     )
-
-    run_id = create_hash(value=str(time.time()), algorithm="md5")
-    run_dir = os.path.join(huoguoml.experiment_dir, run_id)
-    model_dir = os.path.join(run_dir, "model")
-    shutil.copytree(tf_saved_model_dir, model_dir)
 
     requirements = get_requirements()
 
@@ -68,24 +60,28 @@ def log_model(
     for input_tensor in saved_model.structured_input_signature:
         if input_tensor:
             for tensor_name, tensor_spec in input_tensor.items():
-                inputs[tensor_name] = RequestSpecification(shape=tensor_spec.shape.as_list(),
-                                                           dtype=tensor_spec.dtype.name)
+                inputs[tensor_name] = ModelNode(shape=tensor_spec.shape.as_list(),
+                                                dtype=tensor_spec.dtype.name)
     outputs = {}
     for tensor_name, tensor_spec in saved_model.structured_outputs.items():
-        outputs[tensor_name] = RequestSpecification(shape=tensor_spec.shape.as_list(),
-                                                    dtype=tensor_spec.dtype.name)
-    request = Request(inputs=inputs, outputs=outputs)
+        outputs[tensor_name] = ModelNode(shape=tensor_spec.shape.as_list(),
+                                         dtype=tensor_spec.dtype.name)
+    model_definition = ModelDefinition(inputs=inputs, outputs=outputs)
 
-    tracking = Tracking(module="tensorflow",
-                        arguments={
-                            "tf_saved_model_dir": "model",
-                            "tf_meta_graph_tags": tf_meta_graph_tags,
-                            "tf_signature_def_key": tf_signature_def_key,
-                        },
-                        name="load_model")
+    model_api = ModelAPI(module="tensorflow",
+                         arguments={
+                             "tf_saved_model_dir": HUOGUOML_DEFAULT_MODEL_FOLDER,
+                             "tf_meta_graph_tags": tf_meta_graph_tags,
+                             "tf_signature_def_key": tf_signature_def_key,
+                         },
+                         name="load_model")
 
-    run = Run(request=request, tracking=tracking, id=run_id, requirements=requirements)
-    save_json(json_path=os.path.join(run_dir, HUOGUOML_EXPERIMENT_RUN_FILE), data=run.json())
+    huoguoml.service.create_experiment_run(
+        experiment_name=huoguoml.current_experiment.name,
+        artifact_dir=tf_saved_model_dir,
+        model_api=model_api,
+        model_definition=model_definition,
+        requirements=requirements)
 
 
 # TODO: Refactor code, Update TFModel

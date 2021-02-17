@@ -6,7 +6,7 @@ __license__ = 'Apache-2.0'
 __version__ = '0.1'
 
 import huoguoml.tracking.tensorflow as tensorflow
-from huoguoml.tracking import create_experiment
+from huoguoml.tracking import start_experiment
 
-experiment = None
-experiment_dir = None
+service = None
+current_experiment = None

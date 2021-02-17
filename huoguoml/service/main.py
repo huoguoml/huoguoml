@@ -5,12 +5,12 @@ import uvicorn
 from fastapi import FastAPI
 from pydantic import create_model
 
-from huoguoml.constants import HUOGUOML_EXPERIMENT_RUN_JSON
+from huoguoml.constants import HUOGUOML_EXPERIMENT_RUN_FILE
 from huoguoml.utils import read_json
 
 
-def create_service(artifact_dir, model_name="tracking"):
-    config = read_json(os.path.join(artifact_dir, HUOGUOML_EXPERIMENT_RUN_JSON))
+def start_huoguoml_service(artifact_dir, model_name="tracking"):
+    config = read_json(os.path.join(artifact_dir, HUOGUOML_EXPERIMENT_RUN_FILE))
     # Inputs
     fields = {}
     for name, spec in config["signature"]["inputs"].items():
