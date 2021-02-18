@@ -56,7 +56,7 @@ setup(
     long_description_content_type='text/markdown',
     version=about['__version__'],
     author="Steven Mi",
-    url="huoguoml.github.io",
+    url="https://huoguoml.github.io",
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
     package_data={'huoguoml': package_files("huoguoml/server/dashboard")},
