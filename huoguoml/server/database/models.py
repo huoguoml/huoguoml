@@ -14,6 +14,7 @@ class Run(Base):
     __tablename__ = "runs"
 
     id = Column(Integer, primary_key=True, index=True)
+    run_nr = Column(Integer)
     creation_time = Column(Float, default=time.time)
     experiment = relationship("Experiment", back_populates="runs")
     experiment_name = Column(String, ForeignKey("experiments.name"))

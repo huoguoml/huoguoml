@@ -50,7 +50,7 @@ def package_files(directory):
 
 
 setup(
-    name="HuoguoML",
+    name="huoguoml",
     description="A platform for managing and serving Machine Learning types.",
     long_description=readme,
     long_description_content_type='text/markdown',
@@ -86,5 +86,5 @@ setup(
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    keywords='huoguo machine learning deployment serving types management'
+    keywords='HuoguoML'
 )

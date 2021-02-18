@@ -27,8 +27,8 @@ class Service(object):
         experiments = self.repository.get_experiments()
         return [Experiment.from_orm(experiment) for experiment in experiments]
 
-    def get_experiment(self, run_id: int) -> ExperimentDetail:
-        experiment = self.repository.get_experiment(run_id=run_id)
+    def get_experiment(self, experiment_id: int) -> ExperimentDetail:
+        experiment = self.repository.get_experiment(experiment_id=experiment_id)
         return ExperimentDetail.from_orm(experiment)
 
     def get_or_create_experiment(self, experiment_name: str) -> Experiment:
@@ -41,6 +41,7 @@ class Service(object):
                               model_api: ModelAPI,
                               model_definition: ModelDefinition,
                               requirements: List[str]) -> RunDetail:
+        experiment_name = experiment_name.lower()
         experiment_run = self.repository.create_experiment_run(experiment_name)
         experiment_run = RunDetail(id=experiment_run.id,
                                    creation_time=experiment_run.creation_time,

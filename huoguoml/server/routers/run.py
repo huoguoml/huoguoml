@@ -1,7 +1,5 @@
 from fastapi import APIRouter
 
-from fastapi import APIRouter
-
 from huoguoml.schemas import RunDetail
 from huoguoml.server.database.service import Service
 
