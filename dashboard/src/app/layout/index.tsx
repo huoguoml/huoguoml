@@ -1,25 +1,46 @@
 import * as React from 'react';
-import { Breadcrumb, Button, Dropdown, Layout, Menu, Space } from 'antd';
-import { DesktopOutlined, ExperimentOutlined } from '@ant-design/icons';
+import { Breadcrumb, Layout, Menu } from 'antd';
+import {
+  DesktopOutlined,
+  ExperimentOutlined,
+  HomeOutlined,
+} from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAppLayoutSlice } from './slice';
+import { selectAppLayout } from './slice/selectors';
+import { Route, Switch } from 'react-router-dom';
+import { DashboardPage } from '../pages/DashboardPage/Loadable';
+import { ExperimentPage } from '../pages/ExperimentPage/Loadable';
+import { NotFoundPage } from '../components/NotFoundPage/Loadable';
+import { useHistory } from 'react-router-dom';
 
-interface Props {
-  content?: React.ReactNode;
-}
+interface Props {}
 
 export const AppLayout = React.memo((props: Props) => {
+  const dispatch = useDispatch();
+  const { actions } = useAppLayoutSlice();
+
+  const appLayoutState = useSelector(selectAppLayout);
+
+  React.useEffect(() => {
+    dispatch(actions.getLayoutState());
+  }, [dispatch]);
+
   const { Header, Content, Footer, Sider } = Layout;
   const { SubMenu } = Menu;
   const [collapsed, setCollapsed] = React.useState(false);
 
-  const [language, setLanguage] = React.useState('English');
+  let history = useHistory();
 
-  const menu = (
-    <Menu>
-      <Menu.Item onClick={() => setLanguage('German')}>German</Menu.Item>
-      <Menu.Item onClick={() => setLanguage('Chinese')}>Chinese</Menu.Item>
-    </Menu>
-  );
-
+  function toDashboardPage() {
+    history.push(`/`);
+  }
+  function toExperimentPage() {
+    history.push(`/experiments`);
+  }
+  function toExperimentPageWithId(experimentId?: number) {
+    history.push(`/experiments/${experimentId}`);
+  }
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
@@ -30,15 +51,30 @@ export const AppLayout = React.memo((props: Props) => {
           onCollapse={() => setCollapsed(!collapsed)}
         >
           <div className="logo" />
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+          <Menu theme="dark" defaultSelectedKeys={['dashboard']} mode="inline">
+            <Menu.Item
+              onClick={toDashboardPage}
+              key="dashboard"
+              icon={<HomeOutlined />}
+            >
+              Dashboard
+            </Menu.Item>
             <SubMenu
               key="experiments"
               title="Experiments"
               icon={<ExperimentOutlined />}
             >
-              <Menu.Item key="all">All experiments</Menu.Item>
-              <Menu.Item key="1">Experiment 1</Menu.Item>
-              <Menu.Item key="2">Experiment 2</Menu.Item>
+              <Menu.Item key="all" onClick={toExperimentPage}>
+                all
+              </Menu.Item>
+              {appLayoutState.experiments?.map(experiment => (
+                <Menu.Item
+                  onClick={() => toExperimentPageWithId(experiment.id)}
+                  key={experiment.id}
+                >
+                  {experiment.name}
+                </Menu.Item>
+              ))}
             </SubMenu>
             <Menu.Item key="services" icon={<DesktopOutlined />}>
               Services
@@ -51,22 +87,21 @@ export const AppLayout = React.memo((props: Props) => {
             style={{
               height: 48,
             }}
-          >
-            <Space align={'end'}>
-              <Dropdown overlay={menu} placement="bottomCenter">
-                <Button>{language}</Button>
-              </Dropdown>
-            </Space>
-          </Header>
+          />
           <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>Experiments</Breadcrumb.Item>
-            </Breadcrumb>
             <div
               className="site-layout-background"
-              style={{ padding: 24, minHeight: '100%' }}
+              style={{ padding: 24, minHeight: '100%', margin: '16px 0' }}
             >
-              {props.content}
+              <Switch>
+                <Route exact path="/" component={DashboardPage} />
+                <Route exact path="/experiments" component={ExperimentPage} />
+                <Route
+                  path="/experiments/:experimentId"
+                  component={ExperimentPage}
+                />
+                <Route component={NotFoundPage} />
+              </Switch>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

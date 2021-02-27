@@ -58,7 +58,7 @@ export const sliceGenerator: PlopGeneratorConfig = {
     actions.push({
       type: 'add',
       path: `${slicePath}/index.ts`,
-      templateFile: './slice/slice.ts.hbs',
+      templateFile: './slice/index.ts.hbs',
       abortOnFail: true,
     });
     actions.push({

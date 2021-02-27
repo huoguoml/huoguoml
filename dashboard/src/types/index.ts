@@ -8,7 +8,7 @@ export interface ModelAPIInterface {
 
 export interface ModelNodeInterface {
   dtype: string;
-  shape: (null | number)[];
+  shape: (undefined | number)[];
 }
 
 export interface ModelDefinitionInterface {

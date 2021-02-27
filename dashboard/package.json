@@ -21,6 +21,7 @@
     "@types/webpack": "4.41.22",
     "@types/webpack-env": "1.15.2",
     "antd": "4.12.3",
+    "axios": "0.21.1",
     "chalk": "4.1.0",
     "craco": "0.0.3",
     "craco-antd": "1.19.0",

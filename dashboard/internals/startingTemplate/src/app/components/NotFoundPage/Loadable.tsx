@@ -4,7 +4,7 @@
 
 import { lazyLoad } from 'utils/loadable';
 
-export const ExperimentTable = lazyLoad(
+export const NotFoundPage = lazyLoad(
   () => import('./index'),
-  module => module.ExperimentTable,
+  module => module.NotFoundPage,
 );

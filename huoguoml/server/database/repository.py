@@ -33,7 +33,7 @@ class Repository(object):
 
     def get_or_create_experiment(self, experiment_name: str) -> Experiment:
         session = self.Session()
-        experiment = session.query(Experiment).filter_by(name=experiment_name).first()
+        experiment = session.query(Experiment).filter_by(name=experiment_name.lower()).first()
 
         if not experiment:
             experiment = Experiment(name=experiment_name)
@@ -54,7 +54,7 @@ class Repository(object):
 
         return experiment_run
 
-    def get_experiment_runs(self) -> List[Run]:
+    def get_runs(self) -> List[Run]:
         session = self.Session()
         return session.query(Run).all()
 

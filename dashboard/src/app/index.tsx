@@ -8,22 +8,13 @@
 
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
-import { ExperimentPage } from './pages/ExperimentPage/Loadable';
-import { NotFoundPage } from './components/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
 import { AppLayout } from './layout/Loadable';
 
 export function App() {
   const { i18n } = useTranslation();
-
-  const content = (
-    <Switch>
-      <Route exact path="/" component={ExperimentPage} />
-      <Route component={NotFoundPage} />
-    </Switch>
-  );
 
   return (
     <BrowserRouter>
@@ -35,7 +26,7 @@ export function App() {
         <meta name="description" content="A React Boilerplate application" />
       </Helmet>
 
-      <AppLayout content={content} />
+      <AppLayout />
     </BrowserRouter>
   );
 }

@@ -5,7 +5,7 @@ import time
 
 from sqlalchemy import Column, Integer, String, ForeignKey, Float
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, validates
 
 Base = declarative_base()
 
@@ -24,5 +24,9 @@ class Experiment(Base):
     __tablename__ = "experiments"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True, unique=True)
+    name = Column(String, index=True, unique=True, nullable=False)
     runs = relationship("Run", back_populates="experiment")
+
+    @validates('name')
+    def convert_upper(self, key, value):
+        return value.lower()
