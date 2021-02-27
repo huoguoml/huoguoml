@@ -30,11 +30,11 @@ def get_extra_requires(path, add_all=True):
 # get all packages in requirements file
 dependencies = get_extra_requires('extra-requirements.txt')
 
-# get key package details from py_pkg/version.py
-about = {}  # type: ignore
-here = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(here, 'huoguoml', '__init__.py')) as f:
-    exec(f.read(), about)
+# get version detail from huoguoml/__init__.py
+about = {}
+libinfo_content = open(os.path.join('huoguoml', '__init__.py'), 'r', encoding='utf8').readlines()
+version_line = [l.strip() for l in libinfo_content if l.startswith('__version__')][0]
+exec(version_line, about)  # gives __version__
 
 # load the README file and use it as the long_description for PyPI
 with open('README.md', 'r') as f:
@@ -50,19 +50,19 @@ def package_files(directory):
 
 
 setup(
-    name="HuoguoML",
+    name="huoguoml",
     description="A platform for managing and serving Machine Learning types.",
     long_description=readme,
     long_description_content_type='text/markdown',
     version=about['__version__'],
     author="Steven Mi",
-    url="huoguoml.github.io",
+    url="https://huoguoml.github.io",
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
     package_data={'huoguoml': package_files("huoguoml/server/dashboard")},
     python_requires=">=3.7.*",
     install_requires=list(dependencies['all']),
-    license=about['__license__'],
+    license='Apache 2.0',
     zip_safe=False,
     entry_points="""
         [console_scripts]
@@ -86,5 +86,5 @@ setup(
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
-    keywords='huoguo machine learning deployment serving types management'
+    keywords='HuoguoML'
 )

@@ -26,14 +26,14 @@ class Repository(object):
         session = self.Session()
         return session.query(Experiment).all()
 
-    def get_experiment(self, run_id: int) -> Experiment:
+    def get_experiment(self, experiment_id: int) -> Experiment:
         session = self.Session()
-        experiment = session.query(Experiment).filter_by(id=run_id).first()
+        experiment = session.query(Experiment).filter_by(id=experiment_id).first()
         return experiment
 
     def get_or_create_experiment(self, experiment_name: str) -> Experiment:
         session = self.Session()
-        experiment = session.query(Experiment).filter_by(name=experiment_name).first()
+        experiment = session.query(Experiment).filter_by(name=experiment_name.lower()).first()
 
         if not experiment:
             experiment = Experiment(name=experiment_name)
@@ -44,16 +44,17 @@ class Repository(object):
         return experiment
 
     def create_experiment_run(self, experiment_name: str) -> Run:
-        experiment_run = Run(experiment_name=experiment_name)
-
         session = self.Session()
+        experiment = session.query(Experiment).filter_by(name=experiment_name).first()
+        experiment_run = Run(experiment_name=experiment_name, run_nr=len(experiment.runs) + 1)
+
         session.add(experiment_run)
         session.commit()
         session.refresh(experiment_run)
 
         return experiment_run
 
-    def get_experiment_runs(self) -> List[Run]:
+    def get_runs(self) -> List[Run]:
         session = self.Session()
         return session.query(Run).all()
 

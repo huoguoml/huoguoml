@@ -9,8 +9,16 @@ HuoguoML is a platform for managing and serving Machine Learning models. The hig
 
 ## Installation
 
+Get the latest stable release of HuoguoML:
+
 ```bash
 pip install huoguoml
+```
+
+Get the development release (updated for every commit on dev-Branch):
+
+```bash
+pip install huoguoml-dev
 ```
 
 ## Examples

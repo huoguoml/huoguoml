@@ -1,7 +1,7 @@
 """
 The huoguoml.types module contains all types used throughout the package
 """
-from typing import Dict, Any, Union
+from typing import Dict, Any, Union, Optional
 from typing import List
 
 from pydantic import BaseModel
@@ -34,19 +34,16 @@ class Run(BaseModel):
     """Type for a single experiment Run
     """
     id: int
+    run_nr: int
     creation_time: float
     experiment_name: str
 
+    model_definition: Optional[ModelDefinition]
+    model_api: Optional[ModelAPI]
+    requirements: Optional[List[str]]
+
     class Config:
         orm_mode = True
-
-
-class RunDetail(Run):
-    """Type for a single experiment Run details
-    """
-    model_definition: ModelDefinition
-    model_api: ModelAPI
-    requirements: List[str]
 
 
 class Experiment(BaseModel):
@@ -54,11 +51,7 @@ class Experiment(BaseModel):
     """
     id: int
     name: str
+    runs: List[Run]
 
     class Config:
         orm_mode = True
-
-
-class ExperimentDetail(Experiment):
-    """Type for the details of a experiment"""
-    runs: List[Run]

@@ -2,10 +2,9 @@
 
 - [Quick Start](quick-start.md)
 
-
+## Examples
 - [Building Blocks](examples/README.md)
-- [The `Slice`](examples/mnist.md)
-
+- [MNIST](examples/mnist.md)
 
 ## Misc
 

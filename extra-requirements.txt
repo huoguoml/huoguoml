@@ -16,7 +16,5 @@
 
 fastapi:                    devel
 uvicorn:                    devel
-SQLAlchemy                  devel
-flake8:                     devel
-pytest:                     devel
+sqlalchemy:                 devel
 click:                      devel

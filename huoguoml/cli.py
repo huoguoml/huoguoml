@@ -4,7 +4,6 @@ The huoguoml.cli module contains code for the HuoguoML CLI
 import click
 
 from huoguoml.server.main import start_huoguoml_server
-from huoguoml.server.legacy.repository import Repository
 from huoguoml.service.main import start_huoguoml_service
 
 

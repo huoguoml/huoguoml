@@ -101,14 +101,6 @@ class TFModel(object):
         self.saved_model = saved_model
 
     def predict(self, data):
-        """
-
-        Args:
-            data:
-
-        Returns:
-
-        """
         import tensorflow as tf
 
         data_ten = tf.constant(data)
