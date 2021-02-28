@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Breadcrumb, Layout, Menu } from 'antd';
+import { Layout, Menu } from 'antd';
 import {
   DesktopOutlined,
   ExperimentOutlined,
@@ -8,16 +8,13 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppLayoutSlice } from './slice';
 import { selectAppLayout } from './slice/selectors';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { DashboardPage } from '../pages/DashboardPage/Loadable';
 import { ExperimentPage } from '../pages/ExperimentPage/Loadable';
 import { NotFoundPage } from '../components/NotFoundPage/Loadable';
-import { useHistory } from 'react-router-dom';
-import { LanguageButton } from '../components/LanguageButton/Loadable';
+import { RunPage } from '../pages/RunPage/Loadable';
 
-interface Props {}
-
-export const AppLayout = React.memo((props: Props) => {
+export const AppLayout = React.memo(() => {
   const dispatch = useDispatch();
   const { actions } = useAppLayoutSlice();
 
@@ -25,7 +22,7 @@ export const AppLayout = React.memo((props: Props) => {
 
   React.useEffect(() => {
     dispatch(actions.getLayoutState());
-  }, [dispatch]);
+  }, [dispatch, actions]);
 
   const { Header, Content, Footer, Sider } = Layout;
   const { SubMenu } = Menu;
@@ -36,12 +33,15 @@ export const AppLayout = React.memo((props: Props) => {
   function toDashboardPage() {
     history.push(`/`);
   }
+
   function toExperimentPage() {
-    history.push(`/experiments`);
+    history.push(`/experiments/all`);
   }
-  function toExperimentPageWithId(experimentId?: number) {
-    history.push(`/experiments/${experimentId}`);
+
+  function toExperimentPageWithId(experimentName?: string) {
+    history.push(`/experiments/${experimentName}`);
   }
+
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
@@ -70,7 +70,7 @@ export const AppLayout = React.memo((props: Props) => {
               </Menu.Item>
               {appLayoutState.experiments?.map(experiment => (
                 <Menu.Item
-                  onClick={() => toExperimentPageWithId(experiment.id)}
+                  onClick={() => toExperimentPageWithId(experiment.name)}
                   key={experiment.id}
                 >
                   {experiment.name}
@@ -83,13 +83,12 @@ export const AppLayout = React.memo((props: Props) => {
           </Menu>
         </Sider>
         <Layout className="site-layout">
-          <Header
-            className="site-layout-background"
-            style={{
-              height: 48,
-            }}
-          >
-            <LanguageButton />
+          <Header className="site-layout-background">
+            <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']}>
+              <Menu.Item key="1">nav 1</Menu.Item>
+              <Menu.Item key="2">nav 2</Menu.Item>
+              <Menu.Item key="3">nav 3</Menu.Item>
+            </Menu>
           </Header>
           <Content style={{ margin: '0 16px' }}>
             <div
@@ -100,9 +99,11 @@ export const AppLayout = React.memo((props: Props) => {
                 <Route exact path="/" component={DashboardPage} />
                 <Route exact path="/experiments" component={ExperimentPage} />
                 <Route
-                  path="/experiments/:experimentId"
+                  exact
+                  path="/experiments/:experimentName"
                   component={ExperimentPage}
                 />
+                <Route exact path="/runs/:runId" component={RunPage} />
                 <Route component={NotFoundPage} />
               </Switch>
             </div>

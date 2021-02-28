@@ -5,14 +5,16 @@ import axios from 'axios';
 import { EXPERIMENT_URI } from '../../../../constants';
 import { PayloadAction } from '@reduxjs/toolkit';
 
-function* getExperimentState(action: PayloadAction<number>) {
+function* getExperimentState(action: PayloadAction<string>) {
   try {
     const experimentResponse = yield axios.get(
       `${EXPERIMENT_URI}/${action.payload}`,
     );
     yield put(
       actions.getExperimentStateSuccess({
-        experiment: experimentResponse.data,
+        experiment: Array.isArray(experimentResponse.data)
+          ? experimentResponse.data
+          : [experimentResponse.data],
       }),
     );
   } catch (error) {

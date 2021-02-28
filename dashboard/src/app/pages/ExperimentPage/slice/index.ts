@@ -10,7 +10,7 @@ const slice = createSlice({
   name: 'experimentPage',
   initialState,
   reducers: {
-    getExperimentState(state, action: PayloadAction<number>) {
+    getExperimentState(state, action: PayloadAction<string>) {
       state.isLoading = true;
     },
     getExperimentStateSuccess(

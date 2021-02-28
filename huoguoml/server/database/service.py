@@ -15,6 +15,7 @@ class Service(object):
     """
 
     def __init__(self, huoguoml_dir: str):
+        # TODO: Check if absolute path is really necessary
         self.huoguoml_dir = os.path.realpath(huoguoml_dir)
         os.makedirs(self.huoguoml_dir, exist_ok=True)
 
