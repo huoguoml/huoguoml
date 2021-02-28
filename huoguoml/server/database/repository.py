@@ -2,7 +2,7 @@
 The huoguoml.database module provides the database that contains all informations
 """
 
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -26,24 +26,25 @@ class Repository(object):
         session = self.Session()
         return session.query(Experiment).all()
 
-    def get_experiment(self, experiment_id: int) -> Experiment:
+    def get_experiment(self, experiment_name: str) -> Experiment:
         session = self.Session()
-        experiment = session.query(Experiment).filter_by(id=experiment_id).first()
+        experiment = session.query(Experiment).filter_by(name=experiment_name.lower()).first()
         return experiment
 
-    def get_or_create_experiment(self, experiment_name: str) -> Experiment:
+    def create_experiment(self, experiment_name: str) -> Optional[Experiment]:
         session = self.Session()
         experiment = session.query(Experiment).filter_by(name=experiment_name.lower()).first()
 
-        if not experiment:
-            experiment = Experiment(name=experiment_name)
+        if experiment:
+            return None
 
-            session.add(experiment)
-            session.commit()
-            session.refresh(experiment)
+        experiment = Experiment(name=experiment_name)
+        session.add(experiment)
+        session.commit()
+        session.refresh(experiment)
         return experiment
 
-    def create_experiment_run(self, experiment_name: str) -> Run:
+    def create_run(self, experiment_name: str) -> Run:
         session = self.Session()
         experiment = session.query(Experiment).filter_by(name=experiment_name).first()
         experiment_run = Run(experiment_name=experiment_name, run_nr=len(experiment.runs) + 1)
@@ -51,12 +52,7 @@ class Repository(object):
         session.add(experiment_run)
         session.commit()
         session.refresh(experiment_run)
-
         return experiment_run
-
-    def get_runs(self) -> List[Run]:
-        session = self.Session()
-        return session.query(Run).all()
 
     def get_run(self, run_id: int) -> Run:
         session = self.Session()

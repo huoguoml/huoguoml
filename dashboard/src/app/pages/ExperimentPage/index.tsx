@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { AutoComplete, Input, SelectProps } from 'antd';
+import { Card } from 'antd';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAppLayout } from '../../layout/slice/selectors';
@@ -29,7 +29,9 @@ export function ExperimentPage() {
         <title>Home Page</title>
         <meta name="description" content="A Boilerplate application homepage" />
       </Helmet>
-
+      <Card style={{ width: '100%' }}>
+        <p>Experiments</p>
+      </Card>
       {experimentId ? (
         <RunTable runs={experimentPageState.experiment?.runs} />
       ) : (

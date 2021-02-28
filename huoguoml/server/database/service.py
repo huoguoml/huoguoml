@@ -2,11 +2,10 @@
 The huoguoml.database module provides the database that contains all informations
 """
 import os
-import shutil
 from typing import List, Optional
 
 from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE
-from huoguoml.schemas import Experiment, ModelDefinition, ModelAPI, Run
+from huoguoml.schemas import Experiment, Run
 from huoguoml.server.database.repository import Repository
 from huoguoml.utils import save_json, read_json
 
@@ -16,7 +15,7 @@ class Service(object):
     """
 
     def __init__(self, huoguoml_dir: str):
-        self.huoguoml_dir = huoguoml_dir
+        self.huoguoml_dir = os.path.realpath(huoguoml_dir)
         os.makedirs(self.huoguoml_dir, exist_ok=True)
 
         database_url = os.path.join("sqlite:///{}".format(huoguoml_dir), HUOGUOML_DATABASE_FILE)
@@ -27,36 +26,28 @@ class Service(object):
         experiments = self.repository.get_experiments()
         return [Experiment.from_orm(experiment) for experiment in experiments]
 
-    def get_experiment(self, experiment_id: int) -> Experiment:
-        experiment = self.repository.get_experiment(experiment_id=experiment_id)
-        return Experiment.from_orm(experiment)
+    def get_experiment(self, experiment_name: str) -> Optional[Experiment]:
+        experiment = self.repository.get_experiment(experiment_name=experiment_name)
+        if experiment:
+            return Experiment.from_orm(experiment)
+        return None
 
-    def get_or_create_experiment(self, experiment_name: str) -> Experiment:
-        experiment = self.repository.get_or_create_experiment(experiment_name=experiment_name)
+    def create_experiment(self, experiment_name: str) -> Experiment:
+        experiment = self.repository.create_experiment(experiment_name=experiment_name)
         os.makedirs(os.path.join(self.huoguoml_dir, experiment.name), exist_ok=True)
         return Experiment.from_orm(experiment)
 
-    def create_experiment_run(self, experiment_name: str,
-                              artifact_dir: str,
-                              model_api: ModelAPI,
-                              model_definition: ModelDefinition,
-                              requirements: List[str]) -> Run:
-        experiment_run_orm = self.repository.create_experiment_run(experiment_name)
-        experiment_run = Run(id=experiment_run_orm.id,
-                             run_nr=experiment_run_orm.run_nr,
-                             creation_time=experiment_run_orm.creation_time,
-                             experiment_name=experiment_run_orm.experiment_name,
-                             model_api=model_api,
-                             model_definition=model_definition,
-                             requirements=requirements)
+    def create_run(self, experiment_name) -> Run:
+        run_orm = self.repository.create_run(experiment_name=experiment_name)
+        run_dir = os.path.join(self.huoguoml_dir, run_orm.experiment_name, str(run_orm.run_nr))
+        os.makedirs(run_dir, exist_ok=True)
 
-        run_dir = os.path.join(self.huoguoml_dir, experiment_run.experiment_name, str(experiment_run_orm.run_nr))
-        model_dir = os.path.join(run_dir, "model")
-        shutil.copytree(artifact_dir, model_dir)
+        run = Run.from_orm(run_orm)
+        run.run_dir = run_dir
 
         run_json_path = os.path.join(run_dir, HUOGUOML_METADATA_FILE)
-        save_json(json_path=run_json_path, data=experiment_run.json())
-        return experiment_run
+        save_json(json_path=run_json_path, data=run.json())
+        return run
 
     def get_run(self, run_id: int) -> Optional[Run]:
         run = self.repository.get_run(run_id=run_id)
@@ -65,12 +56,6 @@ class Service(object):
                                                   run.experiment_name,
                                                   str(run.run_nr),
                                                   HUOGUOML_METADATA_FILE))
-        if not experiments_json:
-            return None
-
-        return Run.parse_raw(experiments_json)
-
-    def get_runs(self) -> List[Run]:
-        runs = self.repository.get_runs()
-
-        return [Run.from_orm(run) for run in runs]
+        if experiments_json:
+            return Run.parse_raw(experiments_json)
+        return None

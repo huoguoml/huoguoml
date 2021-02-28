@@ -13,6 +13,7 @@ import { DashboardPage } from '../pages/DashboardPage/Loadable';
 import { ExperimentPage } from '../pages/ExperimentPage/Loadable';
 import { NotFoundPage } from '../components/NotFoundPage/Loadable';
 import { useHistory } from 'react-router-dom';
+import { LanguageButton } from '../components/LanguageButton/Loadable';
 
 interface Props {}
 
@@ -87,7 +88,9 @@ export const AppLayout = React.memo((props: Props) => {
             style={{
               height: 48,
             }}
-          />
+          >
+            <LanguageButton />
+          </Header>
           <Content style={{ margin: '0 16px' }}>
             <div
               className="site-layout-background"

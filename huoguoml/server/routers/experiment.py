@@ -17,8 +17,8 @@ def get_router(service: Service) -> APIRouter:
     async def get_experiments():
         return service.get_experiments()
 
-    @router.get("/{experiment_id}", response_model=Experiment)
-    async def get_experiment(experiment_id: int):
-        return service.get_experiment(experiment_id=experiment_id)
+    @router.get("/{experiment_name}", response_model=Experiment)
+    async def get_experiment(experiment_name: str):
+        return service.get_experiment(experiment_name=experiment_name)
 
     return router

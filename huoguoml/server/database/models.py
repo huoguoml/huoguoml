@@ -18,6 +18,7 @@ class Run(Base):
     creation_time = Column(Float, default=time.time)
     experiment = relationship("Experiment", back_populates="runs")
     experiment_name = Column(String, ForeignKey("experiments.name"))
+    # add https://stackoverflow.com/questions/1378325/python-dicts-in-sqlalchemy
 
 
 class Experiment(Base):

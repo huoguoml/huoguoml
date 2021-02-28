@@ -1,5 +1,3 @@
-from typing import List
-
 from fastapi import APIRouter
 
 from huoguoml.schemas import Run
@@ -12,10 +10,6 @@ def get_router(service: Service) -> APIRouter:
         tags=["runs"],
         responses={404: {"description": "Not found"}},
     )
-
-    @router.get("/", response_model=List[Run])
-    async def get_runs():
-        return service.get_runs()
 
     @router.get("/{run_id}", response_model=Run)
     async def get_run(run_id: int):
