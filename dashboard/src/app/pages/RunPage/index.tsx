@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRunPageSlice } from './slice';
 import { selectRunPage } from './slice/selectors';
 import { Card, Typography } from 'antd';
+import { RecordTable } from '../../components/RecordTable/Loadable';
 
 export function RunPage() {
   const { runId } = useParams<Record<string, string>>();
@@ -17,7 +18,6 @@ export function RunPage() {
   }, [dispatch, runId, actions]);
 
   const { Title, Paragraph } = Typography;
-
   return (
     <>
       <Card style={{ width: '100%' }}>
@@ -25,13 +25,9 @@ export function RunPage() {
         <Paragraph>{runPageState.run?.creation_time}</Paragraph>
       </Card>
 
-      <Card style={{ width: '100%' }}>
-        <Paragraph>
-          {runPageState.run?.model_definition?.requirements}
-          {runPageState.run?.model_definition?.model_api.arguments.string}
-          {runPageState.run?.model_definition?.requirements}
-        </Paragraph>
-      </Card>
+      <RecordTable title={'parameters'} record={runPageState.run?.parameters} />
+      <RecordTable title={'metrics'} record={runPageState.run?.metrics} />
+      <RecordTable title={'tags'} record={runPageState.run?.tags} />
     </>
   );
 }
