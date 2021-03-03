@@ -34,17 +34,12 @@ export function ExperimentPage() {
       <Card style={{ width: '100%' }}>
         <Title level={3}>Experiment: {experimentName}</Title>
         <Paragraph editable={true}>
-          In the process of internal desktop applications development, many
-          different design specs and implementations would be involved, which
-          might cause designers and developers difficulties and duplication and
-          reduce the efficiency of development.
+          {experimentPageState.experiment?.description}
         </Paragraph>
       </Card>
-      {experimentPageState.experiment && (
+      {experimentPageState.experiment?.runs && (
         <RunTable
-          runs={experimentPageState.experiment.flatMap(
-            experiment => experiment.runs,
-          )}
+          runs={[...experimentPageState.experiment.runs]}
           onClick={toRunPage}
         />
       )}

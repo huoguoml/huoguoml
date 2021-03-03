@@ -9,7 +9,7 @@ from huoguoml.constants import HUOGUOML_METADATA_FILE
 from huoguoml.utils import read_json
 
 
-def start_huoguoml_service(artifact_dir, model_name="tracking"):
+def start_huoguoml_service(host: str, port: int, artifact_dir, model_name="tracking"):
     config = read_json(os.path.join(artifact_dir, HUOGUOML_METADATA_FILE))
     # Inputs
     fields = {}
@@ -29,4 +29,4 @@ def start_huoguoml_service(artifact_dir, model_name="tracking"):
     async def predict(data: input_model):
         return {"message": "Hello World"}
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=host, port=port)

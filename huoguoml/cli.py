@@ -1,10 +1,14 @@
 """
 The huoguoml.cli module contains code for the HuoguoML CLI
 """
+import os
+
 import click
 
+from huoguoml.constants import HUOGUOML_DEFAULT_SERVICE_FOLDER
 from huoguoml.server.main import start_huoguoml_server
 from huoguoml.service.main import start_huoguoml_service
+from huoguoml.utils import download_and_extract_run_files
 
 
 @click.group()
@@ -41,7 +45,6 @@ def server(host: str, port: int, huoguoml_dir: str):
     connections from other machines, you will need to pass `--host 0.0.0.0`
     to listen on all network interfaces (or a specific interface address).
     """
-    print("Start server")
     start_huoguoml_server(huoguoml_dir=huoguoml_dir,
                           host=host,
                           port=port)
@@ -59,11 +62,10 @@ def server(host: str, port: int, huoguoml_dir: str):
     help="The port to listen on (default: 8080).",
 )
 @click.option(
-    "--artifact_dir",
-    metavar="VERSION",
-    help="TO BE REMOVED",
+    "--run_uri",
+    help="The uri to the run files",
 )
-def service(host: str, port: int, artifact_dir: str):
+def service(host: str, port: int, run_uri: str):
     """
     Run a HuoguoML service.
     The service listens on http://localhost:8080 by default, and only
@@ -71,9 +73,14 @@ def service(host: str, port: int, artifact_dir: str):
     request from other machines, you will need to pass `--host 0.0.0.0`
     to listen on all network interfaces (or a specific interface address).
     """
-    print("Start service")
-    print(host, port)
-    start_huoguoml_service(artifact_dir)
+    # TODO: Check if run_uri is correct
+
+    workspace_dir = HUOGUOML_DEFAULT_SERVICE_FOLDER
+    run_id = os.path.basename(run_uri)
+    run_dir = os.path.join(workspace_dir, run_id)
+    os.makedirs(run_dir, exist_ok=True)
+    download_and_extract_run_files(run_uri=run_uri, dst_dir=run_dir)
+    start_huoguoml_service(host=host, port=port, artifact_dir=run_dir)
 
 
 if __name__ == "__main__":

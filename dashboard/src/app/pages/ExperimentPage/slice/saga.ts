@@ -12,9 +12,7 @@ function* getExperimentState(action: PayloadAction<string>) {
     );
     yield put(
       actions.getExperimentStateSuccess({
-        experiment: Array.isArray(experimentResponse.data)
-          ? experimentResponse.data
-          : [experimentResponse.data],
+        experiment: experimentResponse.data,
       }),
     );
   } catch (error) {

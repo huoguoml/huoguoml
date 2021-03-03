@@ -26,6 +26,8 @@ export interface RunInterface {
   id: number;
   run_nr: number;
   creation_time: number;
+  finish_time: number;
+  author: string;
   experiment_name: string;
   model_definition?: ModelDefinitionInterface;
   parameters?: Record<string, string>;
@@ -36,6 +38,7 @@ export interface RunInterface {
 export interface ExperimentInterface {
   id: number;
   name: string;
+  description: string;
   runs: RunInterface[];
 }
 

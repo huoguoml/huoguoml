@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { memo } from 'react';
-import { Table, Tag, Typography } from 'antd';
+import { Tag } from 'antd';
 
 interface Props {
   record?: Record<string, string>;
@@ -13,7 +13,9 @@ export const RecordTags = memo((props: Props) => {
       {props.record && (
         <div>
           {Object.entries(props.record).map(item => (
-            <Tag color="blue">{item[0]}</Tag>
+            <Tag color="blue">
+              {item[0]}: {item[1]}
+            </Tag>
           ))}
         </div>
       )}

@@ -4,10 +4,10 @@ The huoguoml.database module provides the database that contains all information
 import os
 from typing import List, Optional
 
-from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE
+from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER
 from huoguoml.schemas import Experiment, Run
 from huoguoml.server.database.repository import Repository
-from huoguoml.utils import read_json
+from huoguoml.utils import read_json, create_zip_file
 
 
 class Service(object):
@@ -17,7 +17,11 @@ class Service(object):
     def __init__(self, huoguoml_dir: str):
         # TODO: Check if absolute path is really necessary
         self.huoguoml_dir = os.path.realpath(huoguoml_dir)
-        os.makedirs(self.huoguoml_dir, exist_ok=True)
+        self.zip_dir = os.path.join(self.huoguoml_dir, HUOGUOML_DEFAULT_ZIP_FOLDER)
+
+        if not os.path.isdir(self.huoguoml_dir):
+            os.makedirs(self.huoguoml_dir)
+            os.makedirs(self.zip_dir)
 
         database_url = os.path.join("sqlite:///{}".format(huoguoml_dir), HUOGUOML_DATABASE_FILE)
         connect_args = {"check_same_thread": False}
@@ -57,11 +61,11 @@ class Service(object):
         run.run_dir = run_dir
         return run
 
-    def get_run(self, run_id: str) -> Optional[Run]:
-        run = self.repository.get_run(run_id=run_id)
-        if run:
-            return self._read_run_file(run=run)
-        return None
+    def get_run_files(self, run_id: str) -> str:
+        run_orm = self.repository.get_run(run_id=run_id)
+        run = self._read_run_file(run_orm)
+        zip_file_path = create_zip_file(src_dir=run.run_dir, dst_dir=self.zip_dir, zip_name=run.id)
+        return zip_file_path
 
     def _read_run_file(self, run: Run) -> Run:
         experiments_json = read_json(os.path.join(self.huoguoml_dir,
@@ -69,3 +73,11 @@ class Service(object):
                                                   str(run.run_nr),
                                                   HUOGUOML_METADATA_FILE))
         return Run.parse_raw(experiments_json)
+
+    def update_experiment(self, experiment_name: str, experiment: Experiment) -> Optional[Experiment]:
+        update_data = experiment.dict(exclude_unset=True)
+        experiment_orm = self.repository.update_experiment(experiment_name=experiment_name, update_data=update_data)
+        if experiment_orm:
+            experiment = Experiment.from_orm(experiment_orm)
+            return experiment
+        return None

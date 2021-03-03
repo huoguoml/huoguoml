@@ -48,9 +48,13 @@ class Run(BaseModel):
     id: str
     run_nr: int
     creation_time: float
-    finish_time: float = 0
+    finish_time: Optional[float] = None
+    duration: Optional[float] = None
+    author: str
+
     experiment_name: str
     run_dir: str = ""
+    description: Optional[str] = None
 
     parameters: Dict[str, str] = {}
     metrics: Dict[str, str] = {}
@@ -84,14 +88,17 @@ class Run(BaseModel):
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.finish_time = time.time()
+        self.duration = self.finish_time - self.creation_time
         run_json_path = os.path.join(self.run_dir, HUOGUOML_METADATA_FILE)
         save_json(json_path=run_json_path, data=self.json())
+        print(self)
 
 
 class Experiment(BaseModel):
     """Type for a experiment
     """
     id: int
+    description: Optional[str] = None
     name: str
     runs: List[Run]
 
