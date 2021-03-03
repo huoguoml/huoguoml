@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { memo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Table } from 'antd';
+import { Table, Typography } from 'antd';
 
 interface Props {
   record?: Record<string, string>;
@@ -9,8 +8,7 @@ interface Props {
 }
 
 export const RecordTable = memo((props: Props) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { t, i18n } = useTranslation();
+  const { Title } = Typography;
 
   const columns: any = [
     {
@@ -24,22 +22,24 @@ export const RecordTable = memo((props: Props) => {
       key: 'value',
     },
   ];
-  console.log(props.record);
+
   return (
     <>
-      <p>{props.title}</p>
-      {props.record ? (
-        <Table
-          size="small"
-          dataSource={Object.entries(props.record).map(item => {
-            return {
-              name: item[0],
-              value: item[1],
-            };
-          })}
-          columns={columns}
-        />
-      ) : null}
+      {props.record && (
+        <div>
+          <b>{props.title}</b>
+          <Table
+            size="small"
+            dataSource={Object.entries(props.record).map(item => {
+              return {
+                name: item[0],
+                value: item[1],
+              };
+            })}
+            columns={columns}
+          />
+        </div>
+      )}
     </>
   );
 });

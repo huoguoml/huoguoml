@@ -12,7 +12,7 @@ import { Route, Switch, useHistory } from 'react-router-dom';
 import { DashboardPage } from '../pages/DashboardPage/Loadable';
 import { ExperimentPage } from '../pages/ExperimentPage/Loadable';
 import { NotFoundPage } from '../components/NotFoundPage/Loadable';
-import { RunPage } from '../pages/RunPage/Loadable';
+import { ExperimentRunPage } from '../pages/ExperimentRunPage/Loadable';
 
 export const AppLayout = React.memo(() => {
   const dispatch = useDispatch();
@@ -32,10 +32,6 @@ export const AppLayout = React.memo(() => {
 
   function toDashboardPage() {
     history.push(`/`);
-  }
-
-  function toExperimentPage() {
-    history.push(`/experiments/all`);
   }
 
   function toExperimentPageWithId(experimentName?: string) {
@@ -65,9 +61,6 @@ export const AppLayout = React.memo(() => {
               title="Experiments"
               icon={<ExperimentOutlined />}
             >
-              <Menu.Item key="all" onClick={toExperimentPage}>
-                all
-              </Menu.Item>
               {appLayoutState.experiments?.map(experiment => (
                 <Menu.Item
                   onClick={() => toExperimentPageWithId(experiment.name)}
@@ -97,13 +90,16 @@ export const AppLayout = React.memo(() => {
             >
               <Switch>
                 <Route exact path="/" component={DashboardPage} />
-                <Route exact path="/experiments" component={ExperimentPage} />
                 <Route
                   exact
                   path="/experiments/:experimentName"
                   component={ExperimentPage}
                 />
-                <Route exact path="/runs/:runId" component={RunPage} />
+                <Route
+                  exact
+                  path="/experiments/:experimentName/:runId"
+                  component={ExperimentRunPage}
+                />
                 <Route component={NotFoundPage} />
               </Switch>
             </div>

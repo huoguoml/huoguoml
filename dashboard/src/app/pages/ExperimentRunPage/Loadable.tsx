@@ -4,7 +4,7 @@
 
 import { lazyLoad } from 'utils/loadable';
 
-export const RunPage = lazyLoad(
+export const ExperimentRunPage = lazyLoad(
   () => import('./index'),
-  module => module.RunPage,
+  module => module.ExperimentRunPage,
 );

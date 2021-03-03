@@ -1,7 +1,6 @@
 """
 The huoguoml.models module contains the model definition for our ORM mapper SQL Alchemy
 """
-import time
 
 from sqlalchemy import Column, Integer, String, ForeignKey, Float
 from sqlalchemy.ext.declarative import declarative_base
@@ -13,12 +12,11 @@ Base = declarative_base()
 class Run(Base):
     __tablename__ = "runs"
 
-    id = Column(Integer, primary_key=True, index=True)
-    run_nr = Column(Integer)
-    creation_time = Column(Float, default=time.time)
+    id = Column(String, primary_key=True, index=True)
+    run_nr = Column(Integer, index=True)
+    creation_time = Column(Float)
     experiment = relationship("Experiment", back_populates="runs")
     experiment_name = Column(String, ForeignKey("experiments.name"))
-    # add https://stackoverflow.com/questions/1378325/python-dicts-in-sqlalchemy
 
 
 class Experiment(Base):

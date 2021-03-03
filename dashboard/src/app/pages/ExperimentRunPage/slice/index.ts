@@ -1,23 +1,26 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { runPageSaga } from './saga';
-import { RunPageState } from './types';
+import { experimentRunPageSaga } from './saga';
+import { ExperimentRunPageState } from './types';
 
-export const initialState: RunPageState = {};
+export const initialState: ExperimentRunPageState = {};
 
 const slice = createSlice({
-  name: 'runPage',
+  name: 'experimentRunPage',
   initialState,
   reducers: {
-    getRunState(state, action: PayloadAction<string>) {
+    getExperimentRunState(state, action: PayloadAction<string>) {
       state.isLoading = true;
     },
-    getRunStateSuccess(state, action: PayloadAction<RunPageState>) {
+    getExperimentRunStateSuccess(
+      state,
+      action: PayloadAction<ExperimentRunPageState>,
+    ) {
       state.run = action.payload.run;
       state.isLoading = false;
     },
-    getRunStateFailure(state, action: PayloadAction<string>) {
+    getExperimentRunStateFailure(state, action: PayloadAction<string>) {
       state.error = action.payload;
       state.isLoading = false;
     },
@@ -26,9 +29,9 @@ const slice = createSlice({
 
 export const { actions: runPageActions } = slice;
 
-export const useRunPageSlice = () => {
+export const useExperimentRunPageSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({ key: slice.name, saga: runPageSaga });
+  useInjectSaga({ key: slice.name, saga: experimentRunPageSaga });
   return { actions: slice.actions };
 };
 

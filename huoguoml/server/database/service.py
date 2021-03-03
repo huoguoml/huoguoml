@@ -7,7 +7,7 @@ from typing import List, Optional
 from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE
 from huoguoml.schemas import Experiment, Run
 from huoguoml.server.database.repository import Repository
-from huoguoml.utils import save_json, read_json
+from huoguoml.utils import read_json
 
 
 class Service(object):
@@ -28,35 +28,44 @@ class Service(object):
         return [Experiment.from_orm(experiment) for experiment in experiments]
 
     def get_experiment(self, experiment_name: str) -> Optional[Experiment]:
-        experiment = self.repository.get_experiment(experiment_name=experiment_name)
-        if experiment:
-            return Experiment.from_orm(experiment)
+        experiment_orm = self.repository.get_experiment(experiment_name=experiment_name)
+        if experiment_orm:
+            experiment = Experiment.from_orm(experiment_orm)
+            experiment.runs = [self._read_run_file(run) for run in experiment.runs]
+            return experiment
         return None
+
+    def get_experiment_run(self, experiment_name: str, experiment_run_nr: int) -> Optional[Run]:
+        experiment_orm = self.repository.get_experiment(experiment_name=experiment_name)
+        if experiment_orm:
+            experiment = Experiment.from_orm(experiment_orm)
+            run = next((self._read_run_file(run) for run in experiment.runs if run.run_nr == experiment_run_nr),
+                       None)
+            return run
 
     def create_experiment(self, experiment_name: str) -> Experiment:
         experiment = self.repository.create_experiment(experiment_name=experiment_name)
-        os.makedirs(os.path.join(self.huoguoml_dir, experiment.name), exist_ok=True)
+        os.makedirs(os.path.join(self.huoguoml_dir, experiment.name))
         return Experiment.from_orm(experiment)
 
     def create_run(self, experiment_name) -> Run:
         run_orm = self.repository.create_run(experiment_name=experiment_name)
         run_dir = os.path.join(self.huoguoml_dir, run_orm.experiment_name, str(run_orm.run_nr))
-        os.makedirs(run_dir, exist_ok=True)
+        os.makedirs(run_dir)
 
         run = Run.from_orm(run_orm)
         run.run_dir = run_dir
-
-        run_json_path = os.path.join(run_dir, HUOGUOML_METADATA_FILE)
-        save_json(json_path=run_json_path, data=run.json())
         return run
 
-    def get_run(self, run_id: int) -> Optional[Run]:
+    def get_run(self, run_id: str) -> Optional[Run]:
         run = self.repository.get_run(run_id=run_id)
+        if run:
+            return self._read_run_file(run=run)
+        return None
 
+    def _read_run_file(self, run: Run) -> Run:
         experiments_json = read_json(os.path.join(self.huoguoml_dir,
                                                   run.experiment_name,
                                                   str(run.run_nr),
                                                   HUOGUOML_METADATA_FILE))
-        if experiments_json:
-            return Run.parse_raw(experiments_json)
-        return None
+        return Run.parse_raw(experiments_json)

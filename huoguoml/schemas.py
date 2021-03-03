@@ -2,6 +2,7 @@
 The huoguoml.types module contains all types used throughout the package
 """
 import os
+import time
 from typing import Dict, Any, Union, Optional
 from typing import List
 
@@ -44,9 +45,10 @@ class ModelDefinition(BaseModel):
 class Run(BaseModel):
     """Type for a single experiment Run
     """
-    id: int
+    id: str
     run_nr: int
     creation_time: float
+    finish_time: float = 0
     experiment_name: str
     run_dir: str = ""
 
@@ -81,6 +83,7 @@ class Run(BaseModel):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
+        self.finish_time = time.time()
         run_json_path = os.path.join(self.run_dir, HUOGUOML_METADATA_FILE)
         save_json(json_path=run_json_path, data=self.json())
 

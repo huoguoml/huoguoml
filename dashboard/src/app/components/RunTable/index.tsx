@@ -5,21 +5,21 @@ import { RunInterface } from '../../../types';
 import { Table } from 'antd';
 
 interface Props {
-  runs?: RunInterface[];
-  onClick?: (runId: number) => void;
+  runs: RunInterface[];
+  onClick: (runId: number) => void;
 }
 
 export const RunTable = memo((props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
-  props.runs?.sort((a, b) => b.id - a.id);
+  props.runs.sort((a, b) => b.run_nr - a.run_nr);
 
   const columns: any = [
     {
       title: 'Run',
-      dataIndex: 'id',
-      key: 'id',
-      sorter: (a, b) => a.id - b.id,
+      dataIndex: 'run_nr',
+      key: 'run_nr',
+      sorter: (a, b) => a.run_nr - b.run_nr,
       sortDirections: ['ascend'],
       render: id => (
         <a onClick={() => props.onClick && props.onClick(id)}>{id}</a>

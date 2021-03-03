@@ -2,6 +2,6 @@
 import { RunInterface } from '../../../../types';
 import { PageState } from '../../../../types/RootState';
 
-export interface RunPageState extends PageState {
+export interface ExperimentRunPageState extends PageState {
   run?: RunInterface;
 }

@@ -29,4 +29,6 @@ def start_experiment_run(experiment_name: Optional[str] = None,
     elif run_id:
         run = service.get_run(run_id=run_id)
         huoguoml.current_run = run
+    else:
+        raise ValueError("No value for run_id or experiment_name")
     return run

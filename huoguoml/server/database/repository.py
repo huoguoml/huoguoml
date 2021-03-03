@@ -1,14 +1,16 @@
 """
 The huoguoml.database module provides the database that contains all informations
 """
-
+import time
 from typing import List, Dict, Optional
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+import huoguoml
 from huoguoml.server.database.models import Base, Run
 from huoguoml.server.database.models import Experiment
+from huoguoml.utils import create_hash
 
 
 class Repository(object):
@@ -26,7 +28,7 @@ class Repository(object):
         session = self.Session()
         return session.query(Experiment).all()
 
-    def get_experiment(self, experiment_name: str) -> Experiment:
+    def get_experiment(self, experiment_name: str) -> Optional[Experiment]:
         session = self.Session()
         experiment = session.query(Experiment).filter_by(name=experiment_name.lower()).first()
         return experiment
@@ -34,7 +36,6 @@ class Repository(object):
     def create_experiment(self, experiment_name: str) -> Optional[Experiment]:
         session = self.Session()
         experiment = session.query(Experiment).filter_by(name=experiment_name.lower()).first()
-
         if experiment:
             return None
 
@@ -47,13 +48,18 @@ class Repository(object):
     def create_run(self, experiment_name: str) -> Run:
         session = self.Session()
         experiment = session.query(Experiment).filter_by(name=experiment_name).first()
-        experiment_run = Run(experiment_name=experiment_name, run_nr=len(experiment.runs) + 1)
 
-        session.add(experiment_run)
+        creation_time = time.time()
+        run_nr = len(experiment.runs) + 1
+        run_id = create_hash(value="{}_{}_{}_{}".format(creation_time, run_nr, experiment.name, huoguoml.__version__),
+                             algorithm="md5")
+        run = Run(id=run_id, run_nr=run_nr, experiment_name=experiment.name, creation_time=creation_time)
+
+        session.add(run)
         session.commit()
-        session.refresh(experiment_run)
-        return experiment_run
+        session.refresh(run)
+        return run
 
-    def get_run(self, run_id: int) -> Run:
+    def get_run(self, run_id: str) -> Optional[Run]:
         session = self.Session()
         return session.query(Run).filter_by(id=run_id).first()
