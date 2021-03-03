@@ -1,14 +1,17 @@
 """
 The huoguoml.database module provides the database that contains all informations
 """
-
-from typing import List, Dict
+import getpass
+import time
+from typing import List, Dict, Optional
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+import huoguoml
 from huoguoml.server.database.models import Base, Run
 from huoguoml.server.database.models import Experiment
+from huoguoml.utils import create_hash
 
 
 class Repository(object):
@@ -26,38 +29,51 @@ class Repository(object):
         session = self.Session()
         return session.query(Experiment).all()
 
-    def get_experiment(self, experiment_id: int) -> Experiment:
-        session = self.Session()
-        experiment = session.query(Experiment).filter_by(id=experiment_id).first()
-        return experiment
-
-    def get_or_create_experiment(self, experiment_name: str) -> Experiment:
+    def get_experiment(self, experiment_name: str) -> Optional[Experiment]:
         session = self.Session()
         experiment = session.query(Experiment).filter_by(name=experiment_name.lower()).first()
-
-        if not experiment:
-            experiment = Experiment(name=experiment_name)
-
-            session.add(experiment)
-            session.commit()
-            session.refresh(experiment)
         return experiment
 
-    def create_experiment_run(self, experiment_name: str) -> Run:
+    def create_experiment(self, experiment_name: str) -> Optional[Experiment]:
+        session = self.Session()
+        experiment = session.query(Experiment).filter_by(name=experiment_name.lower()).first()
+        if experiment:
+            return None
+
+        experiment = Experiment(name=experiment_name)
+        session.add(experiment)
+        session.commit()
+        session.refresh(experiment)
+        return experiment
+
+    def create_run(self, experiment_name: str) -> Run:
         session = self.Session()
         experiment = session.query(Experiment).filter_by(name=experiment_name).first()
-        experiment_run = Run(experiment_name=experiment_name, run_nr=len(experiment.runs) + 1)
 
-        session.add(experiment_run)
+        creation_time = time.time()
+        run_nr = len(experiment.runs) + 1
+        run_id = create_hash(value="{}_{}_{}_{}".format(creation_time, run_nr, experiment.name, huoguoml.__version__),
+                             algorithm="md5")
+        run = Run(id=run_id, run_nr=run_nr, experiment_name=experiment.name, creation_time=creation_time,
+                  author=getpass.getuser())
+
+        session.add(run)
         session.commit()
-        session.refresh(experiment_run)
+        session.refresh(run)
+        return run
 
-        return experiment_run
-
-    def get_runs(self) -> List[Run]:
-        session = self.Session()
-        return session.query(Run).all()
-
-    def get_run(self, run_id: int) -> Run:
+    def get_run(self, run_id: str) -> Optional[Run]:
         session = self.Session()
         return session.query(Run).filter_by(id=run_id).first()
+
+    def update_experiment(self, experiment_name: str, update_data: Dict) -> Optional[Experiment]:
+        session = self.Session()
+        experiment = session.query(Experiment).filter_by(name=experiment_name).first()
+        if experiment:
+            for field, field_value in update_data.items():
+                setattr(experiment, field, field_value)
+
+            session.commit()
+            session.refresh(experiment)
+            return experiment
+        return None

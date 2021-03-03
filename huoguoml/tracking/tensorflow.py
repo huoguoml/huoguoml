@@ -1,12 +1,12 @@
 """
 The huoguoml.tracking module provides the options for tracking tensorflow experiments
 """
-
+import os
+import shutil
 from typing import List
 
-import huoguoml
 from huoguoml.constants import HUOGUOML_DEFAULT_REQUIREMENTS, HUOGUOML_DEFAULT_MODEL_FOLDER
-from huoguoml.schemas import ModelNode, ModelDefinition, ModelAPI
+from huoguoml.schemas import ModelNode, ModelDefinition, ModelAPI, ModelGraph, Run
 
 
 def get_requirements() -> List[str]:
@@ -40,6 +40,7 @@ def _load_saved_model(tf_saved_model_dir: str, tf_meta_graph_tags: str, tf_signa
 
 
 def log_model(
+        run: Run,
         tf_saved_model_dir: str,
         tf_meta_graph_tags: str,
         tf_signature_def_key: str):
@@ -53,9 +54,7 @@ def log_model(
         tf_meta_graph_tags=tf_meta_graph_tags,
         tf_signature_def_key=tf_signature_def_key,
     )
-
     requirements = get_requirements()
-
     inputs = {}
     for input_tensor in saved_model.structured_input_signature:
         if input_tensor:
@@ -66,7 +65,7 @@ def log_model(
     for tensor_name, tensor_spec in saved_model.structured_outputs.items():
         outputs[tensor_name] = ModelNode(shape=tensor_spec.shape.as_list(),
                                          dtype=tensor_spec.dtype.name)
-    model_definition = ModelDefinition(inputs=inputs, outputs=outputs)
+    model_graph = ModelGraph(inputs=inputs, outputs=outputs)
 
     model_api = ModelAPI(module="tensorflow",
                          arguments={
@@ -76,12 +75,11 @@ def log_model(
                          },
                          name="load_model")
 
-    huoguoml.service.create_experiment_run(
-        experiment_name=huoguoml.current_experiment.name,
-        artifact_dir=tf_saved_model_dir,
-        model_api=model_api,
-        model_definition=model_definition,
-        requirements=requirements)
+    run.model_definition = ModelDefinition(model_api=model_api,
+                                           model_graph=model_graph,
+                                           requirements=requirements)
+    model_dir = os.path.join(run.run_dir, "model")
+    shutil.copytree(tf_saved_model_dir, model_dir)
 
 
 # TODO: Refactor code, Update TFModel

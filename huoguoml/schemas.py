@@ -1,10 +1,15 @@
 """
 The huoguoml.types module contains all types used throughout the package
 """
+import os
+import time
 from typing import Dict, Any, Union, Optional
 from typing import List
 
 from pydantic import BaseModel
+
+from huoguoml.constants import HUOGUOML_METADATA_FILE
+from huoguoml.utils import save_json
 
 
 class ModelNode(BaseModel):
@@ -14,7 +19,7 @@ class ModelNode(BaseModel):
     shape: List[Union[int, None]]
 
 
-class ModelDefinition(BaseModel):
+class ModelGraph(BaseModel):
     """Type for a model. Every model consists of a input/output
     node with a certain shape and dtype.
     """
@@ -30,26 +35,70 @@ class ModelAPI(BaseModel):
     arguments: Dict[str, Any]
 
 
+class ModelDefinition(BaseModel):
+    """Type for the definition of a model"""
+    model_graph: ModelGraph
+    model_api: ModelAPI
+    requirements: List[str]
+
+
 class Run(BaseModel):
     """Type for a single experiment Run
     """
-    id: int
+    id: str
     run_nr: int
     creation_time: float
-    experiment_name: str
+    finish_time: Optional[float] = None
+    duration: Optional[float] = None
+    author: str
 
+    experiment_name: str
+    run_dir: str = ""
+    description: Optional[str] = None
+
+    parameters: Dict[str, str] = {}
+    metrics: Dict[str, str] = {}
+    tags: Dict[str, str] = {}
     model_definition: Optional[ModelDefinition]
-    model_api: Optional[ModelAPI]
-    requirements: Optional[List[str]]
 
     class Config:
         orm_mode = True
+
+    def log_model(self,
+                  model_type: str,
+                  **kwargs):
+        if self.model_definition:
+            raise FileExistsError("A model already exists")
+
+        if model_type == "tensorflow":
+            from huoguoml.tracking.tensorflow import log_model
+            log_model(run=self, **kwargs)
+
+    def log_parameter(self, parameter_name: str, parameter_value: str):
+        self.parameters[parameter_name] = parameter_value
+
+    def log_metric(self, metric_name: str, metric_value: str):
+        self.metrics[metric_name] = metric_value
+
+    def log_tag(self, tag_name: str, tag_value: str):
+        self.tags[tag_name] = tag_value
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.finish_time = time.time()
+        self.duration = self.finish_time - self.creation_time
+        run_json_path = os.path.join(self.run_dir, HUOGUOML_METADATA_FILE)
+        save_json(json_path=run_json_path, data=self.json())
+        print(self)
 
 
 class Experiment(BaseModel):
     """Type for a experiment
     """
     id: int
+    description: Optional[str] = None
     name: str
     runs: List[Run]
 

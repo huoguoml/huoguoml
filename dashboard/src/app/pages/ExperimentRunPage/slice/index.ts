@@ -1,37 +1,37 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { experimentPageSaga } from './saga';
-import { ExperimentPageState } from './types';
+import { experimentRunPageSaga } from './saga';
+import { ExperimentRunPageState } from './types';
 
-export const initialState: ExperimentPageState = {};
+export const initialState: ExperimentRunPageState = {};
 
 const slice = createSlice({
-  name: 'experimentPage',
+  name: 'experimentRunPage',
   initialState,
   reducers: {
-    getExperimentState(state, action: PayloadAction<string>) {
+    getExperimentRunState(state, action: PayloadAction<string>) {
       state.isLoading = true;
     },
-    getExperimentStateSuccess(
+    getExperimentRunStateSuccess(
       state,
-      action: PayloadAction<ExperimentPageState>,
+      action: PayloadAction<ExperimentRunPageState>,
     ) {
-      state.experiment = action.payload.experiment;
+      state.run = action.payload.run;
       state.isLoading = false;
     },
-    getExperimentStateFailure(state, action: PayloadAction<string>) {
+    getExperimentRunStateFailure(state, action: PayloadAction<string>) {
       state.error = action.payload;
       state.isLoading = false;
     },
   },
 });
 
-export const { actions: experimentPageActions } = slice;
+export const { actions: runPageActions } = slice;
 
-export const useExperimentPageSlice = () => {
+export const useExperimentRunPageSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({ key: slice.name, saga: experimentPageSaga });
+  useInjectSaga({ key: slice.name, saga: experimentRunPageSaga });
   return { actions: slice.actions };
 };
 
@@ -39,7 +39,7 @@ export const useExperimentPageSlice = () => {
  * Example Usage:
  *
  * export function MyComponentNeedingThisSlice() {
- *  const { actions } = useExperimentPageSlice();
+ *  const { actions } = useRunPageSlice();
  *
  *  const onButtonClick = (evt) => {
  *    dispatch(actions.someAction());

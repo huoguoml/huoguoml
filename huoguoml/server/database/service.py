@@ -2,13 +2,12 @@
 The huoguoml.database module provides the database that contains all informations
 """
 import os
-import shutil
 from typing import List, Optional
 
-from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE
-from huoguoml.schemas import Experiment, ModelDefinition, ModelAPI, Run
+from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER
+from huoguoml.schemas import Experiment, Run
 from huoguoml.server.database.repository import Repository
-from huoguoml.utils import save_json, read_json
+from huoguoml.utils import read_json, create_zip_file
 
 
 class Service(object):
@@ -16,8 +15,13 @@ class Service(object):
     """
 
     def __init__(self, huoguoml_dir: str):
-        self.huoguoml_dir = huoguoml_dir
-        os.makedirs(self.huoguoml_dir, exist_ok=True)
+        # TODO: Check if absolute path is really necessary
+        self.huoguoml_dir = os.path.realpath(huoguoml_dir)
+        self.zip_dir = os.path.join(self.huoguoml_dir, HUOGUOML_DEFAULT_ZIP_FOLDER)
+
+        if not os.path.isdir(self.huoguoml_dir):
+            os.makedirs(self.huoguoml_dir)
+            os.makedirs(self.zip_dir)
 
         database_url = os.path.join("sqlite:///{}".format(huoguoml_dir), HUOGUOML_DATABASE_FILE)
         connect_args = {"check_same_thread": False}
@@ -27,50 +31,53 @@ class Service(object):
         experiments = self.repository.get_experiments()
         return [Experiment.from_orm(experiment) for experiment in experiments]
 
-    def get_experiment(self, experiment_id: int) -> Experiment:
-        experiment = self.repository.get_experiment(experiment_id=experiment_id)
+    def get_experiment(self, experiment_name: str) -> Optional[Experiment]:
+        experiment_orm = self.repository.get_experiment(experiment_name=experiment_name)
+        if experiment_orm:
+            experiment = Experiment.from_orm(experiment_orm)
+            experiment.runs = [self._read_run_file(run) for run in experiment.runs]
+            return experiment
+        return None
+
+    def get_experiment_run(self, experiment_name: str, experiment_run_nr: int) -> Optional[Run]:
+        experiment_orm = self.repository.get_experiment(experiment_name=experiment_name)
+        if experiment_orm:
+            experiment = Experiment.from_orm(experiment_orm)
+            run = next((self._read_run_file(run) for run in experiment.runs if run.run_nr == experiment_run_nr),
+                       None)
+            return run
+
+    def create_experiment(self, experiment_name: str) -> Experiment:
+        experiment = self.repository.create_experiment(experiment_name=experiment_name)
+        os.makedirs(os.path.join(self.huoguoml_dir, experiment.name))
         return Experiment.from_orm(experiment)
 
-    def get_or_create_experiment(self, experiment_name: str) -> Experiment:
-        experiment = self.repository.get_or_create_experiment(experiment_name=experiment_name)
-        os.makedirs(os.path.join(self.huoguoml_dir, experiment.name), exist_ok=True)
-        return Experiment.from_orm(experiment)
+    def create_run(self, experiment_name) -> Run:
+        run_orm = self.repository.create_run(experiment_name=experiment_name)
+        run_dir = os.path.join(self.huoguoml_dir, run_orm.experiment_name, str(run_orm.run_nr))
+        os.makedirs(run_dir)
 
-    def create_experiment_run(self, experiment_name: str,
-                              artifact_dir: str,
-                              model_api: ModelAPI,
-                              model_definition: ModelDefinition,
-                              requirements: List[str]) -> Run:
-        experiment_run_orm = self.repository.create_experiment_run(experiment_name)
-        experiment_run = Run(id=experiment_run_orm.id,
-                             run_nr=experiment_run_orm.run_nr,
-                             creation_time=experiment_run_orm.creation_time,
-                             experiment_name=experiment_run_orm.experiment_name,
-                             model_api=model_api,
-                             model_definition=model_definition,
-                             requirements=requirements)
+        run = Run.from_orm(run_orm)
+        run.run_dir = run_dir
+        return run
 
-        run_dir = os.path.join(self.huoguoml_dir, experiment_run.experiment_name, str(experiment_run_orm.run_nr))
-        model_dir = os.path.join(run_dir, "model")
-        shutil.copytree(artifact_dir, model_dir)
+    def get_run_files(self, run_id: str) -> str:
+        run_orm = self.repository.get_run(run_id=run_id)
+        run = self._read_run_file(run_orm)
+        zip_file_path = create_zip_file(src_dir=run.run_dir, dst_dir=self.zip_dir, zip_name=run.id)
+        return zip_file_path
 
-        run_json_path = os.path.join(run_dir, HUOGUOML_METADATA_FILE)
-        save_json(json_path=run_json_path, data=experiment_run.json())
-        return experiment_run
-
-    def get_run(self, run_id: int) -> Optional[Run]:
-        run = self.repository.get_run(run_id=run_id)
-
+    def _read_run_file(self, run: Run) -> Run:
         experiments_json = read_json(os.path.join(self.huoguoml_dir,
                                                   run.experiment_name,
                                                   str(run.run_nr),
                                                   HUOGUOML_METADATA_FILE))
-        if not experiments_json:
-            return None
-
         return Run.parse_raw(experiments_json)
 
-    def get_runs(self) -> List[Run]:
-        runs = self.repository.get_runs()
-
-        return [Run.from_orm(run) for run in runs]
+    def update_experiment(self, experiment_name: str, experiment: Experiment) -> Optional[Experiment]:
+        update_data = experiment.dict(exclude_unset=True)
+        experiment_orm = self.repository.update_experiment(experiment_name=experiment_name, update_data=update_data)
+        if experiment_orm:
+            experiment = Experiment.from_orm(experiment_orm)
+            return experiment
+        return None

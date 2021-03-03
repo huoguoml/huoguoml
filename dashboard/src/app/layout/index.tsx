@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Breadcrumb, Layout, Menu } from 'antd';
+import { Layout, Menu } from 'antd';
 import {
   DesktopOutlined,
   ExperimentOutlined,
@@ -8,15 +8,13 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppLayoutSlice } from './slice';
 import { selectAppLayout } from './slice/selectors';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { DashboardPage } from '../pages/DashboardPage/Loadable';
 import { ExperimentPage } from '../pages/ExperimentPage/Loadable';
 import { NotFoundPage } from '../components/NotFoundPage/Loadable';
-import { useHistory } from 'react-router-dom';
+import { ExperimentRunPage } from '../pages/ExperimentRunPage/Loadable';
 
-interface Props {}
-
-export const AppLayout = React.memo((props: Props) => {
+export const AppLayout = React.memo(() => {
   const dispatch = useDispatch();
   const { actions } = useAppLayoutSlice();
 
@@ -24,7 +22,7 @@ export const AppLayout = React.memo((props: Props) => {
 
   React.useEffect(() => {
     dispatch(actions.getLayoutState());
-  }, [dispatch]);
+  }, [dispatch, actions]);
 
   const { Header, Content, Footer, Sider } = Layout;
   const { SubMenu } = Menu;
@@ -35,12 +33,11 @@ export const AppLayout = React.memo((props: Props) => {
   function toDashboardPage() {
     history.push(`/`);
   }
-  function toExperimentPage() {
-    history.push(`/experiments`);
+
+  function toExperimentPageWithId(experimentName?: string) {
+    history.push(`/experiments/${experimentName}`);
   }
-  function toExperimentPageWithId(experimentId?: number) {
-    history.push(`/experiments/${experimentId}`);
-  }
+
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
@@ -64,12 +61,9 @@ export const AppLayout = React.memo((props: Props) => {
               title="Experiments"
               icon={<ExperimentOutlined />}
             >
-              <Menu.Item key="all" onClick={toExperimentPage}>
-                all
-              </Menu.Item>
               {appLayoutState.experiments?.map(experiment => (
                 <Menu.Item
-                  onClick={() => toExperimentPageWithId(experiment.id)}
+                  onClick={() => toExperimentPageWithId(experiment.name)}
                   key={experiment.id}
                 >
                   {experiment.name}
@@ -82,12 +76,13 @@ export const AppLayout = React.memo((props: Props) => {
           </Menu>
         </Sider>
         <Layout className="site-layout">
-          <Header
-            className="site-layout-background"
-            style={{
-              height: 48,
-            }}
-          />
+          <Header className="site-layout-background">
+            <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']}>
+              <Menu.Item key="1">nav 1</Menu.Item>
+              <Menu.Item key="2">nav 2</Menu.Item>
+              <Menu.Item key="3">nav 3</Menu.Item>
+            </Menu>
+          </Header>
           <Content style={{ margin: '0 16px' }}>
             <div
               className="site-layout-background"
@@ -95,17 +90,22 @@ export const AppLayout = React.memo((props: Props) => {
             >
               <Switch>
                 <Route exact path="/" component={DashboardPage} />
-                <Route exact path="/experiments" component={ExperimentPage} />
                 <Route
-                  path="/experiments/:experimentId"
+                  exact
+                  path="/experiments/:experimentName"
                   component={ExperimentPage}
+                />
+                <Route
+                  exact
+                  path="/experiments/:experimentName/:runId"
+                  component={ExperimentRunPage}
                 />
                 <Route component={NotFoundPage} />
               </Switch>
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            HuoguoML - Created by Data Scientist for Data Scientist
+            HuoguoML - Made by Data Scientist for Data Scientist
           </Footer>
         </Layout>
       </Layout>

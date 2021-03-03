@@ -3,7 +3,7 @@ import { RootState } from './RootState';
 export interface ModelAPIInterface {
   module: string;
   name: string;
-  arguments: { string: any };
+  arguments: Record<string, string>;
 }
 
 export interface ModelNodeInterface {
@@ -11,24 +11,34 @@ export interface ModelNodeInterface {
   shape: (undefined | number)[];
 }
 
+export interface ModelGraphInterface {
+  inputs: Record<string, ModelNodeInterface>;
+  outputs: Record<string, ModelNodeInterface>;
+}
+
 export interface ModelDefinitionInterface {
-  inputs: { string: ModelNodeInterface };
-  outputs: { string: ModelNodeInterface };
+  model_graph: ModelGraphInterface;
+  model_api: ModelAPIInterface;
+  requirements: string[];
 }
 
 export interface RunInterface {
   id: number;
   run_nr: number;
   creation_time: number;
+  finish_time: number;
+  author: string;
   experiment_name: string;
   model_definition?: ModelDefinitionInterface;
-  model_api?: ModelAPIInterface;
-  requirements?: string[];
+  parameters?: Record<string, string>;
+  metrics?: Record<string, string>;
+  tags?: Record<string, string>;
 }
 
 export interface ExperimentInterface {
   id: number;
   name: string;
+  description: string;
   runs: RunInterface[];
 }
 
