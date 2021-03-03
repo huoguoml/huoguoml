@@ -49,22 +49,22 @@ def server(host: str, port: int, huoguoml_dir: str):
                           host=host,
                           port=port)
 
-
-@cli.command()
-@click.option(
-    "--host",
-    default="127.0.0.1",
-    help="The network address to listen on (default: 127.0.0.1).",
-)
-@click.option(
-    "--port",
-    default=8080,
-    help="The port to listen on (default: 8080).",
-)
-@click.option(
-    "--run_uri",
-    help="The uri to the run files",
-)
+#
+# @cli.command()
+# @click.option(
+#     "--host",
+#     default="127.0.0.1",
+#     help="The network address to listen on (default: 127.0.0.1).",
+# )
+# @click.option(
+#     "--port",
+#     default=8080,
+#     help="The port to listen on (default: 8080).",
+# )
+# @click.option(
+#     "--run_uri",
+#     help="The uri to the run files",
+# )
 def service(host: str, port: int, run_uri: str):
     """
     Run a HuoguoML service.
@@ -74,7 +74,6 @@ def service(host: str, port: int, run_uri: str):
     to listen on all network interfaces (or a specific interface address).
     """
     # TODO: Check if run_uri is correct
-
     workspace_dir = HUOGUOML_DEFAULT_SERVICE_FOLDER
     run_id = os.path.basename(run_uri)
     run_dir = os.path.join(workspace_dir, run_id)
@@ -84,4 +83,4 @@ def service(host: str, port: int, run_uri: str):
 
 
 if __name__ == "__main__":
-    cli()
+    service(host="0.0.0.0", port=5000, run_uri="http://localhost:8080/rest/runs/e239b6a9233d7dacbc568048016dc210")
