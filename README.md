@@ -1,21 +1,20 @@
-<p align="center">
-<img src=".github/imgs/logo.png" alt="HuoguoML banner with lgoo"/>
-</p>
-<p align="center">
-Machine learning to production made easy
-</p>
 
-HuoguoML is a platform for managing and serving Machine Learning models. The highlights are:
+# HuoguoML 
+HuoguoML is a framework for managing machine learning models. It provides a set of lightweight APIs that can be used with all existing machine learning applications. Current core features are:
+
+- HuoguoML Tracking: An API to log parameters, code, and results in machine learning experiments 
+- HuoguoML Dashboard: A dashboard that displays experiments and their associated artifacts
+- HuoguoML Service: A CLI to easily launch a machine learning microservice from your logged experiments
 
 ## Installation
 
-Get the latest stable release of HuoguoML:
+Get the latest stable version of HuoguoML:
 
 ```bash
 pip install huoguoml
 ```
 
-Get the development release (updated for every commit on dev-Branch):
+or get the development version, which is updated with every commit on the dev branch:
 
 ```bash
 pip install huoguoml-dev
@@ -31,7 +30,7 @@ Just starting out? Try out our examples:
 
 ## Documentation
 
-Apart from learning from the examples, we highly recommended you go through our [documentation](huoguoml.github.io).
+Apart from learning from the examples, we highly recommended you go through our [documentation](https://steven-mi.gitbook.io/huoguoml/).
 
 Our docs are built on every push, merge, and release of the master branch.
 
