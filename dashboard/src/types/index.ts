@@ -28,6 +28,7 @@ export interface RunInterface {
   creation_time: number;
   finish_time: number;
   author: string;
+  status: number;
   experiment_name: string;
   model_definition?: ModelDefinitionInterface;
   parameters?: Record<string, string>;

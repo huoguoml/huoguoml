@@ -3,6 +3,7 @@ The huoguoml.types module contains all types used throughout the package
 """
 import os
 import time
+from enum import IntEnum
 from typing import Dict, Any, Union, Optional
 from typing import List
 
@@ -42,6 +43,12 @@ class ModelDefinition(BaseModel):
     requirements: List[str]
 
 
+class RunStatus(IntEnum):
+    completed = 1
+    failed = 0
+    pending = -1
+
+
 class Run(BaseModel):
     """Type for a single experiment Run
     """
@@ -51,6 +58,7 @@ class Run(BaseModel):
     finish_time: Optional[float] = None
     duration: Optional[float] = None
     author: str
+    status: RunStatus = RunStatus.pending
 
     experiment_name: str
     run_dir: str = ""
@@ -89,9 +97,12 @@ class Run(BaseModel):
     def __exit__(self, exc_type, exc_value, traceback):
         self.finish_time = time.time()
         self.duration = self.finish_time - self.creation_time
+        if exc_type:
+            self.status = RunStatus.failed
+        else:
+            self.status = RunStatus.completed
         run_json_path = os.path.join(self.run_dir, HUOGUOML_METADATA_FILE)
         save_json(json_path=run_json_path, data=self.json())
-        print(self)
 
 
 class Experiment(BaseModel):

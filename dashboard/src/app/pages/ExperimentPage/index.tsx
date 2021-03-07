@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Card, Typography } from 'antd';
+import { Typography } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectExperimentPage } from './slice/selectors';
 import { useExperimentPageSlice } from './slice';
 import { RunTable } from '../../components/RunTable/Loadable';
-import { RunInterface } from '../../../types';
 
 export function ExperimentPage() {
   const { experimentName } = useParams<Record<string, string>>();
@@ -24,19 +23,16 @@ export function ExperimentPage() {
   let history = useHistory();
 
   function toRunPage(runId: number) {
-    history.push({
-      pathname: `/experiments/${experimentName}/${runId}`,
-    });
+    history.push(`/experiments/${experimentName}/${runId}`);
   }
 
   return (
     <>
-      <Card style={{ width: '100%' }}>
-        <Title level={3}>Experiment: {experimentName}</Title>
-        <Paragraph editable={true}>
-          {experimentPageState.experiment?.description}
-        </Paragraph>
-      </Card>
+      <Title level={3}>Experiment: {experimentName}</Title>
+      <Paragraph editable={true}>
+        {experimentPageState.experiment?.description}
+      </Paragraph>
+
       {experimentPageState.experiment?.runs && (
         <RunTable
           runs={[...experimentPageState.experiment.runs]}

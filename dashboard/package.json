@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/charts": "1.0.19",
     "@reduxjs/toolkit": "1.4.0",
     "@testing-library/jest-dom": "5.11.4",
     "@testing-library/react": "11.0.2",
@@ -22,6 +23,7 @@
     "@types/webpack": "4.41.22",
     "@types/webpack-env": "1.15.2",
     "antd": "4.12.3",
+    "apexcharts": "3.25.0",
     "axios": "0.21.1",
     "chalk": "4.1.0",
     "craco": "0.0.3",

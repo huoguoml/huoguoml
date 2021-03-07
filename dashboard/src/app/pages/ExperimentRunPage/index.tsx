@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useExperimentRunPageSlice } from './slice';
 import { selectExperimentRunPage } from './slice/selectors';
-import { Card, Col, Row, Typography } from 'antd';
+import { Button, Card, Col, Row, Typography } from 'antd';
 import { RecordTable } from '../../components/RecordTable/Loadable';
 import { RecordTags } from '../../components/RecordTags/Loadable';
 
@@ -16,12 +16,13 @@ export function ExperimentRunPage() {
 
   React.useEffect(() => {
     dispatch(actions.getExperimentRunState(`/${experimentName}/${runId}`));
-  }, [dispatch, runId, actions]);
+  }, [dispatch, runId, actions, experimentName]);
 
   const { Title, Paragraph } = Typography;
   return (
     <>
       <Card style={{ width: '100%' }}>
+        <Button type="primary">Create Service</Button>
         <Title level={3}>
           Experiment: {experimentRunPageState.run?.experiment_name}
         </Title>

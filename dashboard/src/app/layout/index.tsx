@@ -46,6 +46,12 @@ export const AppLayout = React.memo(() => {
           collapsible
           collapsed={collapsed}
           onCollapse={() => setCollapsed(!collapsed)}
+          style={{
+            overflow: 'auto',
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+          }}
         >
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['dashboard']} mode="inline">
@@ -75,7 +81,10 @@ export const AppLayout = React.memo(() => {
             </Menu.Item>
           </Menu>
         </Sider>
-        <Layout className="site-layout">
+        <Layout
+          className="site-layout"
+          style={collapsed ? { marginLeft: 80 } : { marginLeft: 200 }}
+        >
           <Header className="site-layout-background">
             <Menu theme="light" mode="horizontal" defaultSelectedKeys={['2']}>
               <Menu.Item key="1">nav 1</Menu.Item>
