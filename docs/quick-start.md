@@ -3,10 +3,6 @@
 Easy-peasy steps to do :)
 
 ```
-pip install huoguoml
-```
-
-```
 with huoguoml.start_experiment_run("mnist", "./huoguoml") as run:
     run.log_parameter("test", 1123123)
     run.log_metric("test", 1123123)
