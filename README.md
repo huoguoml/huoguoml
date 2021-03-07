@@ -26,7 +26,7 @@ Just starting out? Try out our examples:
 
 | Example                          | Description   | 
 | --------------------------       | -------------| 
-| [MNIST](examples/mnist.ipynb)    | Deployment of a MNIST classifier with HuoguoML | 
+| [MNIST](examples/mnist)    | Deployment of a MNIST classifier with HuoguoML | 
 
 ## Documentation
 
