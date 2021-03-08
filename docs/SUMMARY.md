@@ -3,7 +3,8 @@
 - [Quick Start](quick-start.md)
 
 ## Examples
-- [Building Blocks](examples/README.md)
+
+- [Examples](examples/README.md)
 - [MNIST](examples/mnist.md)
 
 ## Misc
