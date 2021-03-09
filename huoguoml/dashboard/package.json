@@ -47,6 +47,7 @@
     "plop": "2.7.4",
     "prettier": "2.1.1",
     "react": "16.13.1",
+    "react-apexcharts": "1.3.7",
     "react-app-polyfill": "1.0.6",
     "react-dom": "16.13.1",
     "react-helmet-async": "1.0.6",

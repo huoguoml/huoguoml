@@ -3,6 +3,7 @@ import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { experimentPageSaga } from './saga';
 import { ExperimentPageState } from './types';
+import exp from 'constants';
 
 export const initialState: ExperimentPageState = {};
 
@@ -17,7 +18,10 @@ const slice = createSlice({
       state,
       action: PayloadAction<ExperimentPageState>,
     ) {
-      state.experiment = action.payload.experiment;
+      const experiment = action.payload.experiment;
+      experiment?.runs.sort((a, b) => b.run_nr - a.run_nr);
+
+      state.experiment = experiment;
       state.isLoading = false;
     },
     getExperimentStateFailure(state, action: PayloadAction<string>) {

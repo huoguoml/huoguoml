@@ -11,7 +11,7 @@ import { Helmet } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
-import { AppLayout } from './layout/Loadable';
+import { AppLayout } from './layout/AppLayout/Loadable';
 
 export function App() {
   const { i18n } = useTranslation();

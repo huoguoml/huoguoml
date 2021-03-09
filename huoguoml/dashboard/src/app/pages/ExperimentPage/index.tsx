@@ -1,12 +1,17 @@
 import * as React from 'react';
-import { Typography } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectExperimentPage } from './slice/selectors';
 import { useExperimentPageSlice } from './slice';
 import { RunTable } from '../../components/RunTable/Loadable';
+import { ExperimentContentLayout } from '../../layout/ExperimentContentLayout/Loadable';
+import { RunInterface } from '../../../types';
+import { RunMetricCharts } from '../../components/RunMetricCharts/Loadable';
+import { Typography } from 'antd';
 
 export function ExperimentPage() {
+  const { Title, Paragraph } = Typography;
+
   const { experimentName } = useParams<Record<string, string>>();
 
   const dispatch = useDispatch();
@@ -18,27 +23,40 @@ export function ExperimentPage() {
     dispatch(actions.getExperimentState(experimentName));
   }, [dispatch, experimentName, actions]);
 
-  const { Title, Paragraph } = Typography;
-
   let history = useHistory();
 
   function toRunPage(runId: number) {
     history.push(`/experiments/${experimentName}/${runId}`);
   }
 
+  React.useEffect(() => {
+    if (experimentPageState.experiment?.runs) {
+      setSelectedRows(experimentPageState.experiment.runs.slice(0, 5));
+    }
+  }, [dispatch, experimentPageState.experiment]);
+
+  const [selectedRows, setSelectedRows] = React.useState<RunInterface[]>([]);
   return (
     <>
-      <Title level={3}>Experiment: {experimentName}</Title>
-      <Paragraph editable={true}>
-        {experimentPageState.experiment?.description}
-      </Paragraph>
+      <ExperimentContentLayout contentUri={['experiments', experimentName]}>
+        <>
+          <Title level={4}>{experimentName}</Title>
+          <Paragraph copyable editable>
+            {experimentPageState.experiment?.description}
+          </Paragraph>
+        </>
 
-      {experimentPageState.experiment?.runs && (
-        <RunTable
-          runs={[...experimentPageState.experiment.runs]}
-          onClick={toRunPage}
-        />
-      )}
+        {selectedRows.length > 0 && <RunMetricCharts runs={selectedRows} />}
+
+        {experimentPageState.experiment?.runs && (
+          <RunTable
+            runs={[...experimentPageState.experiment.runs]}
+            defaultRuns={selectedRows}
+            setSelectedRows={setSelectedRows}
+            onClick={toRunPage}
+          />
+        )}
+      </ExperimentContentLayout>
     </>
   );
 }

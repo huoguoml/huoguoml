@@ -2,9 +2,9 @@ import * as React from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RunInterface } from '../../../types';
-import { Scatter } from '@ant-design/charts';
-import { Checkbox, Col, Divider, Popover, Row } from 'antd';
+import { Checkbox, Col, Divider, Popover, Row, Typography } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
+import Chart from 'react-apexcharts';
 
 interface Props {
   runs: RunInterface[];
@@ -60,68 +60,65 @@ export const RunMetricCharts = memo((props: Props) => {
     </>
   );
 
-  const plotData = checkedList.map(metric =>
-    props.runs.map(run => {
-      return {
-        run_nr: run.run_nr,
-        // @ts-ignore
-        metric_value: run.metrics[metric],
-        metric_name: metric,
-      };
-    }),
-  );
-
-  const plotConfigs = plotData.map(plotData => {
+  const plotData = checkedList.map(metric => {
     return {
-      data: plotData,
-      xField: 'run_nr',
-      yField: 'metric_value',
-      size: 5,
-      padding: 25,
-      pointStyle: {
-        stroke: '#777777',
-        lineWidth: 1,
-        fill: '#5B8FF9',
-      },
-      yAxis: {
-        nice: true,
-        line: { style: { stroke: '#aaa' } },
-      },
-      xAxis: {
-        grid: { line: { style: { stroke: '#eee' } } },
-        line: { style: { stroke: '#aaa' } },
-      },
-      tooltip: {
-        fields: ['run_nr', 'metric_value', 'metric_name'],
-        formatter: metric => {
-          return {
-            name: metric.metric_name,
-            value: metric.metric_value,
-            test: 1,
-          };
+      series: [
+        {
+          name: metric,
+          data: props.runs.map(run => [
+            run.run_nr,
+            //@ts-ignore
+            run.metrics[metric],
+          ]),
         },
-        title: title => {
-          return `Run ${title}`;
+      ],
+      options: {
+        chart: {
+          type: 'scatter',
+          zoom: {
+            enabled: false,
+          },
+          toolbar: {
+            show: false,
+          },
         },
-        enterable: true,
-        showTitle: true,
+        xaxis: {
+          labels: {
+            formatter: function (val) {
+              return parseFloat(val);
+            },
+          },
+        },
+        yaxis: {
+          tickAmount: 7,
+        },
+        title: {
+          text: metric,
+        },
       },
     };
   });
+  const { Title } = Typography;
 
   return (
     <>
+      <Title level={4}>Metric Charts</Title>
       <Popover placement="bottomLeft" content={menu} trigger="click">
         <SettingOutlined />
       </Popover>
       <Row gutter={[8, 8]}>
-        {plotConfigs.map(plotConfig => (
-          <>
-            <Col sm={{ span: 24 }} md={{ span: 8 }} style={{ height: 300 }}>
-              <Scatter {...plotConfig} />
+        <>
+          {plotData.map(data => (
+            <Col sm={{ span: 24 }} md={{ span: 8 }}>
+              <Chart
+                options={data.options}
+                series={data.series}
+                type="scatter"
+                height={280}
+              />
             </Col>
-          </>
-        ))}
+          ))}
+        </>
       </Row>
     </>
   );

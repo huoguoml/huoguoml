@@ -1,6 +1,6 @@
 import { put, takeLatest } from 'redux-saga/effects';
-import { appLayoutActions as actions } from '.';
-import { EXPERIMENT_URI } from '../../../constants';
+import { appLayoutActions as actions } from './index';
+import { EXPERIMENT_URI } from '../../../../constants';
 import axios from 'axios';
 
 function* getLayoutState() {

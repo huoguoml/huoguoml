@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { RunInterface } from '../../../types';
 import { Table } from 'antd';
 import { StatusTag } from '../StatusTag/Loadable';
-import { RunMetricCharts } from '../RunMetricCharts/Loadable';
 
 interface Props {
   runs: RunInterface[];
+  defaultRuns: RunInterface[];
+  setSelectedRows: (run: RunInterface[]) => void;
   onClick: (runId: number) => void;
 }
 
@@ -31,18 +32,9 @@ const secondsToTime = (seconds: number) => {
   );
 };
 
-const getUniqueKeys = (runs: RunInterface[], field_name: string) => {
-  const record_keys = runs.flatMap(run =>
-    run.metrics ? Object.keys(run[field_name]) : undefined,
-  );
-  return Array.from(new Set(record_keys));
-};
-
 export const RunTable = memo((props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
-
-  props.runs.sort((a, b) => b.run_nr - a.run_nr);
 
   const fixedColumns: any = [
     {
@@ -56,6 +48,9 @@ export const RunTable = memo((props: Props) => {
         <a onClick={() => props.onClick && props.onClick(id)}>{id}</a>
       ),
     },
+  ];
+
+  const nonFixedColumns = [
     {
       title: 'Start Time',
       dataIndex: 'creation_time',
@@ -64,14 +59,11 @@ export const RunTable = memo((props: Props) => {
       sortDirections: ['ascend'],
       render: creation_time => <div>{timestampToDate(creation_time)}</div>,
     },
-  ];
-
-  const nonFixedColumns = [
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      sorter: (a, b) => a.status.localeCompare(b.status),
+      sorter: (a, b) => a.status - b.status,
       render: status => <StatusTag status_code={-1} />,
     },
     {
@@ -87,31 +79,22 @@ export const RunTable = memo((props: Props) => {
       key: 'author',
       sorter: (a, b) => a.author.localeCompare(b.author),
     },
+    {
+      title: 'Action',
+      render: () => <a>Delete</a>,
+    },
   ];
 
-  // const metricColumns = getUniqueKeys(props.runs, 'metrics').map(key_name => {
-  //   return {
-  //     title: key_name,
-  //     dataIndex: ['metrics', key_name],
-  //     key: key_name,
-  //   };
-  // });
-
   const onSelectChange = (selectedRowKeys, selectedRows) => {
-    setSelectedRows(selectedRows);
+    props.setSelectedRows(selectedRows);
   };
 
-  const [selectedRows, setSelectedRows] = React.useState<RunInterface[]>(
-    props.runs.slice(0, 5),
-  );
-
   const rowSelection = {
-    selectedRowKeys: selectedRows.map(run => run.run_nr),
+    selectedRowKeys: props.defaultRuns.map(run => run.run_nr),
     onChange: onSelectChange,
   };
   return (
     <>
-      <RunMetricCharts runs={selectedRows} />
       <Table
         rowKey={run => run.run_nr}
         size="small"
