@@ -40,13 +40,15 @@ export function ExperimentPage() {
     <>
       <ExperimentContentLayout contentUri={['experiments', experimentName]}>
         <>
-          <Title level={4}>{experimentName}</Title>
-          <Paragraph copyable editable>
-            {experimentPageState.experiment?.description}
+          <Title level={4}>Experiment: {experimentName}</Title>
+          <Paragraph copyable={true} editable={true}>
+            {experimentPageState.experiment?.description
+              ? experimentPageState.experiment?.description
+              : ''}
           </Paragraph>
         </>
 
-        {selectedRows.length > 0 && <RunMetricCharts runs={selectedRows} />}
+        {/*{selectedRows.length > 0 && <RunMetricCharts runs={selectedRows} />}*/}
 
         {experimentPageState.experiment?.runs && (
           <RunTable

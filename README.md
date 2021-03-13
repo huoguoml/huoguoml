@@ -2,8 +2,8 @@
 # HuoguoML 
 HuoguoML is a framework for managing machine learning models. It provides a set of lightweight APIs that can be used with all existing machine learning applications. Key features are:
 
-- HuoguoML Tracking: An API to log parameters, code, and results in machine learning experiments 
-- HuoguoML Dashboard: A dashboard that displays experiments and their associated artifacts
+- HuoguoML Tracking: An API to log parameters, code, and results of machine learning experiments 
+- HuoguoML Dashboard: A powerful dashboard for comparing and analysing logged experiments
 - HuoguoML Service: A CLI to easily launch a machine learning microservice from your logged experiments
 
 

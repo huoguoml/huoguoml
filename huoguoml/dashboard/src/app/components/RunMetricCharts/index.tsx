@@ -85,7 +85,7 @@ export const RunMetricCharts = memo((props: Props) => {
         xaxis: {
           labels: {
             formatter: function (val) {
-              return parseFloat(val);
+              return parseFloat(val).toFixed(0);
             },
           },
         },
@@ -108,9 +108,10 @@ export const RunMetricCharts = memo((props: Props) => {
       </Popover>
       <Row gutter={[8, 8]}>
         <>
-          {plotData.map(data => (
-            <Col sm={{ span: 24 }} md={{ span: 8 }}>
+          {plotData.map((data, index) => (
+            <Col key={`col_${index}`} sm={{ span: 24 }} md={{ span: 8 }}>
               <Chart
+                key={`metric_chart_${index}`}
                 options={data.options}
                 series={data.series}
                 type="scatter"

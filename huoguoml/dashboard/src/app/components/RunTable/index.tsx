@@ -2,7 +2,7 @@ import * as React from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RunInterface } from '../../../types';
-import { Table } from 'antd';
+import { Table, Typography } from 'antd';
 import { StatusTag } from '../StatusTag/Loadable';
 
 interface Props {
@@ -64,7 +64,7 @@ export const RunTable = memo((props: Props) => {
       dataIndex: 'status',
       key: 'status',
       sorter: (a, b) => a.status - b.status,
-      render: status => <StatusTag status_code={-1} />,
+      render: status => <StatusTag status_code={status} />,
     },
     {
       title: 'Duration',
@@ -93,8 +93,13 @@ export const RunTable = memo((props: Props) => {
     selectedRowKeys: props.defaultRuns.map(run => run.run_nr),
     onChange: onSelectChange,
   };
+
+  const { Title } = Typography;
+
   return (
     <>
+      <Title level={4}>Runs</Title>
+
       <Table
         rowKey={run => run.run_nr}
         size="small"

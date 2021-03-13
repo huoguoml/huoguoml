@@ -14,16 +14,16 @@ class Service(object):
     """The Repository object is responsible for the connection to the database.
     """
 
-    def __init__(self, huoguoml_dir: str):
+    def __init__(self, artifact_dir: str):
         # TODO: Check if absolute path is really necessary
-        self.huoguoml_dir = os.path.realpath(huoguoml_dir)
-        self.zip_dir = os.path.join(self.huoguoml_dir, HUOGUOML_DEFAULT_ZIP_FOLDER)
+        self.artifact_dir = os.path.realpath(artifact_dir)
+        self.zip_dir = os.path.join(self.artifact_dir, HUOGUOML_DEFAULT_ZIP_FOLDER)
 
-        if not os.path.isdir(self.huoguoml_dir):
-            os.makedirs(self.huoguoml_dir)
+        if not os.path.isdir(self.artifact_dir):
+            os.makedirs(self.artifact_dir)
             os.makedirs(self.zip_dir)
 
-        database_url = os.path.join("sqlite:///{}".format(huoguoml_dir), HUOGUOML_DATABASE_FILE)
+        database_url = os.path.join("sqlite:///{}".format(artifact_dir), HUOGUOML_DATABASE_FILE)
         connect_args = {"check_same_thread": False}
         self.repository = Repository(database_url=database_url, connect_args=connect_args)
 
@@ -49,12 +49,12 @@ class Service(object):
 
     def create_experiment(self, experiment_name: str) -> Experiment:
         experiment = self.repository.create_experiment(experiment_name=experiment_name)
-        os.makedirs(os.path.join(self.huoguoml_dir, experiment.name))
+        os.makedirs(os.path.join(self.artifact_dir, experiment.name))
         return Experiment.from_orm(experiment)
 
     def create_run(self, experiment_name) -> Run:
         run_orm = self.repository.create_run(experiment_name=experiment_name)
-        run_dir = os.path.join(self.huoguoml_dir, run_orm.experiment_name, str(run_orm.run_nr))
+        run_dir = os.path.join(self.artifact_dir, run_orm.experiment_name, str(run_orm.run_nr))
         os.makedirs(run_dir)
 
         run = Run.from_orm(run_orm)
@@ -68,7 +68,7 @@ class Service(object):
         return zip_file_path
 
     def _read_run_file(self, run: Run) -> Run:
-        experiments_json = read_json(os.path.join(self.huoguoml_dir,
+        experiments_json = read_json(os.path.join(self.artifact_dir,
                                                   run.experiment_name,
                                                   str(run.run_nr),
                                                   HUOGUOML_METADATA_FILE))

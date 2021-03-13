@@ -19,6 +19,7 @@ class Run(Base):
     creation_time = Column(Float)
     experiment = relationship("Experiment", back_populates="runs")
     experiment_name = Column(String, ForeignKey("experiments.name"))
+    services = relationship("Service", back_populates="run")
 
 
 class Experiment(Base):
@@ -32,3 +33,14 @@ class Experiment(Base):
     @validates('name')
     def convert_upper(self, key, value):
         return value.lower()
+
+class Service(Base):
+    __tablename__ = "services"
+
+    id = Column(Integer, primary_key=True, index=True)
+    host = Column(String, index=True, unique=True, nullable=False)
+    port = Column(String, index=True, unique=True, nullable=False)
+    run = relationship("runs", back_populates="services")
+    run_id = Column(String, ForeignKey("runs.id"))
+
+

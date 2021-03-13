@@ -6,16 +6,16 @@ from huoguoml.server.database.service import Service
 from huoguoml.server.routers import experiment, run
 
 
-def start_huoguoml_server(huoguoml_dir: str, host: str, port: int):
+def start_huoguoml_server(artifact_dir: str, host: str, port: int):
     """
     Starts the HuoguoML server
 
     Args:
-        huoguoml_dir: Location of the huoguoml dir
+        artifact_dir: Location of the artifact directory
         host: The network address to listen on
         port: The port to listen on
     """
-    service = Service(huoguoml_dir=huoguoml_dir)
+    service = Service(artifact_dir=artifact_dir)
     app = FastAPI()
 
     origins = [

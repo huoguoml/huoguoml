@@ -10,9 +10,13 @@ function* getExperimentState(action: PayloadAction<string>) {
     const experimentResponse = yield axios.get(
       `${EXPERIMENT_URI}/${action.payload}`,
     );
+    const experiment = experimentResponse.data;
+    const runs = experimentResponse.data.runs;
+    runs.sort((a, b) => b.run_nr - a.run_nr);
+    experiment.runs = runs;
     yield put(
       actions.getExperimentStateSuccess({
-        experiment: experimentResponse.data,
+        experiment: experiment,
       }),
     );
   } catch (error) {

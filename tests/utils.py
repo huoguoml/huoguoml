@@ -1,2 +1,1 @@
-def dummy():
-    assert True
+

@@ -1,5 +1,6 @@
 *
 
+!mnist
+
 !.gitignore
-!*.ipynb
 !README.md
