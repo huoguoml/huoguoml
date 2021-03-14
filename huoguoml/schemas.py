@@ -76,7 +76,7 @@ class Run(BaseModel):
                   model_type: str,
                   **kwargs):
         if self.model_definition:
-            raise FileExistsError("A model already exists")
+            raise FileExistsError("A model was already logged")
 
         if model_type == "tensorflow":
             from huoguoml.tracking.tensorflow import log_model
@@ -91,18 +91,23 @@ class Run(BaseModel):
     def log_tag(self, tag_name: str, tag_value: str):
         self.tags[tag_name] = tag_value
 
+    def end_experiment_run(self):
+        self.finish_time = time.time()
+        self.duration = self.finish_time - self.creation_time
+        self.status = RunStatus.completed
+
+    def _save_experiment_run(self):
+        run_json_path = os.path.join(self.run_dir, HUOGUOML_METADATA_FILE)
+        save_json(json_path=run_json_path, data=self.json())
+
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self.finish_time = time.time()
-        self.duration = self.finish_time - self.creation_time
         if exc_type:
             self.status = RunStatus.failed
-        else:
-            self.status = RunStatus.completed
-        run_json_path = os.path.join(self.run_dir, HUOGUOML_METADATA_FILE)
-        save_json(json_path=run_json_path, data=self.json())
+        self.end_experiment_run()
+        self._save_experiment_run()
 
 
 class Experiment(BaseModel):

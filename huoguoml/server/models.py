@@ -34,13 +34,12 @@ class Experiment(Base):
     def convert_upper(self, key, value):
         return value.lower()
 
+
 class Service(Base):
     __tablename__ = "services"
 
     id = Column(Integer, primary_key=True, index=True)
     host = Column(String, index=True, unique=True, nullable=False)
     port = Column(String, index=True, unique=True, nullable=False)
-    run = relationship("runs", back_populates="services")
+    run = relationship("Run", back_populates="services")
     run_id = Column(String, ForeignKey("runs.id"))
-
-

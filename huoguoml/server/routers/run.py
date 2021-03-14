@@ -13,7 +13,7 @@ def get_router(service: Service) -> APIRouter:
 
     @router.get("/{run_id}")
     async def get_run(run_id: str):
-        run = service.get_run_files(run_id=run_id)
-        return FileResponse(run, media_type='application/zip')
+        run_file_path = service.get_run_file_path(run_id=run_id)
+        return FileResponse(run_file_path, media_type='application/zip')
 
     return router

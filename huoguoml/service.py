@@ -20,17 +20,17 @@ def start_huoguoml_service(host: str, port: int, run_uri: str, artifact_dir: str
         run_uri: URI to the run artifact
         artifact_dir: Location of the artifact directory
     """
-    # TODO: Check if run_uri is correct
+    # TODO: Check if run_uri is correct and raise error otherwise
     run_id = os.path.basename(run_uri)
     run_dir = os.path.join(artifact_dir, run_id)
-    os.makedirs(run_dir, exist_ok=True)
-    download_and_extract_run_files(run_uri=run_uri, dst_dir=run_dir)
+    if not os.path.isdir(run_dir):
+        os.makedirs(run_dir)
+        download_and_extract_run_files(run_uri=run_uri, dst_dir=run_dir)
 
     os.chdir(run_dir)
     run_json = read_json(HUOGUOML_METADATA_FILE)
     # TODO: Check if exist otherwise error
     run = Run.parse_raw(run_json)
-    # TODO: Check if exist otherwise error
     input_model = create_model('Inputs', **run.model_definition.model_graph.inputs)
     output_model = create_model('Outputs', **run.model_definition.model_graph.outputs)
 

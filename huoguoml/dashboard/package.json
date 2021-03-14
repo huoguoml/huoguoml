@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/charts": "1.0.19",
+    "@craco/craco": "6.1.1",
     "@reduxjs/toolkit": "1.4.0",
     "@testing-library/jest-dom": "5.11.4",
     "@testing-library/react": "11.0.2",

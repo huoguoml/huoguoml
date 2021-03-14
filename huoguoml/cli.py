@@ -5,9 +5,9 @@ The huoguoml.cli module contains code for the HuoguoML CLI
 import click
 
 from huoguoml.constants import HUOGUOML_DEFAULT_SERVER_FOLDER, HUOGUOML_DEFAULT_SERVICE_FOLDER, \
-    HUOGUOML_DEFAULT_SERVER_PORT, HUOGUOML_DEFAULT_SERVICE_HOST, HUOGUOML_DEFAULT_SERVICE_PORT
-from huoguoml.server.main import start_huoguoml_server
-from huoguoml.service.main import start_huoguoml_service
+    HUOGUOML_DEFAULT_SERVICE_HOST, HUOGUOML_DEFAULT_SERVICE_PORT
+from huoguoml.server import start_huoguoml_server
+from huoguoml.service import start_huoguoml_service
 
 
 @click.group()

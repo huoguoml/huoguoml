@@ -61,9 +61,13 @@ class Service(object):
         run.run_dir = run_dir
         return run
 
-    def get_run_files(self, run_id: str) -> str:
+    def get_run(self, run_id: str) -> Run:
         run_orm = self.repository.get_run(run_id=run_id)
-        run = self._read_run_file(run_orm)
+        run = self._read_run_file(run=run_orm)
+        return run
+
+    def get_run_file_path(self, run_id: str) -> str:
+        run = self.get_run(run_id=run_id)
         zip_file_path = create_zip_file(src_dir=run.run_dir, dst_dir=self.zip_dir, zip_name=run.id)
         return zip_file_path
 

@@ -9,8 +9,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import huoguoml
-from huoguoml.server.database.models import Base, Run
-from huoguoml.server.database.models import Experiment
+from huoguoml.server.models import Base, Run
+from huoguoml.server.models import Experiment
 from huoguoml.utils import create_hash
 
 
