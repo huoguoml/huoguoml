@@ -1,11 +1,9 @@
 # HuoguoML 
-HuoguoML is a framework for managing machine learning models. It provides a set of lightweight APIs that can be used with all existing machine learning applications. Key features are:
+HuoguoML is a platform for managing machine learning models. It provides a set of lightweight APIs that can be used with all existing machine learning applications. Key features are:
 
 - HuoguoML Tracking: An API to log parameters, code, and results of machine learning experiments 
 - HuoguoML Dashboard: A powerful dashboard for comparing and analysing logged experiments
 - HuoguoML Service: A CLI to easily launch a REST service from your logged experiments
-
-The core idea is provide a fast and easy way for managing and productionizing your machine learning models.
 
 ## Installation
 
@@ -34,7 +32,7 @@ Just starting out? Try out our examples:
 
 Apart from learning from the examples, we highly recommended you go through our [documentation](https://steven-mi.gitbook.io/huoguoml/).
 
-Our docs are built on every push, merge, and release of the master branch.
+Our docs are built on every push to the main or dev branch.
 
 ## Contributors
 
@@ -43,3 +41,9 @@ We happily welcome all kinds of contributions to HuoguoML. Please see our [contr
 ## License
 
 Apache License Version 2.0, see [LICENSE](LICENSE)
+
+## Philosophy
+
+Putting machine learning into production is difficult. This is because often Enginee
+
+Machine learning  

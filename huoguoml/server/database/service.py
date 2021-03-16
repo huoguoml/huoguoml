@@ -5,7 +5,7 @@ import os
 from typing import List, Optional
 
 from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER
-from huoguoml.schemas import Experiment, Run
+from huoguoml.schemas import Experiment, Run, MLService
 from huoguoml.server.database.repository import Repository
 from huoguoml.utils import read_json, create_zip_file
 
@@ -84,4 +84,19 @@ class Service(object):
         if experiment_orm:
             experiment = Experiment.from_orm(experiment_orm)
             return experiment
+        return None
+
+    def create_ml_service(self, ml_service: MLService) -> MLService:
+        ml_service_orm = self.repository.get_or_create_ml_service(host=ml_service.host, port=ml_service.port)
+        return MLService.from_orm(ml_service_orm)
+
+    def get_ml_services(self) -> List[MLService]:
+        return self.repository.get_ml_services()
+
+    def update_ml_service(self, ml_service_id: int, ml_service: MLService) -> Optional[MLService]:
+        update_data = ml_service.dict(exclude_unset=True)
+        ml_service_orm = self.repository.update_ml_service(ml_service_id=ml_service_id, update_data=update_data)
+        if ml_service_orm:
+            ml_service = MLService.from_orm(ml_service_orm)
+            return ml_service
         return None

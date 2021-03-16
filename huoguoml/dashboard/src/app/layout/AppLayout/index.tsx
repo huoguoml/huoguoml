@@ -4,6 +4,7 @@ import {
   DesktopOutlined,
   ExperimentOutlined,
   HomeOutlined,
+  QuestionOutlined,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppLayoutSlice } from './slice';
@@ -13,6 +14,8 @@ import { DashboardPage } from '../../pages/DashboardPage/Loadable';
 import { ExperimentPage } from '../../pages/ExperimentPage/Loadable';
 import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 import { ExperimentRunPage } from '../../pages/ExperimentRunPage/Loadable';
+import { ServicesPage } from '../../pages/ServicesPage/Loadable';
+import { HelpPage } from '../../pages/HelpPage/Loadable';
 
 export const AppLayout = React.memo(() => {
   const dispatch = useDispatch();
@@ -38,6 +41,12 @@ export const AppLayout = React.memo(() => {
     history.push(`/experiments/${experimentName}`);
   }
 
+  function toServicePage() {
+    history.push('/services');
+  }
+  function toHelpPage() {
+    history.push('/help');
+  }
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
@@ -76,8 +85,19 @@ export const AppLayout = React.memo(() => {
                 </Menu.Item>
               ))}
             </SubMenu>
-            <Menu.Item key="services" icon={<DesktopOutlined />}>
+            <Menu.Item
+              key="services"
+              icon={<DesktopOutlined />}
+              onClick={toServicePage}
+            >
               Services
+            </Menu.Item>
+            <Menu.Item
+              onClick={toHelpPage}
+              key="help"
+              icon={<QuestionOutlined />}
+            >
+              Help
             </Menu.Item>
           </Menu>
         </Sider>
@@ -99,6 +119,8 @@ export const AppLayout = React.memo(() => {
                 path="/experiments/:experimentName/:runId"
                 component={ExperimentRunPage}
               />
+              <Route exact path="/services" component={ServicesPage} />
+              <Route exact path="/help" component={HelpPage} />
               <Route component={NotFoundPage} />
             </Switch>
           </Content>

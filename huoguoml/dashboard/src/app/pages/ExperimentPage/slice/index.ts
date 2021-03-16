@@ -3,7 +3,6 @@ import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { experimentPageSaga } from './saga';
 import { ExperimentPageState } from './types';
-import { run } from 'plop';
 
 export const initialState: ExperimentPageState = {};
 

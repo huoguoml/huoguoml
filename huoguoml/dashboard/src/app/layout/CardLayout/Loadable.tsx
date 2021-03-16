@@ -4,7 +4,7 @@
 
 import { lazyLoad } from 'utils/loadable';
 
-export const ExperimentContentLayout = lazyLoad(
+export const CardLayout = lazyLoad(
   () => import('./index'),
-  module => module.ExperimentContentLayout,
+  module => module.CardLayout,
 );

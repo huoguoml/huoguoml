@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { memo } from 'react';
-import { Breadcrumb, Typography } from 'antd';
-import { ContentCard } from '../ContentCard/Loadable';
+import { Breadcrumb, Col, Row } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 interface Props {
@@ -9,7 +8,7 @@ interface Props {
   contentUri: string[];
 }
 
-export const ExperimentContentLayout = memo((props: Props) => {
+export const CardLayout = memo((props: Props) => {
   let history = useHistory();
   function toPage(uri: string) {
     console.log(uri);
@@ -36,9 +35,23 @@ export const ExperimentContentLayout = memo((props: Props) => {
           ))}
         </Breadcrumb>
       </div>
-      {props.children.map((child, index) => (
-        <ContentCard key={`content_card_${index}`}>{child}</ContentCard>
-      ))}
+      <Row gutter={[0, 16]}>
+        {props.children.map((child, index) => (
+          <Col
+            xs={{ span: 24 }}
+            lg={{ span: 8 }}
+            style={{ margin: '0px 0px 0px 16px' }}
+          >
+            <div
+              key={`card_${index}`}
+              className="site-layout-background"
+              style={{ padding: 24 }}
+            >
+              {child}
+            </div>
+          </Col>
+        ))}
+      </Row>
     </>
   );
 });

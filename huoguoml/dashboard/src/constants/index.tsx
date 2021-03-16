@@ -4,4 +4,5 @@ export const BACKEND_API: string = process.env
   : 'http://localhost:8080';
 
 export const EXPERIMENT_URI: string = BACKEND_API + '/rest/experiments';
+export const SERVICE_URI: string = BACKEND_API + '/rest/ml_services';
 export const RUN_URI: string = BACKEND_API + '/rest/runs';

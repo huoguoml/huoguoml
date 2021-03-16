@@ -62,8 +62,8 @@ def server(host: str, port: int, artifact_dir: str):
     help="The port to listen on (default: {}).".format(HUOGUOML_DEFAULT_SERVICE_PORT),
 )
 @click.option(
-    "--run_uri",
-    help="The uri to the run files",
+    "--server_uri",
+    help="The uri to the HuoguoML server",
 )
 @click.option(
     "--artifact_dir",
@@ -71,7 +71,7 @@ def server(host: str, port: int, artifact_dir: str):
     help="The location of the artifact directory for the HuoguoML service (default: {}).".format(
         HUOGUOML_DEFAULT_SERVICE_FOLDER),
 )
-def service(host: str, port: int, run_uri: str, artifact_dir: str):
+def service(host: str, port: int, server_uri: str, artifact_dir: str):
     """
     Run a HuoguoML service.
     The service listens on http://127.0.0.1:8080 by default, and only
@@ -79,4 +79,4 @@ def service(host: str, port: int, run_uri: str, artifact_dir: str):
     request from other machines, you will need to pass `--host 0.0.0.0`
     to listen on all network interfaces (or a specific interface address).
     """
-    start_huoguoml_service(host=host, port=port, run_uri=run_uri, artifact_dir=artifact_dir)
+    start_huoguoml_service(host=host, port=port, server_uri=server_uri, artifact_dir=artifact_dir)

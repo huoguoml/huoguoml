@@ -56,15 +56,7 @@ export const RunTable = memo((props: Props) => {
       dataIndex: 'creation_time',
       key: 'creation_time',
       sorter: (a, b) => a.creation_time - b.creation_time,
-      sortDirections: ['ascend'],
       render: creation_time => <div>{timestampToDate(creation_time)}</div>,
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      sorter: (a, b) => a.status - b.status,
-      render: status => <StatusTag status_code={status} />,
     },
     {
       title: 'Duration',
@@ -74,14 +66,17 @@ export const RunTable = memo((props: Props) => {
       render: duration => <div>{secondsToTime(parseFloat(duration))}</div>,
     },
     {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      sorter: (a, b) => a.status - b.status,
+      render: status => <StatusTag status_code={status} />,
+    },
+    {
       title: 'Author',
       dataIndex: 'author',
       key: 'author',
       sorter: (a, b) => a.author.localeCompare(b.author),
-    },
-    {
-      title: 'Action',
-      render: () => <a>Delete</a>,
     },
   ];
 
@@ -98,7 +93,7 @@ export const RunTable = memo((props: Props) => {
 
   return (
     <>
-      <Title level={4}>Runs</Title>
+      <Title level={4}>Experiment Runs</Title>
 
       <Table
         rowKey={run => run.run_nr}

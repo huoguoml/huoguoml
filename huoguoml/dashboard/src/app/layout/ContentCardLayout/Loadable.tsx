@@ -4,7 +4,7 @@
 
 import { lazyLoad } from 'utils/loadable';
 
-export const ContentCard = lazyLoad(
+export const ContentCardLayout = lazyLoad(
   () => import('./index'),
-  module => module.ContentCard,
+  module => module.ContentCardLayout,
 );

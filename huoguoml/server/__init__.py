@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from huoguoml.server.database.service import Service
-from huoguoml.server.routers import experiment, run
+from huoguoml.server.routers import experiment, run, ml_service
 
 
 def start_huoguoml_server(artifact_dir: str, host: str, port: int):
@@ -31,6 +31,7 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
     )
     app.include_router(experiment.get_router(service=service))
     app.include_router(run.get_router(service=service))
+    app.include_router(ml_service.get_router(service=service))
 
     @app.get("/")
     async def root():

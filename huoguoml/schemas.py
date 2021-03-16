@@ -120,3 +120,26 @@ class Experiment(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class MLService(BaseModel):
+    id: Optional[int]
+    host: str
+    port: int
+    run_id: Optional[str]
+
+    class Config:
+        orm_mode = True
+
+
+class RequestLog(BaseModel):
+    timestamp: int
+    sender_host: str
+    sender_port: int
+    receiver_host: str
+    receiver_port: int
+    level: int
+    message: str
+
+    class Config:
+        orm_mode = True

@@ -4,9 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectExperimentPage } from './slice/selectors';
 import { useExperimentPageSlice } from './slice';
 import { RunTable } from '../../components/RunTable/Loadable';
-import { ExperimentContentLayout } from '../../layout/ExperimentContentLayout/Loadable';
+import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { RunInterface } from '../../../types';
-import { RunMetricCharts } from '../../components/RunMetricCharts/Loadable';
 import { Typography } from 'antd';
 
 export function ExperimentPage() {
@@ -38,7 +37,7 @@ export function ExperimentPage() {
   const [selectedRows, setSelectedRows] = React.useState<RunInterface[]>([]);
   return (
     <>
-      <ExperimentContentLayout contentUri={['experiments', experimentName]}>
+      <ContentCardLayout contentUri={['experiments', experimentName]}>
         <>
           <Title level={4}>Experiment: {experimentName}</Title>
           <Paragraph copyable={true} editable={true}>
@@ -58,7 +57,7 @@ export function ExperimentPage() {
             onClick={toRunPage}
           />
         )}
-      </ExperimentContentLayout>
+      </ContentCardLayout>
     </>
   );
 }

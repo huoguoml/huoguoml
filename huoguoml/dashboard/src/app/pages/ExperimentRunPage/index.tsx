@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useExperimentRunPageSlice } from './slice';
 import { selectExperimentRunPage } from './slice/selectors';
-import { Button, Card, Col, Row, Typography } from 'antd';
+import { Typography } from 'antd';
 import { RecordTable } from '../../components/RecordTable/Loadable';
 import { RecordTags } from '../../components/RecordTags/Loadable';
-import { ExperimentContentLayout } from '../../layout/ExperimentContentLayout/Loadable';
+import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 
 export function ExperimentRunPage() {
   const { runId, experimentName } = useParams<Record<string, string>>();
@@ -22,9 +22,7 @@ export function ExperimentRunPage() {
   const { Title, Paragraph } = Typography;
   return (
     <>
-      <ExperimentContentLayout
-        contentUri={['experiments', experimentName, runId]}
-      >
+      <ContentCardLayout contentUri={['experiments', experimentName, runId]}>
         <>
           <Title level={4}>Run: {runId}</Title>
           <RecordTags
@@ -44,7 +42,7 @@ export function ExperimentRunPage() {
           title={'Metrics'}
           record={experimentRunPageState.run?.metrics}
         />
-      </ExperimentContentLayout>
+      </ContentCardLayout>
     </>
   );
 }

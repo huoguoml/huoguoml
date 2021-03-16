@@ -43,4 +43,11 @@ export interface ExperimentInterface {
   runs: RunInterface[];
 }
 
+export interface ServiceInterface {
+  id: number;
+  host: string;
+  port: string;
+  run_id?: string;
+}
+
 export type { RootState };

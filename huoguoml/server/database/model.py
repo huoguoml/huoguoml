@@ -19,7 +19,6 @@ class Run(Base):
     creation_time = Column(Float)
     experiment = relationship("Experiment", back_populates="runs")
     experiment_name = Column(String, ForeignKey("experiments.name"))
-    services = relationship("Service", back_populates="run")
 
 
 class Experiment(Base):
@@ -35,11 +34,10 @@ class Experiment(Base):
         return value.lower()
 
 
-class Service(Base):
-    __tablename__ = "services"
+class MLService(Base):
+    __tablename__ = "ml_services"
 
     id = Column(Integer, primary_key=True, index=True)
-    host = Column(String, index=True, unique=True, nullable=False)
-    port = Column(String, index=True, unique=True, nullable=False)
-    run = relationship("Run", back_populates="services")
+    host = Column(String)
+    port = Column(Integer)
     run_id = Column(String, ForeignKey("runs.id"))
