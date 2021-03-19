@@ -1,9 +1,10 @@
-# HuoguoML 
-HuoguoML is a platform for managing machine learning models. It provides a set of lightweight APIs that can be used with all existing machine learning applications. Key features are:
+# 🍲 HuoguoML 
+HuoguoML is a platform for managing machine learning models. It provides a set of functionalities that can be used with all existing machine learning applications. Key features are:
 
 - HuoguoML Tracking: An API to log parameters, code, and results of machine learning experiments 
 - HuoguoML Dashboard: A powerful dashboard for comparing and analysing logged experiments
-- HuoguoML Service: A CLI to easily launch a REST service from your logged experiments
+- HuoguoML Service: A CLI to easily launch a REST service from your logged experiments that can be updated over the air
+
 
 ## Installation
 
@@ -26,7 +27,7 @@ Just starting out? Try out our examples:
 
 | Example                          | Description   | 
 | --------------------------       | -------------| 
-| [MNIST](examples/mnist)    | Deployment of a MNIST classifier with HuoguoML | 
+| [MNIST](examples/mnist)    | Deployment of a MNIST classifier with HuoguoML and Tensorflow | 
 
 ## Documentation
 

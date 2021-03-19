@@ -3,8 +3,7 @@ import os
 
 import requests
 import uvicorn
-from fastapi import FastAPI
-from pydantic import create_model
+from fastapi import Depends, FastAPI
 
 from huoguoml.constants import HUOGUOML_METADATA_FILE
 from huoguoml.schemas import Run, MLService
@@ -26,6 +25,37 @@ def register_ml_service(register_api: str, service_host: str, service_port: int)
     return MLService.parse_raw(response.text)
 
 
+class MLModel(object):
+
+    def __init__(self, model, version):
+        self._update(model=model, version=version)
+
+    def _update(self, model, version):
+        self.model = model
+        self.version = version
+
+
+ML_MODEL = MLModel(None, None)
+
+
+def load_model(model_dir):
+    os.chdir(model_dir)
+    run_json = read_json(HUOGUOML_METADATA_FILE)
+    run = Run.parse_raw(run_json)
+
+    module_name = 'huoguoml.tracking.{}'.format(run.model_definition.model_api.module)
+    module = importlib.import_module(module_name)
+    function = getattr(module, run.model_definition.model_api.name)
+
+    model = function(**run.model_definition.model_api.arguments)
+
+    ML_MODEL._update(model=model, version=run.dict())
+
+
+def get_ml_model() -> MLModel:
+    return ML_MODEL
+
+
 def start_huoguoml_service(host: str, port: int, server_uri: str, artifact_dir: str):
     """
     Starts the HuoguoML service
@@ -36,43 +66,37 @@ def start_huoguoml_service(host: str, port: int, server_uri: str, artifact_dir: 
         port: The port to listen on
         artifact_dir: Location of the artifact directory
     """
+    global ML_MODEL
+
     # TODO: Check if server is online otherwise raise error
     # TODO: Register model
     # TODO: Check if register model is available in artifact_dir, otherwise download
     # TODO: Launch service with model
-    register_api = concat_uri(server_uri, "rest", "ml_services")
-    ml_service = register_ml_service(register_api=register_api,
-                                     service_host=host,
-                                     service_port=port)
+    register_ml_service(register_api=concat_uri(server_uri, "rest", "ml_services"),
+                        service_host=host,
+                        service_port=port)
     app = FastAPI()
 
-    if ml_service.run_id:
+    @app.post("/rest/models", response_model=MLService)
+    async def update_model(ml_service: MLService):
+        source_dir = os.getcwd()
         run_dir = os.path.join(artifact_dir, ml_service.run_id)
         if not os.path.isdir(run_dir):
             os.makedirs(run_dir)
             uri = concat_uri(server_uri, "rest", "runs", ml_service.run_id)
             download_and_extract_run_files(run_uri=uri, dst_dir=run_dir)
+        load_model(model_dir=run_dir)
+        os.chdir(source_dir)
 
-        os.chdir(run_dir)
-        run_json = read_json(HUOGUOML_METADATA_FILE)
-        run = Run.parse_raw(run_json)
-        input_model = create_model('Inputs', **run.model_definition.model_graph.inputs)
-        output_model = create_model('Outputs', **run.model_definition.model_graph.outputs)
+    @app.post("/rest/models/predict")
+    async def predict(data, ml_model=Depends(get_ml_model)):
+        if ml_model.model:
+            return ml_model.model.predict(data)
+        return None
 
-        module_name = 'huoguoml.tracking.{}'.format(run.model_definition.model_api.module)
-        module = importlib.import_module(module_name)
-        function = getattr(module, run.model_definition.model_api.name)
-
-        model = function(**run.model_definition.model_api.arguments)
-
-        @app.post("/rest/models/{}/predict".format(run.experiment_name),
-                  response_model=output_model)
-        async def predict(data: input_model):
-            return model.predict(data)
-
-        @app.get("/rest/models/{}/version".format(run.experiment_name), response_model=Run)
-        async def version():
-            return run
+    @app.get("/rest/models/version", response_model=Run)
+    async def version(ml_model=Depends(get_ml_model)):
+        return ml_model.version
 
     uvicorn.run(app, host=host, port=port)
 
