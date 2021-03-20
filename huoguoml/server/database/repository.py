@@ -9,8 +9,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 import huoguoml
-from huoguoml.server.database.models import Base, Run
-from huoguoml.server.database.models import Experiment
+from huoguoml.server.database.model import Base, Run, MLService
+from huoguoml.server.database.model import Experiment
 from huoguoml.utils import create_hash
 
 
@@ -76,4 +76,33 @@ class Repository(object):
             session.commit()
             session.refresh(experiment)
             return experiment
+        return None
+
+    def get_or_create_ml_service(self, host: str, port: int) -> MLService:
+        session = self.Session()
+
+        ml_service = session.query(MLService).filter_by(host=host, port=port).first()
+        if ml_service:
+            return ml_service
+
+        ml_service = MLService(host=host, port=port)
+        session.add(ml_service)
+        session.commit()
+        session.refresh(ml_service)
+        return ml_service
+
+    def get_ml_services(self):
+        session = self.Session()
+        return session.query(MLService).all()
+
+    def update_ml_service(self, ml_service_id: int, update_data: Dict) -> Optional[MLService]:
+        session = self.Session()
+        ml_service = session.query(MLService).filter_by(name=ml_service_id).first()
+        if ml_service:
+            for field, field_value in update_data.items():
+                setattr(ml_service, field, field_value)
+
+            session.commit()
+            session.refresh(ml_service)
+            return ml_service
         return None

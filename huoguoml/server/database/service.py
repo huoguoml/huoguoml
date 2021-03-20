@@ -5,7 +5,7 @@ import os
 from typing import List, Optional
 
 from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER
-from huoguoml.schemas import Experiment, Run
+from huoguoml.schemas import Experiment, Run, MLService
 from huoguoml.server.database.repository import Repository
 from huoguoml.utils import read_json, create_zip_file
 
@@ -14,16 +14,16 @@ class Service(object):
     """The Repository object is responsible for the connection to the database.
     """
 
-    def __init__(self, huoguoml_dir: str):
+    def __init__(self, artifact_dir: str):
         # TODO: Check if absolute path is really necessary
-        self.huoguoml_dir = os.path.realpath(huoguoml_dir)
-        self.zip_dir = os.path.join(self.huoguoml_dir, HUOGUOML_DEFAULT_ZIP_FOLDER)
+        self.artifact_dir = os.path.realpath(artifact_dir)
+        self.zip_dir = os.path.join(self.artifact_dir, HUOGUOML_DEFAULT_ZIP_FOLDER)
 
-        if not os.path.isdir(self.huoguoml_dir):
-            os.makedirs(self.huoguoml_dir)
+        if not os.path.isdir(self.artifact_dir):
+            os.makedirs(self.artifact_dir)
             os.makedirs(self.zip_dir)
 
-        database_url = os.path.join("sqlite:///{}".format(huoguoml_dir), HUOGUOML_DATABASE_FILE)
+        database_url = os.path.join("sqlite:///{}".format(artifact_dir), HUOGUOML_DATABASE_FILE)
         connect_args = {"check_same_thread": False}
         self.repository = Repository(database_url=database_url, connect_args=connect_args)
 
@@ -49,26 +49,30 @@ class Service(object):
 
     def create_experiment(self, experiment_name: str) -> Experiment:
         experiment = self.repository.create_experiment(experiment_name=experiment_name)
-        os.makedirs(os.path.join(self.huoguoml_dir, experiment.name))
+        os.makedirs(os.path.join(self.artifact_dir, experiment.name))
         return Experiment.from_orm(experiment)
 
     def create_run(self, experiment_name) -> Run:
         run_orm = self.repository.create_run(experiment_name=experiment_name)
-        run_dir = os.path.join(self.huoguoml_dir, run_orm.experiment_name, str(run_orm.run_nr))
+        run_dir = os.path.join(self.artifact_dir, run_orm.experiment_name, str(run_orm.run_nr))
         os.makedirs(run_dir)
 
         run = Run.from_orm(run_orm)
         run.run_dir = run_dir
         return run
 
-    def get_run_files(self, run_id: str) -> str:
+    def get_run(self, run_id: str) -> Run:
         run_orm = self.repository.get_run(run_id=run_id)
-        run = self._read_run_file(run_orm)
+        run = self._read_run_file(run=run_orm)
+        return run
+
+    def get_run_file_path(self, run_id: str) -> str:
+        run = self.get_run(run_id=run_id)
         zip_file_path = create_zip_file(src_dir=run.run_dir, dst_dir=self.zip_dir, zip_name=run.id)
         return zip_file_path
 
     def _read_run_file(self, run: Run) -> Run:
-        experiments_json = read_json(os.path.join(self.huoguoml_dir,
+        experiments_json = read_json(os.path.join(self.artifact_dir,
                                                   run.experiment_name,
                                                   str(run.run_nr),
                                                   HUOGUOML_METADATA_FILE))
@@ -80,4 +84,19 @@ class Service(object):
         if experiment_orm:
             experiment = Experiment.from_orm(experiment_orm)
             return experiment
+        return None
+
+    def create_ml_service(self, ml_service: MLService) -> MLService:
+        ml_service_orm = self.repository.get_or_create_ml_service(host=ml_service.host, port=ml_service.port)
+        return MLService.from_orm(ml_service_orm)
+
+    def get_ml_services(self) -> List[MLService]:
+        return self.repository.get_ml_services()
+
+    def update_ml_service(self, ml_service_id: int, ml_service: MLService) -> Optional[MLService]:
+        update_data = ml_service.dict(exclude_unset=True)
+        ml_service_orm = self.repository.update_ml_service(ml_service_id=ml_service_id, update_data=update_data)
+        if ml_service_orm:
+            ml_service = MLService.from_orm(ml_service_orm)
+            return ml_service
         return None

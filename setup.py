@@ -59,7 +59,7 @@ setup(
     url="https://huoguoml.github.io",
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
-    package_data={'huoguoml': package_files("huoguoml/server/dashboard")},
+    package_data={'huoguoml': package_files(os.path.join("huoguoml", "dashboard", "build"))},
     python_requires=">=3.7.*",
     install_requires=list(dependencies['all']),
     license='Apache 2.0',

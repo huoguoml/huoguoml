@@ -4,7 +4,7 @@
 # package[version]: tag1, tag2, ...
 #
 # AVAILABLE TAGS
-# devel
+# dev, documentation, test
 #
 # REMARKS ON TAGS
 # 1. Try to reuse the existing tags if possible.
@@ -14,7 +14,10 @@
 # 3. Tag order doesn't matter; case-sensitive; duplicated tag will be ignored
 # 4. Tag `all` is reserved for representing all packages
 
-fastapi:                    devel
-uvicorn:                    devel
-sqlalchemy:                 devel
-click:                      devel
+fastapi:                    dev
+uvicorn:                    dev
+aiofiles:                   dev
+sqlalchemy:                 dev
+click:                      dev
+pydoc-markdown:             documentation
+pytest:                     test

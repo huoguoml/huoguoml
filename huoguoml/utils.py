@@ -80,6 +80,9 @@ def create_zip_file(src_dir: str, dst_dir: str, zip_name: str) -> str:
 
 
 def download_and_extract_run_files(run_uri: str, dst_dir: str):
-    with urlopen(run_uri) as zipresp:
-        with ZipFile(BytesIO(zipresp.read())) as zfile:
-            zfile.extractall(dst_dir)
+    """
+    Gets a URI to a ZIP file, downloads it and extract it to a specific folder.
+    """
+    with urlopen(run_uri) as zip_file_response:
+        with ZipFile(BytesIO(zip_file_response.read())) as zip_file:
+            zip_file.extractall(dst_dir)

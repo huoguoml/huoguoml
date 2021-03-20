@@ -13,7 +13,7 @@ def get_router(service: Service) -> APIRouter:
         responses={404: {"description": "Not found"}},
     )
 
-    @router.get("/", response_model=List[Experiment])
+    @router.get("", response_model=List[Experiment])
     async def get_experiments():
         return service.get_experiments()
 
