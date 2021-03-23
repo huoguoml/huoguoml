@@ -42,9 +42,3 @@ We happily welcome all kinds of contributions to HuoguoML. Please see our [contr
 ## License
 
 Apache License Version 2.0, see [LICENSE](LICENSE)
-
-## Philosophy
-
-Putting machine learning into production is difficult. This is because often Enginee
-
-Machine learning  
