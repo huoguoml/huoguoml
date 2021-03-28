@@ -10,7 +10,6 @@ def get_router(service: Service) -> APIRouter:
     router = APIRouter(
         prefix="/rest/ml_services",
         tags=["services"],
-        responses={404: {"description": "Not found"}},
     )
 
     @router.post("", response_model=MLService)

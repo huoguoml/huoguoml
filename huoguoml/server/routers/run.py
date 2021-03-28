@@ -8,7 +8,6 @@ def get_router(service: Service) -> APIRouter:
     router = APIRouter(
         prefix="/rest/runs",
         tags=["runs"],
-        responses={404: {"description": "Not found"}},
     )
 
     @router.get("/{run_id}")

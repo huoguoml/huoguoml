@@ -15,6 +15,7 @@
 # 4. Tag `all` is reserved for representing all packages
 
 fastapi:                    dev
+aiofiles:                   dev
 uvicorn:                    dev
 aiofiles:                   dev
 sqlalchemy:                 dev

@@ -10,7 +10,6 @@ def get_router(service: Service) -> APIRouter:
     router = APIRouter(
         prefix="/rest/experiments",
         tags=["experiments"],
-        responses={404: {"description": "Not found"}},
     )
 
     @router.get("", response_model=List[Experiment])
