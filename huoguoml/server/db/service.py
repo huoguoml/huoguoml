@@ -6,7 +6,7 @@ from typing import List, Optional
 
 from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER
 from huoguoml.schemas import Experiment, Run, MLService
-from huoguoml.server.database.repository import Repository
+from huoguoml.server.db.repository import Repository
 from huoguoml.utils import read_json, create_zip_file
 
 

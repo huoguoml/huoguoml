@@ -3,12 +3,12 @@ from typing import List
 from fastapi import APIRouter
 
 from huoguoml.schemas import MLService
-from huoguoml.server.database.service import Service
+from huoguoml.server.db.service import Service
 
 
 def get_router(service: Service) -> APIRouter:
     router = APIRouter(
-        prefix="/rest/ml_services",
+        prefix="/api/v1/ml_services",
         tags=["services"],
     )
 

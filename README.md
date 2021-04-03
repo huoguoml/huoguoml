@@ -1,5 +1,5 @@
 # 🍲 HuoguoML 
-HuoguoML is a platform for managing machine learning models. It provides a set of functionalities that can be used with all existing machine learning applications. Key features are:
+HuoguoML is a platform for managing and serving machine learning models. It provides a set of functionalities that can be used with all existing machine learning applications. Key features are:
 
 - HuoguoML Tracking: An API to log parameters, code, and results of machine learning experiments 
 - HuoguoML Dashboard: A powerful dashboard for comparing and analysing logged experiments

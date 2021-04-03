@@ -1,12 +1,12 @@
 from fastapi import APIRouter
 from starlette.responses import FileResponse
 
-from huoguoml.server.database.service import Service
+from huoguoml.server.db.service import Service
 
 
 def get_router(service: Service) -> APIRouter:
     router = APIRouter(
-        prefix="/rest/runs",
+        prefix="/api/v1/runs",
         tags=["runs"],
     )
 

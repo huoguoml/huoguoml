@@ -72,7 +72,8 @@ jobs:
         run: |
           yarn install
           yarn run build
-          sh build.sh
+          cp build/index.html build/404.html
+          cp build/index.html build/405.html
       - name: Build and publish
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}

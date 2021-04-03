@@ -79,7 +79,7 @@ def log_model(
                                            model_graph=model_graph,
                                            requirements=requirements)
     model_dir = os.path.join(run.run_dir, "model")
-    shutil.copytree(tf_saved_model_dir, model_dir)
+    run.log_model_files(model_dir=model_dir)
 
 
 # TODO: Refactor code, Update TFModel
