@@ -1,16 +1,12 @@
 """
 The huoguoml.types module contains all types used throughout the package
 """
-import os
 import time
 from enum import IntEnum
 from typing import Dict, Any, Union, Optional
 from typing import List
 
 from pydantic import BaseModel
-
-from huoguoml.constants import HUOGUOML_METADATA_FILE
-from huoguoml.utils import save_json
 
 
 class ModelNode(BaseModel):
@@ -100,19 +96,11 @@ class Run(BaseModel):
         else:
             self.status = RunStatus.completed
 
-    def _post_experiment_run(self):
-        run_json_path = os.path.join(self.run_dir, HUOGUOML_METADATA_FILE)
-        save_json(json_path=run_json_path, data=self.json())
-
-    def log_model_files(self, model_dir):
-        pass
-
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.end_experiment_run()
-        self._post_experiment_run()
 
 
 class Experiment(BaseModel):

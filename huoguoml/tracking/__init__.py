@@ -3,7 +3,7 @@ The huoguoml.tracking module provides the options for tracking all experiment ru
 """
 from typing import Optional
 
-from huoguoml.client import Client
+from huoguoml.tracking.client import Client
 
 
 def start_experiment_run(experiment_name: Optional[str] = None,

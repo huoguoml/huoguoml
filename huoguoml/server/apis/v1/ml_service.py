@@ -13,7 +13,7 @@ def get_router(service: Service) -> APIRouter:
     )
 
     @router.post("", response_model=MLService)
-    async def post_ml_service(ml_service: MLService):
+    async def create_ml_service(ml_service: MLService):
         # TODO: Check if both ml_service.host and port are equal to the request one
         return service.create_ml_service(ml_service)
 

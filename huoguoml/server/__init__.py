@@ -24,9 +24,7 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[
-            "*",
-        ],
+        allow_origins=["*"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

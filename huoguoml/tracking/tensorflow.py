@@ -2,7 +2,6 @@
 The huoguoml.tracking module provides the options for tracking tensorflow experiments
 """
 import os
-import shutil
 from typing import List
 
 from huoguoml.constants import HUOGUOML_DEFAULT_REQUIREMENTS, HUOGUOML_DEFAULT_MODEL_FOLDER
@@ -79,7 +78,7 @@ def log_model(
                                            model_graph=model_graph,
                                            requirements=requirements)
     model_dir = os.path.join(run.run_dir, "model")
-    run.log_model_files(model_dir=model_dir)
+    # TODO: send to server
 
 
 # TODO: Refactor code, Update TFModel
