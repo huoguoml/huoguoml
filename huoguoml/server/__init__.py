@@ -1,9 +1,12 @@
+import os
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.staticfiles import StaticFiles
 
-from huoguoml.server.database.service import Service
-from huoguoml.server.routers import experiment, run, ml_service
+from huoguoml.server.apis.v1 import ml_service, experiment, run
+from huoguoml.server.db.service import Service
 
 
 def start_huoguoml_server(artifact_dir: str, host: str, port: int):
@@ -16,26 +19,28 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
         port: The port to listen on
     """
     service = Service(artifact_dir=artifact_dir)
-    app = FastAPI()
 
-    origins = [
-        "*",
-    ]
+    app = FastAPI()
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=origins,
+        allow_origins=["*"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
     app.include_router(experiment.get_router(service=service))
     app.include_router(run.get_router(service=service))
     app.include_router(ml_service.get_router(service=service))
 
-    @app.get("/")
-    async def root():
-        return {"message": "Hello Bigger Applications!"}
+    dashboard_files_dir = os.path.join(os.path.dirname(__file__),
+                                       "dashboard",
+                                       "build")
+
+    app.mount("/",
+              StaticFiles(directory=dashboard_files_dir, html=True),
+              name="static")
 
     uvicorn.run(app, host=host, port=port)
 

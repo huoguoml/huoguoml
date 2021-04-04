@@ -86,3 +86,12 @@ def download_and_extract_run_files(run_uri: str, dst_dir: str):
     with urlopen(run_uri) as zip_file_response:
         with ZipFile(BytesIO(zip_file_response.read())) as zip_file:
             zip_file.extractall(dst_dir)
+
+
+def concat_uri(*args):
+    uri = ""
+    for arg in args:
+        uri += arg
+        if not uri.endswith("/"):
+            uri += "/"
+    return uri

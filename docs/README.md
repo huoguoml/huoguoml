@@ -20,3 +20,11 @@ or get the development version, which is updated with every commit on the dev br
 ```bash
 pip install huoguoml-dev
 ```
+
+## Contributors
+
+We happily welcome all kinds of contributions to HuoguoML. Please see our [contribution guide](CONTRIBUTING.md]) for details.
+
+## License
+
+Apache License Version 2.0, see [LICENSE](LICENSE)

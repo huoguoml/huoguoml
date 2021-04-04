@@ -4,18 +4,16 @@
 
 ## HuoguoML Basics
 
-- [Introduction to HuoguoML](basics/README.md)
+- [HuoguoML Basics](basics/README.md)
+- [Introduction to HuoguoML](basics/introduction.md)
 - [HuoguoML Components](basics/components.md)
+- [HuoguoML Service](basics/service.md)
 
-## Examples
+## HuoguoML Examples
 
-- [Examples](examples/README.md)
+- [HuoguoML Examples](examples/README.md)
 - [MNIST](examples/mnist.md)
 
 ## Misc
 
 - [FAQ](misc/faq.md)
-
-## API Documentation
-
-- [API](api/README.md)

@@ -7,6 +7,7 @@ from fastapi import Depends, FastAPI
 
 from huoguoml.constants import HUOGUOML_METADATA_FILE
 from huoguoml.schemas import Run, MLService
+from huoguoml.tracking import Client
 from huoguoml.utils import read_json, download_and_extract_run_files
 
 
@@ -68,33 +69,34 @@ def start_huoguoml_service(host: str, port: int, server_uri: str, artifact_dir: 
     """
     global ML_MODEL
 
-    # TODO: Check if server is online otherwise raise error
+    client = Client(server_uri=server_uri)
+
     # TODO: Register model
     # TODO: Check if register model is available in artifact_dir, otherwise download
     # TODO: Launch service with model
-    register_ml_service(register_api=concat_uri(server_uri, "rest", "ml_services"),
+    register_ml_service(register_api=concat_uri(server_uri, "api", "v1", "ml_services"),
                         service_host=host,
                         service_port=port)
     app = FastAPI()
 
-    @app.post("/rest/models", response_model=MLService)
+    @app.post("/api/v1/models", response_model=MLService)
     async def update_model(ml_service: MLService):
         source_dir = os.getcwd()
         run_dir = os.path.join(artifact_dir, ml_service.run_id)
         if not os.path.isdir(run_dir):
             os.makedirs(run_dir)
-            uri = concat_uri(server_uri, "rest", "runs", ml_service.run_id)
+            uri = concat_uri(server_uri, "api", "v1", "runs", ml_service.run_id)
             download_and_extract_run_files(run_uri=uri, dst_dir=run_dir)
         load_model(model_dir=run_dir)
         os.chdir(source_dir)
 
-    @app.post("/rest/models/predict")
+    @app.post("/api/v1/predict")
     async def predict(data, ml_model=Depends(get_ml_model)):
         if ml_model.model:
             return ml_model.model.predict(data)
         return None
 
-    @app.get("/rest/models/version", response_model=Run)
+    @app.get("/api/v1/version", response_model=Run)
     async def version(ml_model=Depends(get_ml_model)):
         return ml_model.version
 

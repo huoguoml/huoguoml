@@ -3,19 +3,22 @@ from typing import List
 from fastapi import APIRouter
 
 from huoguoml.schemas import Experiment, Run
-from huoguoml.server.database.service import Service
+from huoguoml.server.db.service import Service
 
 
 def get_router(service: Service) -> APIRouter:
     router = APIRouter(
-        prefix="/rest/experiments",
+        prefix="/api/v1/experiments",
         tags=["experiments"],
-        responses={404: {"description": "Not found"}},
     )
 
     @router.get("", response_model=List[Experiment])
     async def get_experiments():
         return service.get_experiments()
+
+    @router.post("", response_model=Experiment)
+    async def create_experiment(experiment: Experiment):
+        return service.create_experiment(experiment=experiment)
 
     @router.get("/{experiment_name}", response_model=Experiment)
     async def get_experiment(experiment_name: str):
