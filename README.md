@@ -37,7 +37,8 @@ Our docs are built on every push to the main or dev branch.
 
 ## Contributors
 
-We happily welcome all kinds of contributions to HuoguoML. Please see our [contribution guide](CONTRIBUTING.md]) for details.
+We encourage you to contribute to HuoguoML! Please check out the [Contributing guide](CONTRIBUTING.md) for guidelines about how to proceed.
+
 
 ## License
 
