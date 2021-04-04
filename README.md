@@ -14,7 +14,7 @@ Get the latest stable version of HuoguoML:
 pip install huoguoml
 ```
 
-or get the development version, which is updated with every commit on the dev branch:
+or get the development version, which is updated with every commit on the main branch:
 
 ```bash
 pip install huoguoml-dev
