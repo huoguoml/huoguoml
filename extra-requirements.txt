@@ -1,12 +1,10 @@
-# https://hanxiao.io/2019/11/07/A-Better-Practice-for-Managing-extras-require-Dependencies-in-Python/
-# FORMAT
-# Put your extra requirements here in the following format
+# SOURCE: https://hanxiao.io/2019/11/07/A-Better-Practice-for-Managing-extras-require-Dependencies-in-Python/
 #
+# FORMAT
 # package[version]: tag1, tag2, ...
 #
 # AVAILABLE TAGS
-#
-# prod, dev
+# dev, documentation, test
 #
 # REMARKS ON TAGS
 # 1. Try to reuse the existing tags if possible.
@@ -16,7 +14,11 @@
 # 3. Tag order doesn't matter; case-sensitive; duplicated tag will be ignored
 # 4. Tag `all` is reserved for representing all packages
 
-scipy>=1.4.1:               dev
-flask:                      dev
-flask_cors:                 dev
-fastapi:                    prod
+fastapi:                    dev
+aiofiles:                   dev
+uvicorn:                    dev
+aiofiles:                   dev
+sqlalchemy:                 dev
+click:                      dev
+pydoc-markdown:             documentation
+pytest:                     test
