@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Read docs"
+    url: https://steven-mi.gitbook.io/huoguoml/
+    about: Find your solution from our documenations
+  - name: "Search on Existing Issues"
+    url: https://github.com/HuoguoML/HuoguoML/issues
+    about: Someone else may already post this issue and got solved
