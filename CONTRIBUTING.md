@@ -14,7 +14,7 @@ Some thoughts to help you contribute to this project
 
 ## Pull Requests
 
-### _We actively welcome your pull requests, however linking your work to an existing issue is preferred._
+### We actively welcome your pull requests, however linking your work to an existing issue is preferred._
 
 1. Fork the repo and create your branch from `main`.
 1. Name your branch something that is descriptive to the work you are doing. i.e. adds-new-thing or fixes-mobile
@@ -29,17 +29,34 @@ Some thoughts to help you contribute to this project
 
 *Note for maintainers: All pull requests need a label to assist automation. See the [template](https://github.com/open-sauced/open-sauced/blob/HEAD/.github/release-drafter.yml) to guide which labels to use.*
 
-### PR Validation
+### Commit and PR Validation
 
-Examples for valid PR titles:
+Type is an important prefix in PR, commit message. For each branch, commit, or PR, we need you to specify the type to help us keep things organized. For example,
 
-- fix: Correct typo.
-- feat: Add support for Node 12.
-- refactor!: Drop support for Node 6.
+```
+feat: add hat wobble
+^--^  ^------------^
+|     |
+|     +-> Summary in present tense.
+|
++-------> Type: chore, docs, feat, fix, refactor, style, or test.
+```
+
+- build: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+- ci: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+- docs: Documentation only changes
+- feat: A new feature
+- fix: A bug fix
+- perf: A code change that improves performance
+- refactor: A code change that neither fixes a bug nor adds a feature
+- style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- test: Adding missing tests or correcting existing tests
+- chore: updating grunt tasks etc; no production code change
 
 Note that since PR titles only have a single line, you have to use the ! syntax for breaking changes.
 
 See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for more examples.
+
 
 ### Work in progress
 
@@ -53,10 +70,11 @@ If you would like to contribute to the project for the first time, please consid
 
 Also, all questions are welcomed.
 
+
 ## Coding Tips
 
 - Ask questions if you are stuck. 
-- 
+- Try to follow the [Google styleguide](https://google.github.io/styleguide/pyguide.html).
 
 ## License
 
