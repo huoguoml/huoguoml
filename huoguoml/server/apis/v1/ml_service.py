@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter
 
-from huoguoml.schemas import MLService
+from huoguoml.schemas.ml_service import MLService
 from huoguoml.server.db.service import Service
 
 

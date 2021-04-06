@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from starlette.responses import FileResponse
 
-from huoguoml.schemas import Run
+from huoguoml.schemas.run import Run
 from huoguoml.server.db.service import Service
 
 

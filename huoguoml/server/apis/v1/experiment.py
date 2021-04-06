@@ -2,7 +2,8 @@ from typing import List
 
 from fastapi import APIRouter
 
-from huoguoml.schemas import Experiment, Run
+from huoguoml.schemas.experiment import Experiment
+from huoguoml.schemas.run import Run
 from huoguoml.server.db.service import Service
 
 
