@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from starlette.responses import FileResponse
 
-from huoguoml.schemas.run import Run
+from huoguoml.schemas.run import RunIn
 from huoguoml.server.db.service import Service
 
 
@@ -17,7 +17,7 @@ def get_router(service: Service) -> APIRouter:
         return FileResponse(run_file_path, media_type='application/zip')
 
     @router.post("")
-    async def create_run(run: Run):
+    async def create_run(run: RunIn):
         return service.create_run(run=run)
 
     return router

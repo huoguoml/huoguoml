@@ -43,7 +43,6 @@ class RunStatus(IntEnum):
 
 class RunIn(BaseModel):
     experiment_name: str
-    creation_time: float
     author: str
     status: RunStatus = RunStatus.pending
 
@@ -53,6 +52,7 @@ class Run(RunIn):
     """
     id: str
     run_nr: int
+    creation_time: float
     finish_time: Optional[float] = None
     duration: Optional[float] = None
 

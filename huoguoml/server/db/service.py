@@ -5,7 +5,9 @@ import os
 from typing import List, Optional
 
 from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER
-from huoguoml.schemas import Experiment, Run, MLService
+from huoguoml.schemas.experiment import ExperimentIn, Experiment
+from huoguoml.schemas.ml_service import MLService
+from huoguoml.schemas.run import Run, RunIn
 from huoguoml.server.db.repository import Repository
 from huoguoml.utils import read_json, create_zip_file, save_json
 
@@ -47,20 +49,20 @@ class Service(object):
                        None)
             return run
 
-    def create_experiment(self, experiment: Experiment) -> Experiment:
-        experiment_orm = self.repository.create_experiment(experiment_name=experiment.name)
-        os.makedirs(os.path.join(self.artifact_dir, experiment_orm.name))
-        return Experiment.from_orm(experiment)
+    def create_experiment(self, experiment_in: ExperimentIn) -> Optional[Experiment]:
+        experiment_orm = self.repository.create_experiment(experiment_name=experiment_in.name)
+        if experiment_orm is None:
+            return None
 
-    def create_run(self, run: Run) -> Run:
+        os.makedirs(os.path.join(self.artifact_dir, experiment_orm.name))
+        return Experiment.from_orm(experiment_orm)
+
+    def create_run(self, run: RunIn) -> Run:
         run_orm = self.repository.create_run(experiment_name=run.experiment_name, author=run.author)
         run_dir = os.path.join(self.artifact_dir, run_orm.experiment_name, str(run_orm.run_nr))
         os.makedirs(run_dir)
 
-        updated_run = Run.from_orm(run_orm)
-        updated_run_data = updated_run.dict(exclude_unset=True)
-        for field, field_value in updated_run_data.items():
-            setattr(run, field, field_value)
+        run = Run.from_orm(run_orm)
 
         run_json_path = os.path.join(run_dir, HUOGUOML_METADATA_FILE)
         save_json(json_path=run_json_path, data=run.json())

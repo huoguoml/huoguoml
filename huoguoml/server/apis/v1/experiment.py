@@ -1,8 +1,8 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
-from huoguoml.schemas.experiment import Experiment
+from huoguoml.schemas.experiment import Experiment, ExperimentIn
 from huoguoml.schemas.run import Run
 from huoguoml.server.db.service import Service
 
@@ -18,8 +18,11 @@ def get_router(service: Service) -> APIRouter:
         return service.get_experiments()
 
     @router.post("", response_model=Experiment)
-    async def create_experiment(experiment: Experiment):
-        return service.create_experiment(experiment=experiment)
+    async def create_experiment(experiment_in: ExperimentIn):
+        experiment = service.create_experiment(experiment_in=experiment_in)
+        if experiment is None:
+            raise HTTPException(status_code=422)
+        return experiment
 
     @router.get("/{experiment_name}", response_model=Experiment)
     async def get_experiment(experiment_name: str):

@@ -3,43 +3,48 @@ The huoguoml.tracking module provides the options for tracking all experiment ru
 """
 import getpass
 
-import pydantic
 import requests
+from pydantic import ValidationError
 
-from huoguoml.schemas import Experiment, Run
+from huoguoml.schemas.experiment import Experiment, ExperimentIn
+from huoguoml.schemas.run import Run, RunIn
 from huoguoml.utils import concat_uri
 
 
-class HuoguoMLRun(object):
+class HuoguoRun(object):
 
     def __init__(self,
-                 experiment_name: str,
-                 server_uri: str):
+                 server_uri: str,
+                 experiment_name: str):
         try:
-            response = requests.get(server_uri)
-            response.raise_for_status()
-
-            try:
-                response = requests.get(concat_uri(server_uri, "api", "v1", "experiments", experiment_name))
-                experiment = Experiment.parse_raw(response.text)
-            except pydantic.ValidationError:
-                experiment = Experiment(name=experiment_name)
-                response = requests.post(
-                    concat_uri(server_uri, "api", "v1", "experiments"),
-                    json=experiment.dict(exclude_unset=True))
-                experiment = Experiment.parse_raw(response.text)
-
-            run = Run(experiment_name=experiment.name, author=getpass.getuser())
-            response = requests.post(
-                concat_uri(server_uri, "api", "v1", "runs"),
-                json=run.dict(exclude_unset=True))
-            self.run = Run.parse_raw(response.text)
-            self.server_uri = server_uri
+            get_res = requests.get(server_uri)
+            get_res.raise_for_status()
+        except requests.exceptions.MissingSchema:
+            raise requests.exceptions.MissingSchema
         except (requests.exceptions.HTTPError,
                 requests.exceptions.ConnectionError,
                 requests.exceptions.Timeout,
                 requests.exceptions.RequestException):
             raise ConnectionError("HuoguoML server is not running. Start server with 'huoguoml server' and try again")
+
+        try:
+            exp_res = requests.get(concat_uri(server_uri, "api", "v1", "experiments", experiment_name))
+            experiment = Experiment.parse_raw(exp_res.text)
+        except ValidationError:
+            exp_in = ExperimentIn(name=experiment_name)
+            print(concat_uri(server_uri, "api", "v1", "experiments"))
+            exp_res = requests.post(
+                concat_uri(server_uri, "api", "v1", "experiments"),
+                data=exp_in.dict())
+            print(exp_res)
+            experiment = Experiment.parse_raw(exp_res.text)
+
+        run_in = RunIn(experiment_name=experiment.name, author=getpass.getuser())
+        run_res = requests.post(
+            concat_uri(server_uri, "api", "v1", "runs"),
+            json=run_in.dict(exclude_unset=True))
+        self.run = Run.parse_raw(run_res.text)
+        self.server_uri = server_uri
 
     def log_model(self,
                   model_type: str,
@@ -85,4 +90,4 @@ def start_experiment_run(experiment_name: str,
         experiment_name: Name of the experiment under which to create the experiment run
         server_uri: Uri to the HuoguoML server. (default: 127.0.0.1:8080)
     """
-    return HuoguoMLRun(server_uri=server_uri, experiment_name=experiment_name)
+    return HuoguoRun(server_uri=server_uri, experiment_name=experiment_name)
