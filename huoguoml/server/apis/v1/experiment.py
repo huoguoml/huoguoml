@@ -19,6 +19,7 @@ def get_router(service: Service) -> APIRouter:
 
     @router.post("", response_model=Experiment)
     async def create_experiment(experiment_in: ExperimentIn):
+        print(experiment_in)
         experiment = service.create_experiment(experiment_in=experiment_in)
         if experiment is None:
             raise HTTPException(status_code=422)

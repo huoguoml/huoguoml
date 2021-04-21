@@ -4,7 +4,6 @@ The huoguoml.tracking module provides the options for tracking all experiment ru
 import getpass
 
 import requests
-from pydantic import ValidationError
 
 from huoguoml.schemas.experiment import Experiment, ExperimentIn
 from huoguoml.schemas.run import Run, RunIn
@@ -14,32 +13,24 @@ from huoguoml.utils import concat_uri
 class HuoguoRun(object):
 
     def __init__(self,
-                 server_uri: str,
-                 experiment_name: str):
-        try:
-            get_res = requests.get(server_uri)
-            get_res.raise_for_status()
-        except requests.exceptions.MissingSchema:
-            raise requests.exceptions.MissingSchema
-        except (requests.exceptions.HTTPError,
-                requests.exceptions.ConnectionError,
-                requests.exceptions.Timeout,
-                requests.exceptions.RequestException):
+                 experiment_name: str,
+                 server_uri: str):
+        if requests.get(server_uri).status_code.real == 404:
             raise ConnectionError("HuoguoML server is not running. Start server with 'huoguoml server' and try again")
 
-        try:
-            exp_res = requests.get(concat_uri(server_uri, "api", "v1", "experiments", experiment_name))
-            experiment = Experiment.parse_raw(exp_res.text)
-        except ValidationError:
+        exp_res = requests.get(concat_uri(server_uri, "api", "v1", "experiments", experiment_name))
+        if exp_res.status_code.real == 404:
             exp_in = ExperimentIn(name=experiment_name)
+            print(exp_in)
             print(concat_uri(server_uri, "api", "v1", "experiments"))
             exp_res = requests.post(
                 concat_uri(server_uri, "api", "v1", "experiments"),
-                data=exp_in.dict())
+                data=exp_in.json(exclude_unset=True))
             print(exp_res)
-            experiment = Experiment.parse_raw(exp_res.text)
+        experiment = Experiment.parse_raw(exp_res.text)
 
         run_in = RunIn(experiment_name=experiment.name, author=getpass.getuser())
+        print(run_in)
         run_res = requests.post(
             concat_uri(server_uri, "api", "v1", "runs"),
             json=run_in.dict(exclude_unset=True))
