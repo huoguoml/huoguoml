@@ -15,7 +15,9 @@ class HuoguoRun(object):
     def __init__(self,
                  experiment_name: str,
                  server_uri: str):
-        if requests.get(server_uri).status_code.real == 404:
+        try:
+            requests.get(server_uri)
+        except:
             raise ConnectionError("HuoguoML server is not running. Start server with 'huoguoml server' and try again")
 
         exp_res = requests.get(concat_uri(server_uri, "api", "v1", "experiments", experiment_name))

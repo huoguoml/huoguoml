@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship, validates
 Base = declarative_base()
 
 
-class Run(Base):
+class RunORM(Base):
     __tablename__ = "runs"
 
     id = Column(String, primary_key=True, index=True)
@@ -17,27 +17,36 @@ class Run(Base):
     author = Column(String, unique=False, nullable=True)
     run_nr = Column(Integer, index=True)
     creation_time = Column(Float)
-    experiment = relationship("Experiment", back_populates="runs")
+    experiment = relationship("ExperimentORM", back_populates="runs")
     experiment_name = Column(String, ForeignKey("experiments.name"))
 
 
-class Experiment(Base):
+class ExperimentORM(Base):
     __tablename__ = "experiments"
 
     id = Column(Integer, primary_key=True, index=True)
     description = Column(String, unique=False, nullable=True)
     name = Column(String, index=True, unique=True, nullable=False)
-    runs = relationship("Run", back_populates="experiment")
+    runs = relationship("RunORM", back_populates="experiment")
 
     @validates('name')
     def convert_upper(self, key, value):
         return value.lower()
 
 
-class MLService(Base):
-    __tablename__ = "ml_services"
+class ServiceORM(Base):
+    __tablename__ = "services"
 
     id = Column(Integer, primary_key=True, index=True)
     host = Column(String)
     port = Column(Integer)
-    run_id = Column(String, ForeignKey("runs.id"))
+    model = relationship("ModelORM", uselist=False, back_populates="service")
+
+
+class ModelORM(Base):
+    __tablename__ = "models"
+
+    id = Column(Integer, primary_key=True, index=True)
+    runs = relationship("RunORM", back_populates="ml_model")
+    service = relationship("ServiceORM", back_populates="model")
+
