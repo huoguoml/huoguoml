@@ -56,11 +56,11 @@ class Run(RunIn):
     finish_time: Optional[float] = None
     duration: Optional[float] = None
 
-    description: Optional[str] = None
+    description: Optional[str] = ""
 
-    parameters: Optional[Dict[str, str]] = None
-    metrics: Optional[Dict[str, str]] = None
-    tags: Optional[Dict[str, str]] = None
+    parameters: Optional[Dict[str, str]] = {}
+    metrics: Optional[Dict[str, str]] = {}
+    tags: Optional[Dict[str, str]] = {}
     model_definition: Optional[ModelDefinition] = None
 
     class Config:

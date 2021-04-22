@@ -7,34 +7,34 @@ import requests
 
 from huoguoml.schemas.experiment import Experiment, ExperimentIn
 from huoguoml.schemas.run import Run, RunIn
-from huoguoml.utils import concat_uri
+from huoguoml.utils.utils import coerce_url, concat_uri
 
 
 class HuoguoRun(object):
+    EXPERIMENT_ENDPOINT = "/api/v1/experiments"
+    RUN_ENDPOINT = "/api/v1/runs"
 
     def __init__(self,
                  experiment_name: str,
                  server_uri: str):
+        self.server_uri = coerce_url(server_uri)
+
         try:
             requests.get(server_uri)
         except:
             raise ConnectionError("HuoguoML server is not running. Start server with 'huoguoml server' and try again")
 
-        exp_res = requests.get(concat_uri(server_uri, "api", "v1", "experiments", experiment_name))
+        exp_res = requests.get(concat_uri(self.server_uri, self.EXPERIMENT_ENDPOINT, experiment_name))
         if exp_res.status_code.real == 404:
             exp_in = ExperimentIn(name=experiment_name)
-            print(exp_in)
-            print(concat_uri(server_uri, "api", "v1", "experiments"))
             exp_res = requests.post(
-                concat_uri(server_uri, "api", "v1", "experiments"),
+                concat_uri(server_uri, self.EXPERIMENT_ENDPOINT),
                 data=exp_in.json(exclude_unset=True))
-            print(exp_res)
         experiment = Experiment.parse_raw(exp_res.text)
 
         run_in = RunIn(experiment_name=experiment.name, author=getpass.getuser())
-        print(run_in)
         run_res = requests.post(
-            concat_uri(server_uri, "api", "v1", "runs"),
+            concat_uri(server_uri, self.RUN_ENDPOINT),
             json=run_in.dict(exclude_unset=True))
         self.run = Run.parse_raw(run_res.text)
         self.server_uri = server_uri

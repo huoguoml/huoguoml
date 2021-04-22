@@ -17,8 +17,12 @@ class RunORM(Base):
     author = Column(String, unique=False, nullable=True)
     run_nr = Column(Integer, index=True)
     creation_time = Column(Float)
+
     experiment = relationship("ExperimentORM", back_populates="runs")
     experiment_name = Column(String, ForeignKey("experiments.name"))
+
+    model = relationship("ModelORM", back_populates="runs")
+    model_id = Column(Integer, ForeignKey("models.id"))
 
 
 class ExperimentORM(Base):
@@ -40,6 +44,7 @@ class ServiceORM(Base):
     id = Column(Integer, primary_key=True, index=True)
     host = Column(String)
     port = Column(Integer)
+
     model = relationship("ModelORM", uselist=False, back_populates="service")
 
 
@@ -47,6 +52,10 @@ class ModelORM(Base):
     __tablename__ = "models"
 
     id = Column(Integer, primary_key=True, index=True)
-    runs = relationship("RunORM", back_populates="ml_model")
+
+    runs = relationship("RunORM", back_populates="model")
+
     service = relationship("ServiceORM", back_populates="model")
+    service_id = Column(Integer, ForeignKey("services.id"))
+
 

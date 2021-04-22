@@ -19,7 +19,6 @@ def get_router(service: Service) -> APIRouter:
 
     @router.post("", response_model=Experiment)
     async def create_experiment(experiment_in: ExperimentIn):
-        print(experiment_in)
         experiment = service.create_experiment(experiment_in=experiment_in)
         if experiment is None:
             raise HTTPException(status_code=422)
@@ -27,7 +26,10 @@ def get_router(service: Service) -> APIRouter:
 
     @router.get("/{experiment_name}", response_model=Experiment)
     async def get_experiment(experiment_name: str):
-        return service.get_experiment(experiment_name=experiment_name)
+        experiment = service.get_experiment(experiment_name=experiment_name)
+        if experiment is None:
+            raise HTTPException(status_code=404)
+        return experiment
 
     @router.get("/{experiment_name}/{experiment_run_nr}", response_model=Run)
     async def get_experiment_run(experiment_name: str, experiment_run_nr: int):

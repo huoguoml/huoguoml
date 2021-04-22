@@ -9,7 +9,7 @@ from sqlalchemy.orm import sessionmaker
 
 import huoguoml
 from huoguoml.server.db.model import Base, RunORM, ServiceORM, ExperimentORM
-from huoguoml.utils import create_hash
+from huoguoml.utils.utils import create_hash
 
 
 class Repository(object):

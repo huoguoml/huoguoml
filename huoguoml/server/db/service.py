@@ -9,7 +9,7 @@ from huoguoml.schemas.experiment import ExperimentIn, Experiment
 from huoguoml.schemas.ml_service import MLService
 from huoguoml.schemas.run import Run, RunIn
 from huoguoml.server.db.repository import Repository
-from huoguoml.utils import read_json, create_zip_file, save_json
+from huoguoml.utils.utils import read_json, create_zip_file, save_json
 
 
 class Service(object):
