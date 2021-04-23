@@ -107,3 +107,7 @@ class Service(object):
             ml_service = MLService.from_orm(ml_service_orm)
             return ml_service
         return None
+
+    def update_run(self, run: Run) -> Run:
+
+        pass

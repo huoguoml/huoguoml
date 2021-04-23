@@ -8,7 +8,7 @@ export function HelpPage() {
 
   return (
     <>
-      <CardLayout contentUri={['help']}>
+      <CardLayout contentUri={['']}>
         <a
           href="https://github.com/HuoguoML/HuoguoML"
           target="_blank"

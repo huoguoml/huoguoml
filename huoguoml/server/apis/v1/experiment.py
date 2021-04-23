@@ -36,7 +36,7 @@ def get_router(service: Service) -> APIRouter:
         return service.get_experiment_run(experiment_name=experiment_name,
                                           experiment_run_nr=experiment_run_nr)
 
-    @router.patch("/{experiment_name}", response_model=Experiment)
+    @router.put("/{experiment_name}", response_model=Experiment)
     async def update_experiment(experiment_name: str, experiment: Experiment):
         return service.update_experiment(experiment_name=experiment_name, experiment=experiment)
 

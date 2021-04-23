@@ -2,11 +2,12 @@
 The huoguoml.tracking module provides the options for tracking all experiment runs
 """
 import getpass
+import time
 
 import requests
 
 from huoguoml.schemas.experiment import Experiment, ExperimentIn
-from huoguoml.schemas.run import Run, RunIn
+from huoguoml.schemas.run import Run, RunIn, RunStatus
 from huoguoml.utils.utils import coerce_url, concat_uri
 
 
@@ -61,15 +62,24 @@ class HuoguoRun(object):
     def __enter__(self):
         return self
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        if exc_value:
-            self.run.end_experiment_run(failed=True)
+    def end_experiment_run(self, failed):
+        self.run.finish_time = time.time()
+        self.run.duration = self.run.finish_time - self.run.creation_time
+
+        if failed:
+            self.run.status = RunStatus.failed
         else:
-            self.run.end_experiment_run(failed=False)
+            self.run.status = RunStatus.completed
 
         requests.put(
             concat_uri(self.server_uri, "api", "v1", "runs"),
             json=self.run.dict(exclude_unset=True))
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        if exc_value:
+            self.end_experiment_run(failed=True)
+        else:
+            self.end_experiment_run(failed=False)
 
 
 def start_experiment_run(experiment_name: str,

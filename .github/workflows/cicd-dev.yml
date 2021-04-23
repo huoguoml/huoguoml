@@ -1,4 +1,4 @@
-name: CICD - dev
+name: CI/CD dev version
 
 on:
   push:

@@ -5,6 +5,7 @@ import {
   ExperimentOutlined,
   HomeOutlined,
   QuestionOutlined,
+  DatabaseOutlined,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppLayoutSlice } from './slice';
@@ -16,6 +17,7 @@ import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 import { ExperimentRunPage } from '../../pages/ExperimentRunPage/Loadable';
 import { ServicesPage } from '../../pages/ServicesPage/Loadable';
 import { HelpPage } from '../../pages/HelpPage/Loadable';
+import { ModelsPage } from '../../pages/ModelsPage/Loadable';
 
 export const AppLayout = React.memo(() => {
   const dispatch = useDispatch();
@@ -41,12 +43,16 @@ export const AppLayout = React.memo(() => {
     history.push(`/experiments/${experimentName}`);
   }
 
-  function toServicePage() {
+  function toModelsPage() {
+    history.push('/models');
+  }
+
+  function toServicesPage() {
     history.push('/services');
   }
-  function toHelpPage() {
-    history.push('/help');
-  }
+  // function toHelpPage() {
+  //   history.push('/help');
+  // }
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
@@ -86,19 +92,26 @@ export const AppLayout = React.memo(() => {
               ))}
             </SubMenu>
             <Menu.Item
+              key="models"
+              icon={<DatabaseOutlined />}
+              onClick={toModelsPage}
+            >
+              Models
+            </Menu.Item>
+            <Menu.Item
               key="services"
               icon={<DesktopOutlined />}
-              onClick={toServicePage}
+              onClick={toServicesPage}
             >
               Services
             </Menu.Item>
-            <Menu.Item
+            {/*            <Menu.Item
               onClick={toHelpPage}
               key="help"
               icon={<QuestionOutlined />}
             >
               Help
-            </Menu.Item>
+            </Menu.Item>*/}
           </Menu>
         </Sider>
         <Layout
@@ -108,7 +121,7 @@ export const AppLayout = React.memo(() => {
           <Header className="site-layout-background" />
           <Content>
             <Switch>
-              <Route exact path="/" component={DashboardPage} />
+              <Route exact path="/" component={HelpPage} />
               <Route
                 exact
                 path="/experiments/:experimentName"
@@ -119,8 +132,9 @@ export const AppLayout = React.memo(() => {
                 path="/experiments/:experimentName/:runId"
                 component={ExperimentRunPage}
               />
+              <Route exact path="/models" component={ModelsPage} />
               <Route exact path="/services" component={ServicesPage} />
-              <Route exact path="/help" component={HelpPage} />
+              {/*<Route exact path="/help" component={HelpPage} />*/}
               <Route component={NotFoundPage} />
             </Switch>
           </Content>

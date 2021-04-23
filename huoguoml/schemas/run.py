@@ -66,11 +66,4 @@ class Run(RunIn):
     class Config:
         orm_mode = True
 
-    def end_experiment_run(self, failed):
-        self.finish_time = time.time()
-        self.duration = self.finish_time - self.creation_time
 
-        if failed:
-            self.status = RunStatus.failed
-        else:
-            self.status = RunStatus.completed
