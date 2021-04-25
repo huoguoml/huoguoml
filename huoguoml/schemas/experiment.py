@@ -13,7 +13,7 @@ class Experiment(ExperimentIn):
     """Type for a experiment
     """
     id: int
-    description: Optional[str] = None
+    description: str
     runs: List[Run]
 
     class Config:

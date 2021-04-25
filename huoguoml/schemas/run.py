@@ -2,7 +2,7 @@ import time
 from enum import IntEnum
 from typing import Optional, List, Dict, Any, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 
 
 class ModelNode(BaseModel):
@@ -42,9 +42,9 @@ class RunStatus(IntEnum):
 
 
 class RunIn(BaseModel):
-    experiment_name: str
+    experiment_name: constr(to_lower=True)
     author: str
-    status: RunStatus = RunStatus.pending
+    status: int = RunStatus.pending.value
 
 
 class Run(RunIn):
@@ -53,17 +53,15 @@ class Run(RunIn):
     id: str
     run_nr: int
     creation_time: float
-    finish_time: Optional[float] = None
-    duration: Optional[float] = None
+    finish_time: float
+    duration: float
 
-    description: Optional[str] = ""
+    description: str
 
-    parameters: Optional[Dict[str, str]] = {}
-    metrics: Optional[Dict[str, str]] = {}
-    tags: Optional[Dict[str, str]] = {}
-    model_definition: Optional[ModelDefinition] = None
+    parameters: Dict[str, str]
+    metrics: Dict[str, str]
+    tags: Dict[str, str]
+    model_definition: Optional[ModelDefinition]
 
     class Config:
         orm_mode = True
-
-

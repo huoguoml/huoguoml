@@ -11,7 +11,7 @@ class MLServiceIn(BaseModel):
 class MLService(MLServiceIn):
     id: int
 
-    run_id: Optional[str] = None
+    run_id: Optional[str]
 
     class Config:
         orm_mode = True
