@@ -15,7 +15,7 @@ export const StatusTag = memo((props: Props) => {
   return (
     <>
       <div>
-        {props.status_code > 0 && (
+        {props.status_code === 1 && (
           <Tag
             color="green"
             key="completed"
@@ -24,7 +24,7 @@ export const StatusTag = memo((props: Props) => {
             {'Completed'}
           </Tag>
         )}
-        {props.status_code === 0 && (
+        {props.status_code === -1 && (
           <Tag
             color="green"
             key="pending"
@@ -33,7 +33,7 @@ export const StatusTag = memo((props: Props) => {
             {'Pending'}
           </Tag>
         )}
-        {props.status_code < 0 && (
+        {props.status_code === 0 && (
           <Tag
             color="red"
             key="failed"

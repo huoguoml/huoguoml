@@ -59,11 +59,22 @@ export const RunTable = memo((props: Props) => {
       render: creation_time => <div>{timestampToDate(creation_time)}</div>,
     },
     {
+      title: 'End Time',
+      dataIndex: 'finish_time',
+      key: 'finish_time',
+      sorter: (a, b) => a.finish_time - b.finish_time,
+      render: finish_time => (
+        <div>{finish_time === -1 ? '' : timestampToDate(finish_time)}</div>
+      ),
+    },
+    {
       title: 'Duration',
       dataIndex: 'duration',
       key: 'duration',
       sorter: (a, b) => a.creation_time - b.creation_time,
-      render: duration => <div>{secondsToTime(parseFloat(duration))}</div>,
+      render: duration => (
+        <div>{duration === -1 ? '' : secondsToTime(parseFloat(duration))}</div>
+      ),
     },
     {
       title: 'Status',

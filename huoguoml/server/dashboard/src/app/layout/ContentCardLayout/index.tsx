@@ -36,12 +36,7 @@ export const ContentCardLayout = memo((props: Props) => {
         </Breadcrumb>
       </div>
       {props.children.map((child, index) => (
-        <div
-          key={`content_card_${index}`}
-          className="site-layout-background"
-          // top, right, bottom, left
-          style={{ padding: 24, margin: 16 }}
-        >
+        <div key={`content_card_${index}`} className="site-layout-card">
           {child}
         </div>
       ))}

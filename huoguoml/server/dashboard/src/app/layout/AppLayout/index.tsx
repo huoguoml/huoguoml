@@ -4,14 +4,14 @@ import {
   DesktopOutlined,
   ExperimentOutlined,
   HomeOutlined,
-  QuestionOutlined,
+  // QuestionOutlined,
   DatabaseOutlined,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppLayoutSlice } from './slice';
 import { selectAppLayout } from './slice/selectors';
 import { Route, Switch, useHistory } from 'react-router-dom';
-import { DashboardPage } from '../../pages/DashboardPage/Loadable';
+// import { DashboardPage } from '../../pages/DashboardPage/Loadable';
 import { ExperimentPage } from '../../pages/ExperimentPage/Loadable';
 import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 import { ExperimentRunPage } from '../../pages/ExperimentRunPage/Loadable';
