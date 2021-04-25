@@ -11,9 +11,6 @@ function* getExperimentState(action: PayloadAction<string>) {
       `${EXPERIMENT_URI}/${action.payload}`,
     );
     const experiment = experimentResponse.data;
-    const runs = experimentResponse.data.runs;
-    runs.sort((a, b) => b.run_nr - a.run_nr);
-    experiment.runs = runs;
     yield put(
       actions.getExperimentStateSuccess({
         experiment: experiment,

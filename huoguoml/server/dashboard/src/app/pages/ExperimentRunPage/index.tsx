@@ -8,6 +8,7 @@ import { RecordTable } from '../../components/RecordTable/Loadable';
 import { RecordTags } from '../../components/RecordTags/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { StatusTag } from '../../components/StatusTag/Loadable';
+import { RegisterModelButton } from '../../components/RegisterModelButton/Loadable';
 
 export function ExperimentRunPage() {
   const { runId, experimentName } = useParams<Record<string, string>>();
@@ -31,7 +32,7 @@ export function ExperimentRunPage() {
           <Paragraph copyable={true} editable={true}>
             {''}
           </Paragraph>
-          <Button type="primary">Register Model</Button>
+          <RegisterModelButton run={experimentRunPageState.run} />
         </>
         <RecordTable
           title={'Parameters'}

@@ -1,12 +1,12 @@
 from typing import Optional, List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, constr
 
 from huoguoml.schemas.run import Run
 
 
 class ExperimentIn(BaseModel):
-    name: str
+    name: constr(to_lower=True)
 
 
 class Experiment(ExperimentIn):

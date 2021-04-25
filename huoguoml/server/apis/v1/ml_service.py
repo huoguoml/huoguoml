@@ -23,8 +23,4 @@ class MLServiceRouter(object):
         async def get_ml_services():
             return service.get_ml_services()
 
-        @router.patch("/{ml_service_id}", response_model=MLService)
-        async def update_ml_service(ml_service_id: int, ml_service: MLService):
-            return service.update_ml_service(ml_service_id=ml_service_id, ml_service=ml_service)
-
         self.router = router

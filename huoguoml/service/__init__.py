@@ -6,9 +6,9 @@ import uvicorn
 from fastapi import Depends, FastAPI
 
 from huoguoml.constants import HUOGUOML_METADATA_FILE
-from huoguoml.schemas import Run, MLService
-from huoguoml.tracking import Client
-from huoguoml.utils import read_json, download_and_extract_run_files
+from huoguoml.schemas.run import Run
+from huoguoml.schemas.ml_service import MLService
+from huoguoml.utils.utils import read_json, download_and_extract_run_files
 
 
 def concat_uri(*args):
@@ -68,8 +68,6 @@ def start_huoguoml_service(host: str, port: int, server_uri: str, artifact_dir: 
         artifact_dir: Location of the artifact directory
     """
     global ML_MODEL
-
-    client = Client(server_uri=server_uri)
 
     # TODO: Register model
     # TODO: Check if register model is available in artifact_dir, otherwise download

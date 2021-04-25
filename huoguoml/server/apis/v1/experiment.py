@@ -15,7 +15,7 @@ class ExperimentRouter(object):
             tags=["experiments"],
         )
 
-        @router.get("", response_model=List[Experiment])
+        @router.get("", response_model=List[Experiment], response_model_exclude={"runs"})
         async def get_experiments():
             return service.get_experiments()
 

@@ -1,30 +1,34 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
-from huoguoml.schemas.ml_service import MLService
+from huoguoml.schemas.ml_model import MLModelIn, MLModel
 from huoguoml.server.db.service import Service
 
 
 class MLModelRouter(object):
-    # TODO: rework
+
     def __init__(self, service: Service):
         router = APIRouter(
             prefix="/api/v1/ml_models",
-            tags=["ml_services"],
+            tags=["ml_models"],
         )
 
-        @router.post("", response_model=MLService)
-        async def create_ml_models(ml_service: MLService):
-            # TODO: Check if both ml_service.host and port are equal to the request one
-            return service.create_ml_service(ml_service)
-
-        @router.get("", response_model=List[MLService])
+        @router.get("", response_model=List[MLModel], response_model_exclude={"runs"})
         async def get_ml_models():
-            return service.get_ml_services()
+            return service.get_ml_models()
 
-        @router.patch("/{ml_service_id}", response_model=MLService)
-        async def update_ml_models(ml_service_id: int, ml_service: MLService):
-            return service.update_ml_service(ml_service_id=ml_service_id, ml_service=ml_service)
+        @router.get("/{ml_model_name}", response_model=MLModel)
+        async def get_ml_models(ml_model_name: str):
+            ml_model = service.get_ml_model(ml_model_name=ml_model_name)
+            if ml_model is None:
+                raise HTTPException(status_code=404)
+            return ml_model
+
+        @router.put("/{ml_model_name}", response_model=MLModel)
+        async def update_or_create_ml_model(ml_model_name: str, ml_model_in: MLModelIn):
+            # TODO: Check if both ml_service.host and port are equal to the request one
+            ml_model = service.update_or_create_ml_model(ml_model_name=ml_model_name, ml_model_in=ml_model_in)
+            return ml_model
 
         self.router = router

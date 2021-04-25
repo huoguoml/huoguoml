@@ -50,8 +50,9 @@ class RunIn(BaseModel):
 class Run(RunIn):
     """Type for a single experiment Run
     """
-    id: str
+    id: int
     run_nr: int
+
     creation_time: float
     finish_time: float
     duration: float

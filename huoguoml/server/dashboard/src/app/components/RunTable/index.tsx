@@ -6,9 +6,7 @@ import { Table, Typography } from 'antd';
 import { StatusTag } from '../StatusTag/Loadable';
 
 interface Props {
-  runs: RunInterface[];
-  defaultRuns: RunInterface[];
-  setSelectedRows: (run: RunInterface[]) => void;
+  runs: RunInterface[] | undefined;
   onClick: (runId: number) => void;
 }
 
@@ -91,25 +89,24 @@ export const RunTable = memo((props: Props) => {
     },
   ];
 
-  const onSelectChange = (selectedRowKeys, selectedRows) => {
-    props.setSelectedRows(selectedRows);
-  };
-
-  const rowSelection = {
-    selectedRowKeys: props.defaultRuns.map(run => run.run_nr),
-    onChange: onSelectChange,
-  };
+  // const onSelectChange = (selectedRowKeys, selectedRows) => {
+  //   props.setSelectedRows(selectedRows);
+  // };
+  //
+  // const rowSelection = {
+  //   selectedRowKeys: props.defaultRuns.map(run => run.run_nr),
+  //   onChange: onSelectChange,
+  // };
 
   const { Title } = Typography;
 
   return (
     <>
-      <Title level={4}>Experiment Runs</Title>
-
+      <Title level={4}>Runs</Title>
       <Table
         rowKey={run => run.run_nr}
         size="small"
-        rowSelection={rowSelection}
+        // rowSelection={rowSelection}
         scroll={{ x: 'max-content' }}
         dataSource={props.runs}
         columns={[...fixedColumns, ...nonFixedColumns]}

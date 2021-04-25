@@ -42,7 +42,7 @@ def log_model(
         run: Run,
         tf_saved_model_dir: str,
         tf_meta_graph_tags: str,
-        tf_signature_def_key: str):
+        tf_signature_def_key: str) -> ModelDefinition:
     import tensorflow as tf
     if tf.__version__ < "2.0.0":
         raise NotImplementedError("HuoguoML does not support Tensorflow 1.X")
@@ -74,11 +74,10 @@ def log_model(
                          },
                          name="load_model")
 
-    run.model_definition = ModelDefinition(model_api=model_api,
-                                           model_graph=model_graph,
-                                           requirements=requirements)
-    model_dir = os.path.join(run.run_dir, "model")
-    # TODO: send to server
+    model_definition = ModelDefinition(model_api=model_api,
+                                       model_graph=model_graph,
+                                       requirements=requirements)
+    return model_definition
 
 
 # TODO: Refactor code, Update TFModel
