@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from typing import List
+
+from fastapi import APIRouter, HTTPException, UploadFile, File
 # from starlette.responses import FileResponse
 
 from huoguoml.schemas.run import RunIn, Run
@@ -27,5 +29,9 @@ class RunRouter(object):
         @router.put("/{run_id}", response_model=Run)
         async def update_or_create_run(run_id: int, run: Run):
             return service.update_or_create_run(run_id=run_id, run=run)
+
+        @router.post("/uploadfiles")
+        async def create_upload_files(files: List[UploadFile] = File(...)):
+            return {"filenames": [file.filename for file in files]}
 
         self.router = router
