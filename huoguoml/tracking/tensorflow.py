@@ -5,7 +5,7 @@ import os
 from typing import List
 
 from huoguoml.constants import HUOGUOML_DEFAULT_REQUIREMENTS, HUOGUOML_DEFAULT_MODEL_FOLDER
-from huoguoml.schemas import ModelNode, ModelDefinition, ModelAPI, ModelGraph, Run
+from huoguoml.schemas import ModelNode, ModelDefinition, ModelAPI, ModelGraph
 
 
 def get_requirements() -> List[str]:
@@ -17,6 +17,13 @@ def get_requirements() -> List[str]:
     requirements = HUOGUOML_DEFAULT_REQUIREMENTS.copy()
     requirements.append("tensorflow={}".format(tf.__version__))
     return requirements
+
+
+def get_file_pattern() -> List[str]:
+    """
+    Returns a list with all possible file patterns
+    """
+    return ["*.pb", "*.data", "*.index"]
 
 
 def _load_saved_model(tf_saved_model_dir: str, tf_meta_graph_tags: str, tf_signature_def_key: str):
@@ -39,7 +46,6 @@ def _load_saved_model(tf_saved_model_dir: str, tf_meta_graph_tags: str, tf_signa
 
 
 def log_model(
-        run: Run,
         tf_saved_model_dir: str,
         tf_meta_graph_tags: str,
         tf_signature_def_key: str) -> ModelDefinition:
@@ -74,9 +80,18 @@ def log_model(
                          },
                          name="load_model")
 
+    model_files = []
+    for dir_path, _, filenames in os.walk(tf_saved_model_dir):
+        for filename in filenames:
+            file_path = os.path.join(dir_path, filename)
+            abs_file_path = os.path.abspath(file_path)
+            model_file_path = os.path.relpath(file_path, tf_saved_model_dir)
+            model_file = ("files", (model_file_path, open(abs_file_path, "rb")))
+            model_files.append(model_file)
     model_definition = ModelDefinition(model_api=model_api,
                                        model_graph=model_graph,
-                                       requirements=requirements)
+                                       requirements=requirements,
+                                       model_files=model_files)
     return model_definition
 
 

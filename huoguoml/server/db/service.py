@@ -4,13 +4,15 @@ The huoguoml.database module provides the database that contains all information
 import os
 from typing import List, Optional
 
-from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER
+import aiofiles
+from fastapi import UploadFile
+
+from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER, HUOGUOML_DEFAULT_MODEL_FOLDER
 from huoguoml.schemas.experiment import ExperimentIn, Experiment
+from huoguoml.schemas.ml_model import MLModel, MLModelIn
 from huoguoml.schemas.ml_service import MLService
 from huoguoml.schemas.run import Run, RunIn
 from huoguoml.server.db.repository import Repository
-from huoguoml.schemas.ml_model import MLModel, MLModelIn
-from huoguoml.utils.utils import read_json, create_zip_file, save_json
 
 
 class Service(object):
@@ -90,9 +92,19 @@ class Service(object):
             return ml_service
         return None
 
-    def update_or_create_run(self, run_id: int, run: Run) -> Run:
+    async def update_or_create_run(self, run_id: int, run: Run, files: List[UploadFile]) -> Run:
         run_orm = self.repository.update_or_create_run(run_id=run_id,
                                                        run=run)
+        if files:
+            for file in files:
+                file_path = os.path.join(self.artifact_dir,
+                                         run_orm.experiment_name,
+                                         str(run_orm.run_nr),
+                                         HUOGUOML_DEFAULT_MODEL_FOLDER,
+                                         file.filename)
+                async with aiofiles.open(file_path, 'wb') as out_file:
+                    content = await file.read()  # async read
+                    await out_file.write(content)  # async write
         return Run.from_orm(run_orm)
 
     def get_ml_model(self, ml_model_name: str) -> Optional[MLModel]:
