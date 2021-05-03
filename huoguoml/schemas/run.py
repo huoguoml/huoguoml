@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Optional, List, Dict, Any, Union, Tuple
+from typing import Optional, List, Dict, Any, Union
 
 from pydantic import BaseModel, constr
 
@@ -32,7 +32,6 @@ class ModelDefinition(BaseModel):
     model_graph: ModelGraph
     model_api: ModelAPI
     requirements: List[str]
-    model_files: List[Tuple[str]]
 
 
 class RunStatus(IntEnum):

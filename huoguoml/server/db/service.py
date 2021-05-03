@@ -92,20 +92,26 @@ class Service(object):
             return ml_service
         return None
 
-    async def update_or_create_run(self, run_id: int, run: Run, files: List[UploadFile]) -> Run:
+    def update_or_create_run(self, run_id: int, run: Run) -> Run:
         run_orm = self.repository.update_or_create_run(run_id=run_id,
                                                        run=run)
-        if files:
-            for file in files:
-                file_path = os.path.join(self.artifact_dir,
-                                         run_orm.experiment_name,
-                                         str(run_orm.run_nr),
-                                         HUOGUOML_DEFAULT_MODEL_FOLDER,
-                                         file.filename)
-                async with aiofiles.open(file_path, 'wb') as out_file:
-                    content = await file.read()  # async read
-                    await out_file.write(content)  # async write
         return Run.from_orm(run_orm)
+
+    def update_or_create_run_files(self, run_id: int, files: List[UploadFile]) -> bool:
+        run_orm = self.repository.get_run(run_id=run_id)
+        if run_orm is None:
+            return False
+
+        for file in files:
+            file_path = os.path.join(self.artifact_dir,
+                                     run_orm.experiment_name,
+                                     str(run_orm.run_nr),
+                                     HUOGUOML_DEFAULT_MODEL_FOLDER,
+                                     file.filename)
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, "wb+") as file_object:
+                file_object.write(file.file.read())
+        return True
 
     def get_ml_model(self, ml_model_name: str) -> Optional[MLModel]:
         ml_model_orm = self.repository.get_ml_model(ml_model_name=ml_model_name)

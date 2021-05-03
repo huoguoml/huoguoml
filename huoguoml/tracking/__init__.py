@@ -3,7 +3,7 @@ The huoguoml.tracking module provides the options for tracking all experiment ru
 """
 import getpass
 import time
-from typing import List
+from typing import List, Optional
 
 import requests
 
@@ -46,14 +46,17 @@ class HuoguoRun(object):
     def log_model(self,
                   model_type: str,
                   **kwargs):
+        # if self.run.model_definition:
+        #    raise FileExistsError("A model was already logged")
+
         if model_type == "tensorflow":
             from huoguoml.tracking.tensorflow import log_model
-            model_definition = log_model(**kwargs)
+            model_definition, model_files = log_model(**kwargs)
         else:
             raise NotImplementedError("Currently there is no support for {} in HuoguoML".format(model_type))
 
         self.run.model_definition = model_definition
-        self._update_experiment_run(model_definition.model_files)
+        self._update_experiment_run(model_files)
 
     def log_parameter(self, parameter_name: str, parameter_value: str):
         self.run.parameters[parameter_name] = parameter_value
@@ -81,11 +84,15 @@ class HuoguoRun(object):
 
         self._update_experiment_run()
 
-    def _update_experiment_run(self, files: List = []):
+    def _update_experiment_run(self, files: Optional[List] = None):
+        if files:
+            requests.put(
+                concat_uri(self.server_uri, self.RUN_ENDPOINT, "files", str(self.run.id)),
+                files=files)
+
         requests.put(
             concat_uri(self.server_uri, self.RUN_ENDPOINT, str(self.run.id)),
-            data=self.run.json(),
-            files=files)
+            data=self.run.json())
 
     def __exit__(self, exc_type, exc_value, traceback):
         if exc_value:
