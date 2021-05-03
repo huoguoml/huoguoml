@@ -4,7 +4,6 @@ import { Tag } from 'antd';
 
 interface Props {
   record?: Record<string, string>;
-  title: string;
 }
 
 export const RecordTags = memo((props: Props) => {

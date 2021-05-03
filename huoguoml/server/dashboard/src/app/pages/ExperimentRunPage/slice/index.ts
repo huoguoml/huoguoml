@@ -4,7 +4,17 @@ import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { experimentRunPageSaga } from './saga';
 import { ExperimentRunPageState } from './types';
 
-export const initialState: ExperimentRunPageState = {};
+export const initialState: ExperimentRunPageState = {
+  run: {
+    id: -1,
+    run_nr: -1,
+    creation_time: -1,
+    finish_time: -1,
+    author: '',
+    status: -1,
+    experiment_name: '',
+  },
+};
 
 const slice = createSlice({
   name: 'experimentRunPage',

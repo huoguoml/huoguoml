@@ -5,7 +5,6 @@ import { selectExperimentPage } from './slice/selectors';
 import { useExperimentPageSlice } from './slice';
 import { RunTable } from '../../components/RunTable/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
-import { RunInterface } from '../../../types';
 import { Typography } from 'antd';
 
 export function ExperimentPage() {
@@ -28,13 +27,13 @@ export function ExperimentPage() {
     history.push(`/experiments/${experimentName}/${runId}`);
   }
 
-  React.useEffect(() => {
-    if (experimentPageState.experiment?.runs) {
-      setSelectedRows(experimentPageState.experiment.runs.slice(0, 5));
-    }
-  }, [dispatch, experimentPageState.experiment]);
+  // React.useEffect(() => {
+  //   if (experimentPageState.experiment?.runs) {
+  //     setSelectedRows(experimentPageState.experiment.runs.slice(0, 5));
+  //   }
+  // }, [dispatch, experimentPageState.experiment]);
 
-  const [selectedRows, setSelectedRows] = React.useState<RunInterface[]>([]);
+  // const [selectedRows, setSelectedRows] = React.useState<RunInterface[]>([]);
   return (
     <>
       <ContentCardLayout contentUri={['experiments', experimentName]}>
@@ -52,8 +51,8 @@ export function ExperimentPage() {
         {experimentPageState.experiment?.runs && (
           <RunTable
             runs={[...experimentPageState.experiment.runs]}
-            defaultRuns={selectedRows}
-            setSelectedRows={setSelectedRows}
+            // defaultRuns={selectedRows}
+            // setSelectedRows={setSelectedRows}
             onClick={toRunPage}
           />
         )}

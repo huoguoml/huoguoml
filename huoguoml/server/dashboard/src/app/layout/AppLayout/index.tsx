@@ -4,18 +4,20 @@ import {
   DesktopOutlined,
   ExperimentOutlined,
   HomeOutlined,
-  QuestionOutlined,
+  // QuestionOutlined,
+  DatabaseOutlined,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppLayoutSlice } from './slice';
 import { selectAppLayout } from './slice/selectors';
 import { Route, Switch, useHistory } from 'react-router-dom';
-import { DashboardPage } from '../../pages/DashboardPage/Loadable';
+// import { DashboardPage } from '../../pages/DashboardPage/Loadable';
 import { ExperimentPage } from '../../pages/ExperimentPage/Loadable';
 import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 import { ExperimentRunPage } from '../../pages/ExperimentRunPage/Loadable';
 import { ServicesPage } from '../../pages/ServicesPage/Loadable';
 import { HelpPage } from '../../pages/HelpPage/Loadable';
+import { ModelPage } from '../../pages/ModelPage/Loadable';
 
 export const AppLayout = React.memo(() => {
   const dispatch = useDispatch();
@@ -37,16 +39,20 @@ export const AppLayout = React.memo(() => {
     history.push(`/`);
   }
 
-  function toExperimentPageWithId(experimentName?: string) {
+  function toExperimentPageWithName(experimentName?: string) {
     history.push(`/experiments/${experimentName}`);
   }
 
-  function toServicePage() {
+  function toModelPageWithName(model_name?: string) {
+    history.push(`/models/${model_name}`);
+  }
+
+  function toServicesPage() {
     history.push('/services');
   }
-  function toHelpPage() {
-    history.push('/help');
-  }
+  // function toHelpPage() {
+  //   history.push('/help');
+  // }
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
@@ -78,27 +84,37 @@ export const AppLayout = React.memo(() => {
             >
               {appLayoutState.experiments?.map(experiment => (
                 <Menu.Item
-                  onClick={() => toExperimentPageWithId(experiment.name)}
-                  key={experiment.id}
+                  onClick={() => toExperimentPageWithName(experiment.name)}
+                  key={`experiments_${experiment.id}`}
                 >
                   {experiment.name}
+                </Menu.Item>
+              ))}
+            </SubMenu>
+            <SubMenu key="models" title="Models" icon={<DatabaseOutlined />}>
+              {appLayoutState.ml_models?.map(ml_model => (
+                <Menu.Item
+                  onClick={() => toModelPageWithName(ml_model.name)}
+                  key={`models_${ml_model.id}`}
+                >
+                  {ml_model.name}
                 </Menu.Item>
               ))}
             </SubMenu>
             <Menu.Item
               key="services"
               icon={<DesktopOutlined />}
-              onClick={toServicePage}
+              onClick={toServicesPage}
             >
               Services
             </Menu.Item>
-            <Menu.Item
+            {/*            <Menu.Item
               onClick={toHelpPage}
               key="help"
               icon={<QuestionOutlined />}
             >
               Help
-            </Menu.Item>
+            </Menu.Item>*/}
           </Menu>
         </Sider>
         <Layout
@@ -108,7 +124,7 @@ export const AppLayout = React.memo(() => {
           <Header className="site-layout-background" />
           <Content>
             <Switch>
-              <Route exact path="/" component={DashboardPage} />
+              <Route exact path="/" component={HelpPage} />
               <Route
                 exact
                 path="/experiments/:experimentName"
@@ -119,8 +135,9 @@ export const AppLayout = React.memo(() => {
                 path="/experiments/:experimentName/:runId"
                 component={ExperimentRunPage}
               />
+              <Route exact path="/models/:mlModelName" component={ModelPage} />
               <Route exact path="/services" component={ServicesPage} />
-              <Route exact path="/help" component={HelpPage} />
+              {/*<Route exact path="/help" component={HelpPage} />*/}
               <Route component={NotFoundPage} />
             </Switch>
           </Content>

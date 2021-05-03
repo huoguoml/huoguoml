@@ -1,13 +1,12 @@
 import { put, takeLatest } from 'redux-saga/effects';
 import { runPageActions as actions } from '.';
 import axios from 'axios';
-import { SERVICE_URI } from '../../../../constants';
+import { ML_SERVICE_URI } from '../../../../constants';
 
 function* getServiceState() {
   try {
-    const servicesResponse = yield axios.get(`${SERVICE_URI}`);
+    const servicesResponse = yield axios.get(`${ML_SERVICE_URI}`);
     const services = servicesResponse.data;
-    services.sort((a, b) => b.id - a.id);
 
     yield put(
       actions.getServicesStateSuccess({

@@ -88,10 +88,25 @@ def download_and_extract_run_files(run_uri: str, dst_dir: str):
             zip_file.extractall(dst_dir)
 
 
-def concat_uri(*args):
-    uri = ""
-    for arg in args:
-        uri += arg
-        if not uri.endswith("/"):
-            uri += "/"
-    return uri
+def concat_uri(*args: str):
+    return "/".join(args)
+
+
+def coerce_url(url: str) -> str:
+    """
+    Gets a url as string and returns it in the right format
+
+    Args:
+        url: str
+
+    Returns:
+        formatted url as string
+    """
+    url = url.strip()
+    if url.endswith("/"):
+        url = url[:-1]
+
+    for proto in ["http://", "https://"]:
+        if url.startswith(proto):
+            return url
+    return "http://{0}".format(url)

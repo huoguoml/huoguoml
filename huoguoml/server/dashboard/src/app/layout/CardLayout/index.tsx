@@ -35,17 +35,15 @@ export const CardLayout = memo((props: Props) => {
           ))}
         </Breadcrumb>
       </div>
-      <Row gutter={[0, 16]}>
+      <Row gutter={[0, 0]}>
         {props.children.map((child, index) => (
-          <Col
-            xs={{ span: 24 }}
-            lg={{ span: 8 }}
-            style={{ margin: '0px 0px 0px 16px' }}
-          >
+          <Col xs={{ span: 24 }} lg={{ span: 8 }}>
             <div
               key={`card_${index}`}
-              className="site-layout-background"
-              style={{ padding: 24 }}
+              className="site-layout-card"
+              style={{
+                height: 150,
+              }}
             >
               {child}
             </div>

@@ -3,10 +3,12 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useExperimentRunPageSlice } from './slice';
 import { selectExperimentRunPage } from './slice/selectors';
-import { Typography } from 'antd';
+import { Button, Typography } from 'antd';
 import { RecordTable } from '../../components/RecordTable/Loadable';
 import { RecordTags } from '../../components/RecordTags/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
+import { StatusTag } from '../../components/StatusTag/Loadable';
+import { RegisterModelButton } from '../../components/RegisterModelButton/Loadable';
 
 export function ExperimentRunPage() {
   const { runId, experimentName } = useParams<Record<string, string>>();
@@ -25,22 +27,20 @@ export function ExperimentRunPage() {
       <ContentCardLayout contentUri={['experiments', experimentName, runId]}>
         <>
           <Title level={4}>Run: {runId}</Title>
-          <RecordTags
-            title={'Tags'}
-            record={experimentRunPageState.run?.tags}
-          />
-
+          <RecordTags record={experimentRunPageState.run.tags} />
+          <StatusTag status_code={experimentRunPageState.run.status} />
           <Paragraph copyable={true} editable={true}>
             {''}
           </Paragraph>
+          <RegisterModelButton run={experimentRunPageState.run} />
         </>
         <RecordTable
           title={'Parameters'}
-          record={experimentRunPageState.run?.parameters}
+          record={experimentRunPageState.run.parameters}
         />
         <RecordTable
           title={'Metrics'}
-          record={experimentRunPageState.run?.metrics}
+          record={experimentRunPageState.run.metrics}
         />
       </ContentCardLayout>
     </>

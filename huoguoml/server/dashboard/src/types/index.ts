@@ -50,4 +50,10 @@ export interface ServiceInterface {
   run_id?: string;
 }
 
+export interface MLModelInterface {
+  id: number;
+  name: string;
+  runs?: RunInterface[];
+}
+
 export type { RootState };

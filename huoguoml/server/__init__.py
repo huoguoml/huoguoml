@@ -5,7 +5,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 
-from huoguoml.server.apis.v1 import ml_service, experiment, run
+from huoguoml.server.apis.v1 import ml_service, experiment, run, ml_model
+from huoguoml.server.apis.v1.experiment import ExperimentRouter
+from huoguoml.server.apis.v1.ml_model import MLModelRouter
+from huoguoml.server.apis.v1.ml_service import MLServiceRouter
+from huoguoml.server.apis.v1.run import RunRouter
 from huoguoml.server.db.service import Service
 
 
@@ -30,9 +34,10 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
         allow_headers=["*"],
     )
 
-    app.include_router(experiment.get_router(service=service))
-    app.include_router(run.get_router(service=service))
-    app.include_router(ml_service.get_router(service=service))
+    app.include_router(ExperimentRouter(service=service).router)
+    app.include_router(RunRouter(service=service).router)
+    app.include_router(MLServiceRouter(service=service).router)
+    app.include_router(MLModelRouter(service=service).router)
 
     dashboard_files_dir = os.path.join(os.path.dirname(__file__),
                                        "dashboard",

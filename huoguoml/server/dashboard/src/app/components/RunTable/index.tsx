@@ -6,9 +6,7 @@ import { Table, Typography } from 'antd';
 import { StatusTag } from '../StatusTag/Loadable';
 
 interface Props {
-  runs: RunInterface[];
-  defaultRuns: RunInterface[];
-  setSelectedRows: (run: RunInterface[]) => void;
+  runs: RunInterface[] | undefined;
   onClick: (runId: number) => void;
 }
 
@@ -59,11 +57,22 @@ export const RunTable = memo((props: Props) => {
       render: creation_time => <div>{timestampToDate(creation_time)}</div>,
     },
     {
+      title: 'End Time',
+      dataIndex: 'finish_time',
+      key: 'finish_time',
+      sorter: (a, b) => a.finish_time - b.finish_time,
+      render: finish_time => (
+        <div>{finish_time === -1 ? '' : timestampToDate(finish_time)}</div>
+      ),
+    },
+    {
       title: 'Duration',
       dataIndex: 'duration',
       key: 'duration',
       sorter: (a, b) => a.creation_time - b.creation_time,
-      render: duration => <div>{secondsToTime(parseFloat(duration))}</div>,
+      render: duration => (
+        <div>{duration === -1 ? '' : secondsToTime(parseFloat(duration))}</div>
+      ),
     },
     {
       title: 'Status',
@@ -80,25 +89,24 @@ export const RunTable = memo((props: Props) => {
     },
   ];
 
-  const onSelectChange = (selectedRowKeys, selectedRows) => {
-    props.setSelectedRows(selectedRows);
-  };
-
-  const rowSelection = {
-    selectedRowKeys: props.defaultRuns.map(run => run.run_nr),
-    onChange: onSelectChange,
-  };
+  // const onSelectChange = (selectedRowKeys, selectedRows) => {
+  //   props.setSelectedRows(selectedRows);
+  // };
+  //
+  // const rowSelection = {
+  //   selectedRowKeys: props.defaultRuns.map(run => run.run_nr),
+  //   onChange: onSelectChange,
+  // };
 
   const { Title } = Typography;
 
   return (
     <>
-      <Title level={4}>Experiment Runs</Title>
-
+      <Title level={4}>Runs</Title>
       <Table
         rowKey={run => run.run_nr}
         size="small"
-        rowSelection={rowSelection}
+        // rowSelection={rowSelection}
         scroll={{ x: 'max-content' }}
         dataSource={props.runs}
         columns={[...fixedColumns, ...nonFixedColumns]}

@@ -13,8 +13,18 @@ const slice = createSlice({
     getLayoutState(state) {
       state.isLoading = true;
     },
-    getLayoutStateSuccess(state, action: PayloadAction<AppLayoutState>) {
+    getLayoutStateExperimentsSuccess(
+      state,
+      action: PayloadAction<AppLayoutState>,
+    ) {
       state.experiments = action.payload.experiments;
+      state.isLoading = false;
+    },
+    getLayoutStateMLModelsSuccess(
+      state,
+      action: PayloadAction<AppLayoutState>,
+    ) {
+      state.ml_models = action.payload.ml_models;
       state.isLoading = false;
     },
     getLayoutStateFailure(state, action: PayloadAction<string>) {

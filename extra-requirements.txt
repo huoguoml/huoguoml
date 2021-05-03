@@ -17,7 +17,7 @@
 fastapi:                    dev
 aiofiles:                   dev
 uvicorn:                    dev
-aiofiles:                   dev
+python-multipart:           dev
 sqlalchemy:                 dev
 click:                      dev
 pydoc-markdown:             documentation
