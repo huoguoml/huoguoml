@@ -18,10 +18,10 @@ function* getLayoutStateExperiments() {
 
 function* getLayoutStateMLModels() {
   try {
-    const experimentsResponse = yield axios.get(ML_MODEL_URI);
+    const mlModelsResponse = yield axios.get(ML_MODEL_URI);
     yield put(
       actions.getLayoutStateMLModelsSuccess({
-        ml_models: experimentsResponse.data,
+        ml_models: mlModelsResponse.data,
       }),
     );
   } catch (error) {

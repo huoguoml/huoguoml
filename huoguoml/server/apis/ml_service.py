@@ -10,7 +10,7 @@ class MLServiceRouter(object):
     # TODO: rework
     def __init__(self, service: Service):
         router = APIRouter(
-            prefix="/api/v1/ml_services",
+            prefix="/api/ml_services",
             tags=["ml_services"],
         )
 

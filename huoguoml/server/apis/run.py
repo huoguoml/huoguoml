@@ -12,7 +12,7 @@ from huoguoml.server.db.service import Service
 class RunRouter(object):
     def __init__(self, service: Service):
         router = APIRouter(
-            prefix="/api/v1/runs",
+            prefix="/api/runs",
             tags=["runs"],
         )
 

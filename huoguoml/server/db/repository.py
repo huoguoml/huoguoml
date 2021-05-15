@@ -7,12 +7,10 @@ from typing import List, Dict, Optional
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-import huoguoml
 from huoguoml.schemas.experiment import ExperimentIn
 from huoguoml.schemas.ml_model import MLModelIn
 from huoguoml.schemas.run import RunIn, Run
-from huoguoml.server.db.model import Base, RunORM, ServiceORM, ExperimentORM, MLModelORM
-from huoguoml.utils.utils import create_hash
+from huoguoml.server.db.model import Base, RunORM, MLServiceORM, ExperimentORM, MLModelORM
 
 
 class Repository(object):
@@ -87,14 +85,14 @@ class Repository(object):
             return experiment
         return None
 
-    def get_or_create_ml_service(self, host: str, port: int) -> ServiceORM:
+    def get_or_create_ml_service(self, host: str, port: int) -> MLServiceORM:
         session = self.Session()
 
-        ml_service = session.query(ServiceORM).filter_by(host=host, port=port).first()
+        ml_service = session.query(MLServiceORM).filter_by(host=host, port=port).first()
         if ml_service:
             return ml_service
 
-        ml_service = ServiceORM(host=host, port=port)
+        ml_service = MLServiceORM(host=host, port=port)
         session.add(ml_service)
         session.commit()
         session.refresh(ml_service)
@@ -102,11 +100,11 @@ class Repository(object):
 
     def get_ml_services(self):
         session = self.Session()
-        return session.query(ServiceORM).all()
+        return session.query(MLServiceORM).all()
 
-    def update_ml_service(self, ml_service_id: int, update_data: Dict) -> Optional[ServiceORM]:
+    def update_ml_service(self, ml_service_id: int, update_data: Dict) -> Optional[MLServiceORM]:
         session = self.Session()
-        ml_service = session.query(ServiceORM).filter_by(name=ml_service_id).first()
+        ml_service = session.query(MLServiceORM).filter_by(name=ml_service_id).first()
         if ml_service:
             for field, field_value in update_data.items():
                 setattr(ml_service, field, field_value)
@@ -139,7 +137,7 @@ class Repository(object):
         return session.query(RunORM).filter_by(run_nr=experiment_run_nr, experiment_name=experiment_name
                                                ).first()
 
-    def get_ml_model(self, ml_model_name):
+    def get_ml_model(self, ml_model_name) -> Optional[MLModelORM]:
         session = self.Session()
         return session.query(MLModelORM).filter_by(name=ml_model_name).first()
 

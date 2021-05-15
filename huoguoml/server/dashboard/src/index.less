@@ -1,14 +1,18 @@
 @import '~antd/lib/style/themes/default.less';
 @import '~antd/dist/antd.less'; // Import Ant Design styles by less entry
 
+svg {
+  vertical-align: baseline;
+}
+
 .logo {
   height: 32px;
   margin: 16px;
-  background: rgba(255, 255, 255, 0.3);
 }
 
 .site-layout .site-layout-background {
   background: #fff;
+  vertical-align: center;
 }
 
 .site-layout .site-layout-card {
@@ -17,25 +21,37 @@
   margin: 16px;
 }
 
-.ant-table-small .ant-table-thead > tr > th{
-  background: #efefef;
+.status-icon .success{
+  color: @success-color;
+}
+.status-icon .error{
+  color: @error-color;
+}
+.status-icon .processing{
+  color: @processing-color;
 }
 
-.ant-table-tbody > tr.ant-table-row:hover > td{
-  background: #efefef;
-}
+//.ant-table-small .ant-table-thead > tr > th{
+//  background: #efefef;
+//}
+//
+//.ant-table-tbody > tr.ant-table-row:hover > td{
+//  background: #efefef;
+//}
 
-.experiment-drawer.ant-drawer-open {
-  // width: 100% !important; // mask: false
-  > .ant-drawer-content-wrapper {
-    width: 60% !important;
-  }
-}
 
-@media (max-width: 767.98px) {
-  .experiment-drawer.ant-drawer-open {
-    > .ant-drawer-content-wrapper {
-      width: 60% !important;
-    }
-  }
-}
+// for full screen drawer
+//.experiment-drawer.ant-drawer-open {
+//  // width: 100% !important; // mask: false
+//  > .ant-drawer-content-wrapper {
+//    width: 60% !important;
+//  }
+//}
+//
+//@media (max-width: 767.98px) {
+//  .experiment-drawer.ant-drawer-open {
+//    > .ant-drawer-content-wrapper {
+//      width: 60% !important;
+//    }
+//  }
+//}

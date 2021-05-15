@@ -10,7 +10,7 @@ Base = declarative_base()
 
 run_ml_model_association = Table('run_ml_model_association', Base.metadata,
                                  Column('run_id', Integer, ForeignKey('runs.id')),
-                                 Column('ml_model_name', Integer, ForeignKey('ml_models.name'))
+                                 Column('ml_model_id', Integer, ForeignKey('ml_models.id'))
                                  )
 
 
@@ -36,7 +36,7 @@ class RunORM(Base):
     experiment = relationship("ExperimentORM", back_populates="runs")
     experiment_name = Column(String, ForeignKey("experiments.name"))
 
-    ml_model = relationship("MLModelORM", back_populates="runs", secondary=run_ml_model_association )
+    ml_model = relationship("MLModelORM", back_populates="runs", secondary=run_ml_model_association)
 
     @validates('experiment_name')
     def convert_upper(self, key, value):
@@ -58,7 +58,7 @@ class ExperimentORM(Base):
         return self.lower
 
 
-class ServiceORM(Base):
+class MLServiceORM(Base):
     __tablename__ = "ml_services"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -69,7 +69,8 @@ class ServiceORM(Base):
 class MLModelORM(Base):
     __tablename__ = "ml_models"
 
-    name = Column(String, primary_key=True, index=True, unique=True)
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True, unique=True)
     runs = relationship("RunORM", back_populates="ml_model", secondary=run_ml_model_association)
 
     @validates('name')

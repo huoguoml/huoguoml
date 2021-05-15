@@ -10,11 +10,11 @@ class MLModelRouter(object):
 
     def __init__(self, service: Service):
         router = APIRouter(
-            prefix="/api/v1/ml_models",
+            prefix="/api/ml_models",
             tags=["ml_models"],
         )
 
-        @router.get("", response_model=List[MLModel], response_model_exclude={"runs"})
+        @router.get("", response_model=List[MLModel])
         async def get_ml_models():
             return service.get_ml_models()
 

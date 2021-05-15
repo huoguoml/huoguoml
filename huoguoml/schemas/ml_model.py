@@ -11,6 +11,7 @@ class MLModelIn(BaseModel):
 
 
 class MLModel(BaseModel):
+    id: int
     name: constr(to_lower=True)
     runs: List[Run]
 

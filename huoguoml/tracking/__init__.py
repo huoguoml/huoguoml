@@ -13,8 +13,8 @@ from huoguoml.utils.utils import coerce_url, concat_uri
 
 
 class HuoguoRun(object):
-    EXPERIMENT_ENDPOINT = "api/v1/experiments"
-    RUN_ENDPOINT = "api/v1/runs"
+    EXPERIMENT_ENDPOINT = "api/experiments"
+    RUN_ENDPOINT = "api/runs"
 
     def __init__(self,
                  experiment_name: str,

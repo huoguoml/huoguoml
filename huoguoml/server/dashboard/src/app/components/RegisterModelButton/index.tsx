@@ -7,6 +7,7 @@ import { MLModelInterface, RunInterface } from '../../../types';
 
 interface Props {
   run: RunInterface;
+  disabled?: boolean;
 }
 
 export const RegisterModelButton = memo((props: Props) => {
@@ -53,7 +54,7 @@ export const RegisterModelButton = memo((props: Props) => {
   return (
     <>
       <div>
-        <Button type="primary" onClick={showModal}>
+        <Button type="primary" onClick={showModal} disabled={props.disabled}>
           Register
         </Button>
         <Modal

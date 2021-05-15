@@ -26,7 +26,7 @@ export function ModelPage() {
     <>
       <ContentCardLayout contentUri={['models', mlModelName]}>
         <Title level={4}>Models</Title>
-        <RunTable runs={modelPageState.model.runs} onClick={toRunPage} />
+        <Title level={4}>Models</Title>
       </ContentCardLayout>
     </>
   );

@@ -16,29 +16,17 @@ export const StatusTag = memo((props: Props) => {
     <>
       <div>
         {props.status_code === 1 && (
-          <Tag
-            color="green"
-            key="completed"
-            icon={<CheckCircleOutlined style={{ verticalAlign: 'middle' }} />}
-          >
+          <Tag color="green" key="completed" icon={<CheckCircleOutlined />}>
             {'Completed'}
           </Tag>
         )}
         {props.status_code === -1 && (
-          <Tag
-            color="green"
-            key="pending"
-            icon={<SyncOutlined style={{ verticalAlign: 'middle' }} />}
-          >
+          <Tag color="blue" key="pending" icon={<SyncOutlined spin={true} />}>
             {'Pending'}
           </Tag>
         )}
         {props.status_code === 0 && (
-          <Tag
-            color="red"
-            key="failed"
-            icon={<CloseCircleOutlined style={{ verticalAlign: 'middle' }} />}
-          >
+          <Tag color="red" key="failed" icon={<CloseCircleOutlined />}>
             {'Failed'}
           </Tag>
         )}

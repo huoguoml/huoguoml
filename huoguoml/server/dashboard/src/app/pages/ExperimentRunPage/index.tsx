@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useExperimentRunPageSlice } from './slice';
 import { selectExperimentRunPage } from './slice/selectors';
-import { Button, Typography } from 'antd';
+import { Typography } from 'antd';
 import { RecordTable } from '../../components/RecordTable/Loadable';
 import { RecordTags } from '../../components/RecordTags/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
@@ -32,7 +32,10 @@ export function ExperimentRunPage() {
           <Paragraph copyable={true} editable={true}>
             {''}
           </Paragraph>
-          <RegisterModelButton run={experimentRunPageState.run} />
+          <RegisterModelButton
+            run={experimentRunPageState.run}
+            disabled={!experimentRunPageState.run.model_definition}
+          />
         </>
         <RecordTable
           title={'Parameters'}

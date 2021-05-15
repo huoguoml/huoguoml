@@ -11,11 +11,11 @@ class ExperimentRouter(object):
 
     def __init__(self, service: Service):
         router = APIRouter(
-            prefix="/api/v1/experiments",
+            prefix="/api/experiments",
             tags=["experiments"],
         )
 
-        @router.get("", response_model=List[Experiment], response_model_exclude={"runs"})
+        @router.get("", response_model=List[Experiment])
         async def get_experiments():
             return service.get_experiments()
 

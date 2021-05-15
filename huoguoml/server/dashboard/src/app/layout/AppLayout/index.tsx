@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Typography } from 'antd';
 import {
   DesktopOutlined,
   ExperimentOutlined,
@@ -18,8 +18,11 @@ import { ExperimentRunPage } from '../../pages/ExperimentRunPage/Loadable';
 import { ServicesPage } from '../../pages/ServicesPage/Loadable';
 import { HelpPage } from '../../pages/HelpPage/Loadable';
 import { ModelPage } from '../../pages/ModelPage/Loadable';
+import {CompareRunPage} from "../../pages/CompareRunPage/Loadable";
 
 export const AppLayout = React.memo(() => {
+  const { Title } = Typography;
+
   const dispatch = useDispatch();
   const { actions } = useAppLayoutSlice();
 
@@ -27,7 +30,7 @@ export const AppLayout = React.memo(() => {
 
   React.useEffect(() => {
     dispatch(actions.getLayoutState());
-  }, [dispatch, actions]);
+  }, [dispatch]);
 
   const { Header, Content, Footer, Sider } = Layout;
   const { SubMenu } = Menu;
@@ -68,7 +71,11 @@ export const AppLayout = React.memo(() => {
             left: 0,
           }}
         >
-          <div className="logo" />
+          <div className="logo">
+            <Title style={{ color: 'white', textAlign: 'center' }} level={3}>
+              {collapsed ? '🍲' : '🍲 HuoguoML'}
+            </Title>
+          </div>
           <Menu theme="dark" defaultSelectedKeys={['dashboard']} mode="inline">
             <Menu.Item
               onClick={toDashboardPage}
@@ -137,6 +144,7 @@ export const AppLayout = React.memo(() => {
               />
               <Route exact path="/models/:mlModelName" component={ModelPage} />
               <Route exact path="/services" component={ServicesPage} />
+              <Route exact path="/compare" component={CompareRunPage} />
               {/*<Route exact path="/help" component={HelpPage} />*/}
               <Route component={NotFoundPage} />
             </Switch>
