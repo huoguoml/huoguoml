@@ -150,7 +150,7 @@ export const AppLayout = React.memo(() => {
             </Switch>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            HuoguoML - Made by Data Scientist for Data Scientist
+            HuoguoML - Made by Data Scientist for Data Scientist 
           </Footer>
         </Layout>
       </Layout>
