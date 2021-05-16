@@ -160,3 +160,12 @@ class Repository(object):
         session.commit()
         session.refresh(ml_model_orm)
         return ml_model_orm
+
+    def get_runs_by_experiment_name_and_run_nrs(self, experiment_name: str, run_nrs: List[int]) -> List[RunORM]:
+        session = self.Session()
+        return session.query(RunORM).filter(experiment_name == RunORM.experiment_name,
+                                            RunORM.run_nr.in_(run_nrs)).all()
+
+    def get_runs(self) -> List[RunORM]:
+        session = self.Session()
+        return session.query(RunORM).all()

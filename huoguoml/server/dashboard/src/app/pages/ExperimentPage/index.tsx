@@ -5,7 +5,7 @@ import { selectExperimentPage } from './slice/selectors';
 import { useExperimentPageSlice } from './slice';
 import { RunTable } from '../../components/RunTable/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
-import { Button, Col, Row, Select, Typography } from 'antd';
+import { Alert, Button, Col, Row, Select, Typography } from 'antd';
 import { RunInterface } from '../../../types';
 import { DownloadOutlined, RedoOutlined } from '@ant-design/icons';
 
@@ -25,15 +25,20 @@ export function ExperimentPage() {
 
   let history = useHistory();
 
-  function toRunPage(runId: number) {
-    history.push(`/experiments/${experimentName}/${runId}`);
-  }
-
   const [selectedRows, setSelectedRows] = React.useState<RunInterface[]>([]);
 
   function handleChange(value) {
     console.log(`selected ${value}`);
   }
+
+  function toRunPage(runId: number) {
+    history.push(`/experiments/${experimentName}/${runId}`);
+  }
+
+  function toComparePage(runIds: number[]) {
+    history.push(`/experiments/${experimentName}/compare?run_nrs=${runIds}`);
+  }
+
   return (
     <>
       <ContentCardLayout contentUri={['experiments', experimentName]}>
@@ -67,11 +72,26 @@ export function ExperimentPage() {
         <>
           <Title level={5}>Available runs</Title>
 
-          {`Selected ${selectedRows.length} runs`}
-          <Button>Compare</Button>
-          <Button>Delete</Button>
           <Button icon={<DownloadOutlined />} />
           <Button icon={<RedoOutlined />} />
+          <Alert
+            message={`Selected ${selectedRows.length} runs`}
+            type="info"
+            action={
+              <>
+                <Button
+                  type="primary"
+                  disabled={selectedRows.length <= 1}
+                  onClick={() => toComparePage(selectedRows.map(row => row.id))}
+                >
+                  Compare
+                </Button>
+                <Button disabled={selectedRows.length < 1}>Clear</Button>
+                <Button disabled={selectedRows.length < 1}>Delete</Button>
+              </>
+            }
+          />
+
           <RunTable
             runs={experimentPageState.experiment?.runs}
             selectedRuns={selectedRows}

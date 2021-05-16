@@ -1,6 +1,6 @@
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi import APIRouter, HTTPException, UploadFile, File, Query
 
 from huoguoml.schemas.run import RunIn, Run
 from huoguoml.server.db.service import Service
@@ -15,6 +15,23 @@ class RunRouter(object):
             prefix="/api/runs",
             tags=["runs"],
         )
+
+        @router.get("", response_model=List[Run])
+        async def get_runs(experiment_name: Optional[str] = Query(None),
+                           run_nrs: Optional[str] = Query(None,
+                                                          description="String that contains a set of comma seperated numbers e.g. '1,2,3,4'")):
+            if run_nrs is not None:
+                numbers = []
+                for el in run_nrs.split(','):
+                    el = el.strip()
+                    if not el.isnumeric():
+                        raise HTTPException(status_code=422,
+                                            detail="Element {} in {} is not a number".format(el, run_nrs))
+                    numbers.append(int(el))
+                run_nrs = numbers
+            runs = service.get_runs(experiment_name=experiment_name,
+                                   run_nrs=run_nrs)
+            return runs
 
         @router.get("/{run_id}", response_model=Run)
         async def get_run(run_id: int):

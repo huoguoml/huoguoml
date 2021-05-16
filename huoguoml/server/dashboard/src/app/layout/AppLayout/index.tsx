@@ -18,7 +18,7 @@ import { ExperimentRunPage } from '../../pages/ExperimentRunPage/Loadable';
 import { ServicesPage } from '../../pages/ServicesPage/Loadable';
 import { HelpPage } from '../../pages/HelpPage/Loadable';
 import { ModelPage } from '../../pages/ModelPage/Loadable';
-import {CompareRunPage} from "../../pages/CompareRunPage/Loadable";
+import { CompareRunPage } from '../../pages/CompareRunPage/Loadable';
 
 export const AppLayout = React.memo(() => {
   const { Title } = Typography;
@@ -53,6 +53,7 @@ export const AppLayout = React.memo(() => {
   function toServicesPage() {
     history.push('/services');
   }
+
   // function toHelpPage() {
   //   history.push('/help');
   // }
@@ -138,19 +139,22 @@ export const AppLayout = React.memo(() => {
                 component={ExperimentPage}
               />
               <Route
+                path="/experiments/:experimentName/compare"
+                component={CompareRunPage}
+              />
+              <Route
                 exact
                 path="/experiments/:experimentName/:runId"
                 component={ExperimentRunPage}
               />
               <Route exact path="/models/:mlModelName" component={ModelPage} />
               <Route exact path="/services" component={ServicesPage} />
-              <Route exact path="/compare" component={CompareRunPage} />
               {/*<Route exact path="/help" component={HelpPage} />*/}
               <Route component={NotFoundPage} />
             </Switch>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
-            HuoguoML - Made by Data Scientist for Data Scientist 
+            HuoguoML - Made by Data Scientist for Data Scientist
           </Footer>
         </Layout>
       </Layout>

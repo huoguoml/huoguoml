@@ -104,3 +104,10 @@ class Service(object):
 
     def update_or_create_ml_model(self, ml_model_name: str, ml_model_in: MLModelIn) -> MLModelORM:
         return self.repository.update_or_create_ml_model(ml_model_name=ml_model_name, ml_model_in=ml_model_in)
+
+    def get_runs(self, experiment_name: Optional[str], run_nrs: Optional[List[int]]) -> List[RunORM]:
+        if experiment_name is not None and run_nrs is not None:
+            return self.repository.get_runs_by_experiment_name_and_run_nrs(experiment_name=experiment_name,
+                                                                           run_nrs=run_nrs)
+        else:
+            return self.repository.get_runs()

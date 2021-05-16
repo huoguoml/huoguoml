@@ -3,6 +3,7 @@ import { ExperimentPageState } from '../app/pages/ExperimentPage/slice/types';
 import { ExperimentRunPageState } from '../app/pages/ExperimentRunPage/slice/types';
 import { ServicesPageState } from '../app/pages/ServicesPage/slice/types';
 import { ModelPageState } from '../app/pages/ModelPage/slice/types';
+import { CompareRunPageState } from '../app/pages/CompareRunPage/slice/types';
 
 export interface PageState {
   isLoading?: boolean;
@@ -15,4 +16,5 @@ export interface RootState {
   experimentRunPage?: ExperimentRunPageState;
   servicesPage?: ServicesPageState;
   modelPage?: ModelPageState;
+  compareRunPage?: CompareRunPageState;
 }
