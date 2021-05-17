@@ -2,8 +2,8 @@ import * as React from 'react';
 import { memo } from 'react';
 import { Button, Input, message, Modal, Select } from 'antd';
 import axios from 'axios';
-import { ML_MODEL_URI } from '../../../constants';
-import { MLModelInterface, RunInterface } from '../../../types';
+import { ML_MODEL_URI } from '../../../../constants';
+import { MLModelInterface, RunInterface } from '../../../../types';
 
 interface Props {
   run: RunInterface;

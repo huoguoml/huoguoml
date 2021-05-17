@@ -37,6 +37,7 @@ export const RecordTable = memo((props: Props) => {
               };
             })}
             columns={columns}
+            pagination={false}
           />
         </div>
       )}

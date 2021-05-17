@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ServiceInterface } from '../../../types';
+import { ServiceInterface } from '../../../../types';
 import { Table, Typography } from 'antd';
 
 interface Props {

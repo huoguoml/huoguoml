@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectExperimentPage } from './slice/selectors';
 import { useExperimentPageSlice } from './slice';
-import { RunTable } from '../../components/RunTable/Loadable';
+import { RunTable } from '../../components/Table/RunTable/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { Alert, Button, Col, Row, Select, Typography } from 'antd';
 import { RunInterface } from '../../../types';

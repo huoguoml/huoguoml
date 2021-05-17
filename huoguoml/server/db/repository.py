@@ -5,7 +5,7 @@ import time
 from typing import List, Dict, Optional
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 from huoguoml.schemas.experiment import ExperimentIn
 from huoguoml.schemas.ml_model import MLModelIn
@@ -21,7 +21,8 @@ class Repository(object):
         engine = create_engine(
             database_url, connect_args=connect_args
         )
-        self.Session = sessionmaker(bind=engine)
+        session_factory = sessionmaker(bind=engine)
+        self.Session = scoped_session(session_factory)
         Base.metadata.create_all(bind=engine)
 
     def get_experiments(self) -> List[ExperimentORM]:

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RunInterface } from '../../../types';
+import { RunInterface } from '../../../../types';
 import { Table } from 'antd';
-import { StatusTag } from '../StatusTag/Loadable';
+import { StatusTag } from '../../StatusTag/Loadable';
 
 interface Props {
   runs: RunInterface[] | undefined;

@@ -5,7 +5,7 @@ import { useModelPageSlice } from './slice';
 import { selectModelPageState } from './slice/selectors';
 import { Typography } from 'antd';
 import { useParams } from 'react-router-dom';
-import { RunTable } from '../../components/RunTable/Loadable';
+import { RunTable } from '../../components/Table/RunTable/Loadable';
 
 export function ModelPage() {
   const { mlModelName } = useParams<Record<string, string>>();

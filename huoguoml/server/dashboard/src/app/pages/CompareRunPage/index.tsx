@@ -5,7 +5,7 @@ import { useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCompareRunPageSlice } from './slice';
 import { selectCompareRunPage } from './slice/selectors';
-import { ParameterTable } from '../../components/ParameterTable/Loadable';
+import { ParameterTable } from '../../components/Table/ParameterTable/Loadable';
 import { Typography } from 'antd';
 
 export function CompareRunPage() {
