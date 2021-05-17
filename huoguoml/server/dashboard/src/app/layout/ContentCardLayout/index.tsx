@@ -20,7 +20,7 @@ export const ContentCardLayout = memo((props: Props) => {
       <div style={{ margin: '16px 16px' }}>
         <Breadcrumb>
           {props.contentUri.map((uri, index) => (
-            <Breadcrumb.Item>
+            <Breadcrumb.Item key={`${uri}_${index}`}>
               {index === 0 && uri}
               {index > 0 && (
                 <a

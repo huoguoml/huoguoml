@@ -82,7 +82,9 @@ export function ExperimentPage() {
                 <Button
                   type="primary"
                   disabled={selectedRows.length <= 1}
-                  onClick={() => toComparePage(selectedRows.map(row => row.id))}
+                  onClick={() =>
+                    toComparePage(selectedRows.map(row => row.run_nr))
+                  }
                 >
                   Compare
                 </Button>
