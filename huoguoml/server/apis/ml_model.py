@@ -16,7 +16,9 @@ class MLModelRouter(object):
 
         @router.get("", response_model=List[MLModel])
         async def get_ml_models():
-            return service.get_ml_models()
+            temp = service.get_ml_models()
+            print(temp[0].__dir__())
+            return temp
 
         @router.get("/{ml_model_name}", response_model=MLModel)
         async def get_ml_models(ml_model_name: str):
@@ -25,10 +27,12 @@ class MLModelRouter(object):
                 raise HTTPException(status_code=404)
             return ml_model
 
-        @router.put("/{ml_model_name}", response_model=MLModel)
-        async def update_or_create_ml_model(ml_model_name: str, ml_model_in: MLModelIn):
+        @router.post("", response_model=MLModel)
+        async def create_ml_model(ml_model_in: MLModelIn):
             # TODO: Check if both ml_service.host and port are equal to the request one
-            ml_model = service.update_or_create_ml_model(ml_model_name=ml_model_name, ml_model_in=ml_model_in)
+            ml_model = service.create_ml_model(ml_model_in=ml_model_in)
+            if ml_model is None:
+                raise HTTPException(status_code=400)
             return ml_model
 
         self.router = router

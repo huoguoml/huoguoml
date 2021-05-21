@@ -170,3 +170,17 @@ class Repository(object):
     def get_runs(self) -> List[RunORM]:
         session = self.Session()
         return session.query(RunORM).all()
+
+    def create_ml_model(self, ml_model_in: MLModelIn) -> Optional[MLModelORM]:
+        session = self.Session()
+        run_orm = session.query(RunORM).filter_by(id=ml_model_in.run_id).first()
+        if run_orm and run_orm.ml_model:
+            return None
+
+        ml_model = MLModelORM(
+            tag="",
+            **ml_model_in.dict())
+        session.add(ml_model)
+        session.commit()
+        session.refresh(ml_model)
+        return ml_model

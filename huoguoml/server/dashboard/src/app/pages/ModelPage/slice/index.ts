@@ -5,7 +5,7 @@ import { modelPageSaga } from './saga';
 import { ModelPageState } from './types';
 
 export const initialState: ModelPageState = {
-  model: { id: -1, name: '' },
+  models: [],
 };
 
 const slice = createSlice({
@@ -16,7 +16,7 @@ const slice = createSlice({
       state.isLoading = true;
     },
     getModelStateSuccess(state, action: PayloadAction<ModelPageState>) {
-      state.model = action.payload.model;
+      state.models = action.payload.models;
       state.isLoading = false;
     },
     getModelStateFailure(state, action: PayloadAction<string>) {

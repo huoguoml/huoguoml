@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { memo } from 'react';
-import { Button, Input, message, Modal, Select } from 'antd';
+import { AutoComplete, Button, Input, message, Modal, Select } from 'antd';
 import axios from 'axios';
 import { ML_MODEL_URI } from '../../../../constants';
 import { MLModelInterface, RunInterface } from '../../../../types';
@@ -17,33 +17,33 @@ export const RegisterModelButton = memo((props: Props) => {
   const [mlModels, setMlModels] = React.useState<MLModelInterface[]>([]);
   const [mlModelName, setMlModelName] = React.useState<string>('');
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  const getMlModel = () => {
     axios
       .get(ML_MODEL_URI)
       .then(response => setMlModels(response.data))
       .catch(error => console.log(error));
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
+  const showModal = () => {
+    setIsModalVisible(true);
+    getMlModel();
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setMlModelName('');
   };
 
   const registerModel = () => {
     if (mlModelName) {
       axios
-        .put(`${ML_MODEL_URI}/${mlModelName}`, {
+        .post(`${ML_MODEL_URI}`, {
           name: mlModelName,
-          run: props.run,
+          run_id: props.run.id,
         })
         .then(response => {
           message.success(`Added model to ${mlModelName}`);
-          setIsModalVisible(false);
-          setMlModelName('');
+          handleCancel();
         })
         .catch(error => {
           message.error(error.message);
@@ -60,7 +60,6 @@ export const RegisterModelButton = memo((props: Props) => {
         <Modal
           title="Register Modal to Registry"
           visible={isModalVisible}
-          onOk={handleOk}
           onCancel={handleCancel}
           footer={[
             <Button key="cancel" onClick={handleCancel}>
@@ -72,14 +71,14 @@ export const RegisterModelButton = memo((props: Props) => {
               onClick={registerModel}
               disabled={mlModelName.length === 0}
             >
-              Submit
+              Register
             </Button>,
           ]}
         >
-          <Select
-            showSearch
+          <p>Select a existing or type the name of a new Model Registry</p>
+          <AutoComplete
             style={{ width: '100%' }}
-            placeholder="Select a existing Model Registry"
+            placeholder="Select a existing or type the name of a new Model Registry"
             optionFilterProp="children"
             filterOption={(input, option) =>
               option
@@ -87,19 +86,16 @@ export const RegisterModelButton = memo((props: Props) => {
                   0
                 : false
             }
+            onChange={value => setMlModelName(String(value))}
             onSearch={setMlModelName}
             onSelect={value => setMlModelName(String(value))}
           >
             {mlModels.map(mlModel => (
-              <Option value={mlModel.name}>{mlModel.name}</Option>
+              <Option key={mlModel.id} value={mlModel.name}>
+                {mlModel.name}
+              </Option>
             ))}
-          </Select>
-          or
-          <Input
-            placeholder="Type the name of a new Model Registry"
-            value={mlModelName}
-            onChange={value => setMlModelName(value.target.value)}
-          />
+          </AutoComplete>
         </Modal>
       </div>
     </>

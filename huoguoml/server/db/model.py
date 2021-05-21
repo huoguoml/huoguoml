@@ -2,16 +2,11 @@
 The huoguoml.models module contains the model definition for our ORM mapper SQL Alchemy
 """
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Float, PickleType, Table
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, PickleType
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, validates
 
 Base = declarative_base()
-
-run_ml_model_association = Table('run_ml_model_association', Base.metadata,
-                                 Column('run_id', Integer, ForeignKey('runs.id')),
-                                 Column('ml_model_id', Integer, ForeignKey('ml_models.id'))
-                                 )
 
 
 class RunORM(Base):
@@ -36,7 +31,7 @@ class RunORM(Base):
     experiment = relationship("ExperimentORM", back_populates="runs")
     experiment_name = Column(String, ForeignKey("experiments.name"))
 
-    ml_model = relationship("MLModelORM", back_populates="runs", secondary=run_ml_model_association)
+    ml_model = relationship("MLModelORM", uselist=False, back_populates="run")
 
     @validates('experiment_name')
     def convert_upper(self, key, value):
@@ -66,12 +61,21 @@ class MLServiceORM(Base):
     port = Column(Integer)
 
 
+class MLModelRegistry(Base):
+    __tablename__ = "ml_model_registry"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+
+
 class MLModelORM(Base):
     __tablename__ = "ml_models"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True, unique=True)
-    runs = relationship("RunORM", back_populates="ml_model", secondary=run_ml_model_association)
+    tag = Column(String)
+
+    run_id = Column(Integer, ForeignKey('runs.id'))
+    run = relationship("RunORM", back_populates="ml_model")
 
     @validates('name')
     def convert_upper(self, key, value):

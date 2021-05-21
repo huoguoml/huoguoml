@@ -111,3 +111,6 @@ class Service(object):
                                                                            run_nrs=run_nrs)
         else:
             return self.repository.get_runs()
+
+    def create_ml_model(self, ml_model_in: MLModelIn) -> Optional[MLModelORM]:
+        return self.repository.create_ml_model(ml_model_in=ml_model_in)

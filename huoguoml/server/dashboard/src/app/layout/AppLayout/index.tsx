@@ -19,6 +19,7 @@ import { ServicesPage } from '../../pages/ServicesPage/Loadable';
 import { HelpPage } from '../../pages/HelpPage/Loadable';
 import { ModelPage } from '../../pages/ModelPage/Loadable';
 import { CompareRunPage } from '../../pages/CompareRunPage/Loadable';
+import { ModelDetailPage } from '../../pages/ModelDetailPage/Loadable';
 
 export const AppLayout = React.memo(() => {
   const { Title } = Typography;
@@ -30,7 +31,7 @@ export const AppLayout = React.memo(() => {
 
   React.useEffect(() => {
     dispatch(actions.getLayoutState());
-  }, [dispatch]);
+  }, [dispatch, actions]);
 
   const { Header, Content, Footer, Sider } = Layout;
   const { SubMenu } = Menu;
@@ -46,8 +47,8 @@ export const AppLayout = React.memo(() => {
     history.push(`/experiments/${experimentName}`);
   }
 
-  function toModelPageWithName(model_name?: string) {
-    history.push(`/models/${model_name}`);
+  function toModelPage() {
+    history.push(`/models`);
   }
 
   function toServicesPage() {
@@ -99,16 +100,13 @@ export const AppLayout = React.memo(() => {
                 </Menu.Item>
               ))}
             </SubMenu>
-            <SubMenu key="models" title="Models" icon={<DatabaseOutlined />}>
-              {appLayoutState.ml_models?.map(ml_model => (
-                <Menu.Item
-                  onClick={() => toModelPageWithName(ml_model.name)}
-                  key={`models_${ml_model.id}`}
-                >
-                  {ml_model.name}
-                </Menu.Item>
-              ))}
-            </SubMenu>
+            <Menu.Item
+              key="models"
+              icon={<DatabaseOutlined />}
+              onClick={toModelPage}
+            >
+              Models
+            </Menu.Item>
             <Menu.Item
               key="services"
               icon={<DesktopOutlined />}
@@ -147,7 +145,12 @@ export const AppLayout = React.memo(() => {
                 path="/experiments/:experimentName/:runId"
                 component={ExperimentRunPage}
               />
-              <Route exact path="/models/:mlModelName" component={ModelPage} />
+              <Route exact path="/models" component={ModelPage} />
+              <Route
+                exact
+                path="/models/:mlModelName"
+                component={ModelDetailPage}
+              />
               <Route exact path="/services" component={ServicesPage} />
               {/*<Route exact path="/help" component={HelpPage} />*/}
               <Route component={NotFoundPage} />

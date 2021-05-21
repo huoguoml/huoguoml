@@ -53,7 +53,7 @@ export interface ServiceInterface {
 export interface MLModelInterface {
   id: number;
   name: string;
-  runs?: RunInterface[];
+  runs: RunInterface[];
 }
 
 export type { RootState };
