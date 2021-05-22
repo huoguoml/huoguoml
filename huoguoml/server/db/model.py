@@ -61,18 +61,12 @@ class MLServiceORM(Base):
     port = Column(Integer)
 
 
-class MLModelRegistry(Base):
-    __tablename__ = "ml_model_registry"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-
-
 class MLModelORM(Base):
     __tablename__ = "ml_models"
 
     id = Column(Integer, primary_key=True, index=True)
     tag = Column(String)
+    name = Column(String, index=True)
 
     run_id = Column(Integer, ForeignKey('runs.id'))
     run = relationship("RunORM", back_populates="ml_model")

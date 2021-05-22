@@ -144,7 +144,7 @@ class Repository(object):
 
     def get_ml_models(self):
         session = self.Session()
-        return session.query(MLModelORM).all()
+        return session.query(MLModelORM).group_by(MLModelORM.name).all()
 
     def update_or_create_ml_model(self, ml_model_name: str, ml_model_in: MLModelIn) -> MLModelORM:
         session = self.Session()

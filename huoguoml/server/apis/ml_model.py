@@ -17,7 +17,8 @@ class MLModelRouter(object):
         @router.get("", response_model=List[MLModel])
         async def get_ml_models():
             temp = service.get_ml_models()
-            print(temp[0].__dir__())
+            print(temp)
+            print(temp.__dir__())
             return temp
 
         @router.get("/{ml_model_name}", response_model=MLModel)

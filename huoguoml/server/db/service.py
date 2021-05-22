@@ -100,7 +100,7 @@ class Service(object):
         return self.repository.get_ml_model(ml_model_name=ml_model_name)
 
     def get_ml_models(self) -> List[MLModelORM]:
-        return self.repository.get_ml_models()
+        return [ml_model.__dict__ for ml_model in self.repository.get_ml_models()]
 
     def update_or_create_ml_model(self, ml_model_name: str, ml_model_in: MLModelIn) -> MLModelORM:
         return self.repository.update_or_create_ml_model(ml_model_name=ml_model_name, ml_model_in=ml_model_in)

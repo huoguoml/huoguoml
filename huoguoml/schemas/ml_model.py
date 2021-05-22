@@ -12,7 +12,7 @@ class MLModelIn(BaseModel):
 
 class MLModel(BaseModel):
     name: constr(to_lower=True)
-    run: Run
+    run: List[Run]
 
     class Config:
         orm_mode = True
