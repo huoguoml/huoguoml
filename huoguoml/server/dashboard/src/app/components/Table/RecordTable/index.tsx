@@ -27,7 +27,6 @@ export const RecordTable = memo((props: Props) => {
     <>
       {props.record && (
         <div>
-          <Title level={4}>{props.title}</Title>
           <Table
             size="small"
             dataSource={Object.entries(props.record).map(item => {

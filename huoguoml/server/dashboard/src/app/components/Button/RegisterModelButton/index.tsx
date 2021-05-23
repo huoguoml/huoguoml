@@ -3,7 +3,7 @@ import { memo } from 'react';
 import { AutoComplete, Button, Input, message, Modal, Select } from 'antd';
 import axios from 'axios';
 import { ML_MODEL_URI } from '../../../../constants';
-import { MLModelInterface, RunInterface } from '../../../../types';
+import { RunInterface } from '../../../../types';
 
 interface Props {
   run: RunInterface;
@@ -14,13 +14,13 @@ export const RegisterModelButton = memo((props: Props) => {
   const { Option } = Select;
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const [mlModels, setMlModels] = React.useState<MLModelInterface[]>([]);
+  const [mlModelsName, setMlModelsName] = React.useState<string[]>([]);
   const [mlModelName, setMlModelName] = React.useState<string>('');
 
   const getMlModel = () => {
     axios
       .get(ML_MODEL_URI)
-      .then(response => setMlModels(response.data))
+      .then(response => setMlModelsName(Object.keys(response.data)))
       .catch(error => console.log(error));
   };
 
@@ -90,9 +90,9 @@ export const RegisterModelButton = memo((props: Props) => {
             onSearch={setMlModelName}
             onSelect={value => setMlModelName(String(value))}
           >
-            {mlModels.map(mlModel => (
-              <Option key={mlModel.id} value={mlModel.name}>
-                {mlModel.name}
+            {mlModelsName.map((name, index) => (
+              <Option key={index} value={name}>
+                {name}
               </Option>
             ))}
           </AutoComplete>

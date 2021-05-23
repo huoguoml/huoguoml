@@ -55,19 +55,15 @@ export function ExperimentPage() {
         </>
         <>
           <Title level={5}>Filter runs</Title>
-          <Row>
-            <Col flex="auto">
-              <Select
-                mode="tags"
-                style={{ width: '100%' }}
-                onChange={handleChange}
-                tokenSeparators={[',']}
-                placeholder={
-                  'Search runs by their value by typing the value or specifying a range'
-                }
-              />
-            </Col>
-          </Row>
+          <Select
+            mode="tags"
+            style={{ width: '100%' }}
+            onChange={handleChange}
+            tokenSeparators={[',']}
+            placeholder={
+              'Search runs by their value by typing the value or specifying a range'
+            }
+          />
         </>
         <>
           <Title level={5}>Available runs</Title>

@@ -48,7 +48,7 @@ export const AppLayout = React.memo(() => {
   }
 
   function toModelPage() {
-    history.push(`/models`);
+    history.push(`/ml_models`);
   }
 
   function toServicesPage() {
@@ -145,10 +145,10 @@ export const AppLayout = React.memo(() => {
                 path="/experiments/:experimentName/:runId"
                 component={ExperimentRunPage}
               />
-              <Route exact path="/models" component={ModelPage} />
+              <Route exact path="/ml_models" component={ModelPage} />
               <Route
                 exact
-                path="/models/:mlModelName"
+                path="/ml_models/:mlModelName"
                 component={ModelDetailPage}
               />
               <Route exact path="/services" component={ServicesPage} />

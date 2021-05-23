@@ -138,13 +138,13 @@ class Repository(object):
         return session.query(RunORM).filter_by(run_nr=experiment_run_nr, experiment_name=experiment_name
                                                ).first()
 
-    def get_ml_model(self, ml_model_name) -> Optional[MLModelORM]:
+    def get_ml_model_by_name(self, ml_model_name) -> List[MLModelORM]:
         session = self.Session()
-        return session.query(MLModelORM).filter_by(name=ml_model_name).first()
+        return session.query(MLModelORM).filter_by(name=ml_model_name).all()
 
     def get_ml_models(self):
         session = self.Session()
-        return session.query(MLModelORM).group_by(MLModelORM.name).all()
+        return session.query(MLModelORM).order_by(MLModelORM.name).all()
 
     def update_or_create_ml_model(self, ml_model_name: str, ml_model_in: MLModelIn) -> MLModelORM:
         session = self.Session()
@@ -178,7 +178,7 @@ class Repository(object):
             return None
 
         ml_model = MLModelORM(
-            tag="",
+            tag=None,
             **ml_model_in.dict())
         session.add(ml_model)
         session.commit()

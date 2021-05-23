@@ -2,13 +2,15 @@
 The huoguoml.database module provides the database that contains all informations
 """
 import os
+from itertools import groupby
+from operator import attrgetter
 from typing import List, Optional
 
 from fastapi import UploadFile
 
 from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER, HUOGUOML_DEFAULT_MODEL_FOLDER
 from huoguoml.schemas.experiment import ExperimentIn, Experiment
-from huoguoml.schemas.ml_model import MLModelIn
+from huoguoml.schemas.ml_model import MLModelIn, MLModelRegistry
 from huoguoml.schemas.ml_service import MLService
 from huoguoml.schemas.run import Run, RunIn
 from huoguoml.server.db.model import ExperimentORM, RunORM, MLModelORM, MLServiceORM
@@ -96,11 +98,21 @@ class Service(object):
                 file_object.write(file.file.read())
         return True
 
-    def get_ml_model(self, ml_model_name: str) -> Optional[MLModelORM]:
-        return self.repository.get_ml_model(ml_model_name=ml_model_name)
+    def get_ml_model_by_name(self, ml_model_name: str) -> List[MLModelORM]:
+        return self.repository.get_ml_model_by_name(ml_model_name=ml_model_name)
 
-    def get_ml_models(self) -> List[MLModelORM]:
-        return [ml_model.__dict__ for ml_model in self.repository.get_ml_models()]
+    def get_ml_models_groupby_name(self) -> List[MLModelRegistry]:
+        ml_models_orm = self.repository.get_ml_models()
+
+        ml_models = []
+        for k, g in groupby(ml_models_orm, attrgetter('name')):
+            ml_models.append(
+                MLModelRegistry(
+                    name=k,
+                    ml_models=list(g)
+                )
+            )
+        return ml_models
 
     def update_or_create_ml_model(self, ml_model_name: str, ml_model_in: MLModelIn) -> MLModelORM:
         return self.repository.update_or_create_ml_model(ml_model_name=ml_model_name, ml_model_in=ml_model_in)

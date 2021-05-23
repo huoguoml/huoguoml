@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MLModelInterface } from '../../../../types';
-import { Table, Typography } from 'antd';
+import { MLModelInterface, MLModelRegistryInterface } from '../../../../types';
+import { Table } from 'antd';
 
 interface Props {
-  models?: MLModelInterface[];
+  models?: MLModelRegistryInterface[];
   onClick: (modelName: string) => void;
 }
 
@@ -33,30 +33,39 @@ export const ModelTable = memo((props: Props) => {
   const nonFixedColumns = [
     {
       title: 'Latest Model',
-      dataIndex: 'host',
-      key: 'host',
-      sorter: (a, b) => a.host.localeCompare(b.host),
+      dataIndex: 'ml_models',
+      key: 'lasted_ml_models',
+      render: ml_models => (
+        <>
+          <div>{ml_models[ml_models.length - 1].run.id}</div>
+        </>
+      ),
     },
     {
       title: 'Staging Model',
-      dataIndex: 'port',
-      key: 'port',
-      sorter: (a, b) => a.port - b.port,
+      dataIndex: 'ml_models',
+      key: 'staged_ml_models',
+      render: ml_models => (
+        <>
+          <div>{ml_models.find(ml_model => ml_model.tag === 0)?.run.id}</div>
+        </>
+      ),
     },
     {
       title: 'Production Model',
-      dataIndex: 'run_id',
-      key: 'run_id',
+      dataIndex: 'ml_models',
+      key: 'productions_ml_models',
+      render: ml_models => (
+        <>
+          <div>{ml_models.find(ml_model => ml_model.tag === 1)?.run.id}</div>
+        </>
+      ),
     },
   ];
 
-  const { Title } = Typography;
-
   return (
     <>
-      <Title level={4}>Services</Title>
       <Table
-        rowKey={service => service.id}
         size="small"
         scroll={{ x: 'max-content' }}
         dataSource={props.models}

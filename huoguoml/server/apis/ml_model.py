@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException
 
-from huoguoml.schemas.ml_model import MLModelIn, MLModel
+from huoguoml.schemas.ml_model import MLModelIn, MLModel, MLModelRegistry
 from huoguoml.server.db.service import Service
 
 
@@ -14,16 +14,13 @@ class MLModelRouter(object):
             tags=["ml_models"],
         )
 
-        @router.get("", response_model=List[MLModel])
-        async def get_ml_models():
-            temp = service.get_ml_models()
-            print(temp)
-            print(temp.__dir__())
-            return temp
+        @router.get("", response_model=List[MLModelRegistry])
+        async def get_ml_models_groupby_name():
+            return service.get_ml_models_groupby_name()
 
-        @router.get("/{ml_model_name}", response_model=MLModel)
-        async def get_ml_models(ml_model_name: str):
-            ml_model = service.get_ml_model(ml_model_name=ml_model_name)
+        @router.get("/{ml_model_name}", response_model=List[MLModel])
+        async def get_ml_model_by_name(ml_model_name: str):
+            ml_model = service.get_ml_model_by_name(ml_model_name=ml_model_name)
             if ml_model is None:
                 raise HTTPException(status_code=404)
             return ml_model

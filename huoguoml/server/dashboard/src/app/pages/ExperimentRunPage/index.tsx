@@ -29,23 +29,33 @@ export function ExperimentRunPage() {
           <Title level={4}>Run: {runId}</Title>
           <RecordTags record={experimentRunPageState.run.tags} />
           <StatusTag status_code={experimentRunPageState.run.status} />
-          <Paragraph copyable={true} editable={true}>
-            {''}
-          </Paragraph>
+
           <RegisterModelButton
             run={experimentRunPageState.run}
             disabled={!experimentRunPageState.run.model_definition}
           />
           <Button disabled={true}>Compare</Button>
         </>
-        <RecordTable
-          title={'Parameters'}
-          record={experimentRunPageState.run.parameters}
-        />
-        <RecordTable
-          title={'Metrics'}
-          record={experimentRunPageState.run.metrics}
-        />
+        <>
+          <Title level={5}>Description</Title>
+          <Paragraph copyable={true} editable={true}>
+            {''}
+          </Paragraph>
+        </>
+        <>
+          <Title level={5}>Parameters</Title>
+          <RecordTable
+            title={'Parameters'}
+            record={experimentRunPageState.run.parameters}
+          />
+        </>
+        <>
+          <Title level={5}>Metrics</Title>
+          <RecordTable
+            title={'Metrics'}
+            record={experimentRunPageState.run.metrics}
+          />
+        </>
       </ContentCardLayout>
     </>
   );

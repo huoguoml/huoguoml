@@ -11,7 +11,6 @@ interface Props {
 export const CardLayout = memo((props: Props) => {
   let history = useHistory();
   function toPage(uri: string) {
-    console.log(uri);
     history.push(uri);
   }
 
@@ -37,9 +36,9 @@ export const CardLayout = memo((props: Props) => {
       </div>
       <Row gutter={[0, 0]}>
         {props.children.map((child, index) => (
-          <Col xs={{ span: 24 }} lg={{ span: 8 }}>
+          <Col xs={{ span: 24 }} lg={{ span: 8 }} key={`card_col_${index}`}>
             <div
-              key={`card_${index}`}
+              key={`card_col_content_${index}`}
               className="site-layout-card"
               style={{
                 height: 150,

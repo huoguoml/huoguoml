@@ -65,7 +65,7 @@ class MLModelORM(Base):
     __tablename__ = "ml_models"
 
     id = Column(Integer, primary_key=True, index=True)
-    tag = Column(String)
+    tag = Column(Integer)
     name = Column(String, index=True)
 
     run_id = Column(Integer, ForeignKey('runs.id'))
