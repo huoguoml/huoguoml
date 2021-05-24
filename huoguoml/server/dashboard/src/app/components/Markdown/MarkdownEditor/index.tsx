@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { memo } from 'react';
-import ReactMarkdown from 'react-markdown';
-import rehypeHighlight from 'rehype-highlight';
-import remarkMath from 'remark-math';
-import rehypeKatex from 'rehype-katex';
-import { Input, Button } from 'antd';
+import { Button, Input } from 'antd';
+import 'katex/dist/katex.min.css';
+import { MarkdownPreview } from '../MarkdownPreview/Loadable';
 
 interface Props {
   value: string;
   onChange?: (value: string) => void;
+  onSubmit?: (value: string) => void;
   placeholder: string;
 }
 
@@ -17,14 +16,14 @@ export const MarkdownEditor = memo((props: Props) => {
 
   const [edit, setEdit] = React.useState<boolean>(false);
 
+  const handleSave = () => {
+    setEdit(false);
+    props.onSubmit && props.onSubmit(props.value);
+  };
+
   return (
     <>
-      <ReactMarkdown
-        remarkPlugins={[remarkMath]}
-        rehypePlugins={[rehypeKatex, rehypeHighlight]}
-      >
-        {props.value}
-      </ReactMarkdown>
+      <MarkdownPreview value={props.value} />
 
       {edit ? (
         <>
@@ -40,7 +39,7 @@ export const MarkdownEditor = memo((props: Props) => {
           <Button type="primary" onClick={() => setEdit(false)}>
             Cancel
           </Button>
-          <Button type="primary" onClick={() => setEdit(false)}>
+          <Button type="primary" onClick={() => handleSave()}>
             Save
           </Button>
         </>

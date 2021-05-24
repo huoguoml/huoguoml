@@ -9,7 +9,7 @@ import { RecordTags } from '../../components/RecordTags/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { StatusTag } from '../../components/StatusTag/Loadable';
 import { RegisterModelButton } from '../../components/Button/RegisterModelButton/Loadable';
-import { MarkdownEditor } from '../../components/MarkdownEditor/Loadable';
+import { MarkdownEditor } from '../../components/Markdown/MarkdownEditor/Loadable';
 
 export function ExperimentRunPage() {
   const { runId, experimentName } = useParams<Record<string, string>>();
