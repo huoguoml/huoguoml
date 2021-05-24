@@ -1,26 +1,27 @@
 import * as React from 'react';
 import { memo } from 'react';
-import { AutoComplete, Button, Input, message, Modal, Select } from 'antd';
+import { AutoComplete, Button, message, Modal, Select } from 'antd';
 import axios from 'axios';
 import { ML_MODEL_URI } from '../../../../constants';
-import { RunInterface } from '../../../../types';
+import { MLModelRegistryInterface, RunInterface } from '../../../../types';
 
 interface Props {
   run: RunInterface;
-  disabled?: boolean;
 }
 
 export const RegisterModelButton = memo((props: Props) => {
   const { Option } = Select;
 
   const [isModalVisible, setIsModalVisible] = React.useState(false);
-  const [mlModelsName, setMlModelsName] = React.useState<string[]>([]);
+  const [mlModelRegistry, setMlModelRegistry] = React.useState<
+    MLModelRegistryInterface[]
+  >([]);
   const [mlModelName, setMlModelName] = React.useState<string>('');
 
   const getMlModel = () => {
     axios
       .get(ML_MODEL_URI)
-      .then(response => setMlModelsName(Object.keys(response.data)))
+      .then(response => setMlModelRegistry(response.data))
       .catch(error => console.log(error));
   };
 
@@ -54,7 +55,11 @@ export const RegisterModelButton = memo((props: Props) => {
   return (
     <>
       <div>
-        <Button type="primary" onClick={showModal} disabled={props.disabled}>
+        <Button
+          type="primary"
+          onClick={showModal}
+          disabled={!props.run.model_definition || !!props.run.ml_model}
+        >
           Register
         </Button>
         <Modal
@@ -90,9 +95,9 @@ export const RegisterModelButton = memo((props: Props) => {
             onSearch={setMlModelName}
             onSelect={value => setMlModelName(String(value))}
           >
-            {mlModelsName.map((name, index) => (
-              <Option key={index} value={name}>
-                {name}
+            {mlModelRegistry.map((registry, index) => (
+              <Option key={index} value={registry.name}>
+                {registry.name}
               </Option>
             ))}
           </AutoComplete>

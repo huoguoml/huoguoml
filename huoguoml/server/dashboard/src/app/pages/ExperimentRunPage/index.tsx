@@ -30,10 +30,7 @@ export function ExperimentRunPage() {
           <RecordTags record={experimentRunPageState.run.tags} />
           <StatusTag status_code={experimentRunPageState.run.status} />
 
-          <RegisterModelButton
-            run={experimentRunPageState.run}
-            disabled={!experimentRunPageState.run.model_definition}
-          />
+          <RegisterModelButton run={experimentRunPageState.run} />
           <Button disabled={true}>Compare</Button>
         </>
         <>

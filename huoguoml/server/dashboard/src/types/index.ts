@@ -34,6 +34,7 @@ export interface RunInterface {
   parameters?: Record<string, string>;
   metrics?: Record<string, string>;
   tags?: Record<string, string>;
+  ml_model?: MLModelBaseInterface;
 }
 
 export interface ExperimentInterface {
@@ -55,10 +56,13 @@ export interface MLModelRegistryInterface {
   ml_models: MLModelInterface[];
 }
 
-export interface MLModelInterface {
+export interface MLModelBaseInterface {
   id: number;
   name: string;
   tag?: number;
+}
+
+export interface MLModelInterface extends MLModelBaseInterface {
   run: RunInterface;
 }
 

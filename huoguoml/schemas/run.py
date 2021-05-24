@@ -4,6 +4,14 @@ from typing import Optional, List, Dict, Any, Union
 from pydantic import BaseModel, constr
 
 
+class MLModelBase(BaseModel):
+    name: constr(to_lower=True)
+    tag: Optional[int]
+
+    class Config:
+        orm_mode = True
+
+
 class ModelNode(BaseModel):
     """Model Node
     """
@@ -62,6 +70,8 @@ class Run(RunIn):
     metrics: Dict[str, str]
     tags: Dict[str, str]
     model_definition: Optional[ModelDefinition]
+
+    ml_model: Optional[MLModelBase]
 
     class Config:
         orm_mode = True

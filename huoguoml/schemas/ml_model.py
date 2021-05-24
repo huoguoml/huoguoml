@@ -1,9 +1,9 @@
 from enum import IntEnum
-from typing import Optional, List
+from typing import List
 
 from pydantic import BaseModel, constr
 
-from huoguoml.schemas.run import Run
+from huoguoml.schemas.run import Run, MLModelBase
 
 
 class MLModelTag(IntEnum):
@@ -16,13 +16,8 @@ class MLModelIn(BaseModel):
     run_id: int
 
 
-class MLModel(BaseModel):
-    name: constr(to_lower=True)
-    tag: Optional[int]
+class MLModel(MLModelBase):
     run: Run
-
-    class Config:
-        orm_mode = True
 
 
 class MLModelRegistry(BaseModel):

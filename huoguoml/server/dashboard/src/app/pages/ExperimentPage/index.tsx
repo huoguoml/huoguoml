@@ -8,6 +8,7 @@ import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { Alert, Button, Col, Row, Select, Typography } from 'antd';
 import { RunInterface } from '../../../types';
 import { DownloadOutlined, RedoOutlined } from '@ant-design/icons';
+import ReactMarkdown from 'react-markdown';
 
 export function ExperimentPage() {
   const { Title, Paragraph } = Typography;
@@ -97,6 +98,11 @@ export function ExperimentPage() {
             onClick={toRunPage}
             isLoading={experimentPageState.isLoading}
           />
+
+          <ReactMarkdown>
+            hi
+            hi
+          </ReactMarkdown>
         </>
       </ContentCardLayout>
     </>
