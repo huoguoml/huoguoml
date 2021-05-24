@@ -13,7 +13,7 @@ from huoguoml.schemas.experiment import ExperimentIn, Experiment
 from huoguoml.schemas.ml_model import MLModelIn, MLModelRegistry
 from huoguoml.schemas.ml_service import MLService
 from huoguoml.schemas.run import Run, RunIn
-from huoguoml.server.db.model import ExperimentORM, RunORM, MLModelORM, MLServiceORM
+from huoguoml.server.db.entity import ExperimentORM, RunORM, MLModelORM, MLServiceORM
 from huoguoml.server.db.repository import Repository
 
 

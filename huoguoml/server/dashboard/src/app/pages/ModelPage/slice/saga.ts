@@ -9,7 +9,7 @@ function* getModelState(action: PayloadAction<string>) {
     const mlModelsResponse = yield axios.get(ML_MODEL_URI);
     yield put(
       actions.getModelStateSuccess({
-        models: mlModelsResponse.data,
+        ml_registry: mlModelsResponse.data,
       }),
     );
   } catch (error) {

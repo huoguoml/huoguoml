@@ -10,8 +10,8 @@ class MLModelRouter(object):
 
     def __init__(self, service: Service):
         router = APIRouter(
-            prefix="/api/ml_models",
-            tags=["ml_models"],
+            prefix="/api/models",
+            tags=["models"],
         )
 
         @router.get("", response_model=List[MLModelRegistry])

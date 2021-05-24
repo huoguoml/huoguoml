@@ -3,11 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useModelDetailPageSlice } from './slice';
 import { selectModelDetailPageState } from './slice/selectors';
 import { useParams } from 'react-router-dom';
-import { RecordTags } from '../../components/RecordTags/Loadable';
-import { StatusTag } from '../../components/StatusTag/Loadable';
-import { RegisterModelButton } from '../../components/Button/RegisterModelButton/Loadable';
-import { Button, Typography } from 'antd';
-import { RecordTable } from '../../components/Table/RecordTable/Loadable';
+import { Typography } from 'antd';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 
 export function ModelDetailPage() {
@@ -24,10 +20,10 @@ export function ModelDetailPage() {
 
   return (
     <>
-      <ContentCardLayout contentUri={['ml_models', mlModelName]} skip={-1}>
+      <ContentCardLayout contentUri={['models', mlModelName]} skip={-1}>
         <Title level={4}>Model: {mlModelName}</Title>
         <Title level={4}>Run</Title>
-        <Title level={4}>Run</Title>
+        <Title level={4}>{modelDetailPageState.model.ml_models?.length}</Title>
       </ContentCardLayout>
     </>
   );

@@ -4,7 +4,7 @@
 
 import { lazyLoad } from 'utils/loadable';
 
-export const ModelTable = lazyLoad(
+export const ModelRegistryTable = lazyLoad(
   () => import('./index'),
-  module => module.ModelTable,
+  module => module.ModelRegistryTable,
 );

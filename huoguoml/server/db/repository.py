@@ -10,7 +10,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from huoguoml.schemas.experiment import ExperimentIn
 from huoguoml.schemas.ml_model import MLModelIn
 from huoguoml.schemas.run import RunIn, Run
-from huoguoml.server.db.model import Base, RunORM, MLServiceORM, ExperimentORM, MLModelORM
+from huoguoml.server.db.entity import Base, RunORM, MLServiceORM, ExperimentORM, MLModelORM
 
 
 class Repository(object):

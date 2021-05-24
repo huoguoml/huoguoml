@@ -5,7 +5,7 @@ import { modelPageSaga } from './saga';
 import { ModelPageState } from './types';
 
 export const initialState: ModelPageState = {
-  models: [],
+  ml_registry: [],
 };
 
 const slice = createSlice({
@@ -16,7 +16,7 @@ const slice = createSlice({
       state.isLoading = true;
     },
     getModelStateSuccess(state, action: PayloadAction<ModelPageState>) {
-      state.models = action.payload.models;
+      state.ml_registry = action.payload.ml_registry;
       state.isLoading = false;
     },
     getModelStateFailure(state, action: PayloadAction<string>) {

@@ -5,7 +5,7 @@ import { useModelPageSlice } from './slice';
 import { selectModelPageState } from './slice/selectors';
 import { Select, Typography } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { ModelTable } from '../../components/Table/ModelTable/Loadable';
+import { ModelRegistryTable } from '../../components/Table/ModelRegistryTable/Loadable';
 
 export function ModelPage() {
   const { mlModelName } = useParams<Record<string, string>>();
@@ -21,7 +21,7 @@ export function ModelPage() {
   }, [dispatch, actions, mlModelName]);
 
   function toModelDetailPage(modelName: string) {
-    history.push(`/ml_models/${modelName}`);
+    history.push(`/models/${modelName}`);
   }
 
   function handleChange(value) {
@@ -30,7 +30,7 @@ export function ModelPage() {
 
   return (
     <>
-      <ContentCardLayout contentUri={['ml_models']} skip={-1}>
+      <ContentCardLayout contentUri={['models']} skip={-1}>
         <Title level={2}>Models</Title>
         <>
           <Title level={3}>Filter models</Title>
@@ -46,8 +46,8 @@ export function ModelPage() {
         </>
         <>
           <Title level={3}>Available models</Title>
-          <ModelTable
-            models={modelPageState.models}
+          <ModelRegistryTable
+            models={modelPageState.ml_registry}
             onClick={toModelDetailPage}
           />
         </>
