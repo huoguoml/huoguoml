@@ -31,9 +31,9 @@ export function ModelPage() {
   return (
     <>
       <ContentCardLayout contentUri={['ml_models']} skip={-1}>
-        <Title level={4}>Models</Title>
+        <Title level={2}>Models</Title>
         <>
-          <Title level={5}>Filter models</Title>
+          <Title level={3}>Filter models</Title>
           <Select
             mode="tags"
             style={{ width: '100%' }}
@@ -45,7 +45,7 @@ export function ModelPage() {
           />
         </>
         <>
-          <Title level={5}>Available models</Title>
+          <Title level={3}>Available models</Title>
           <ModelTable
             models={modelPageState.models}
             onClick={toModelDetailPage}

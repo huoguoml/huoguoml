@@ -9,6 +9,7 @@ import { RecordTags } from '../../components/RecordTags/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { StatusTag } from '../../components/StatusTag/Loadable';
 import { RegisterModelButton } from '../../components/Button/RegisterModelButton/Loadable';
+import { MarkdownEditor } from '../../components/MarkdownEditor/Loadable';
 
 export function ExperimentRunPage() {
   const { runId, experimentName } = useParams<Record<string, string>>();
@@ -21,12 +22,14 @@ export function ExperimentRunPage() {
     dispatch(actions.getExperimentRunState(`/${experimentName}/${runId}`));
   }, [dispatch, runId, actions, experimentName]);
 
-  const { Title, Paragraph } = Typography;
+  const { Title } = Typography;
+  const [description, setDescription] = React.useState<string>('');
+
   return (
     <>
       <ContentCardLayout contentUri={['experiments', experimentName, runId]}>
         <>
-          <Title level={4}>Run: {runId}</Title>
+          <Title level={2}>Run: {runId}</Title>
           <RecordTags record={experimentRunPageState.run.tags} />
           <StatusTag status_code={experimentRunPageState.run.status} />
 
@@ -34,20 +37,24 @@ export function ExperimentRunPage() {
           <Button disabled={true}>Compare</Button>
         </>
         <>
-          <Title level={5}>Description</Title>
-          <Paragraph copyable={true} editable={true}>
-            {''}
-          </Paragraph>
+          <Title level={3}>Description</Title>
+          <MarkdownEditor
+            value={description}
+            onChange={setDescription}
+            placeholder={
+              'Add a description to your experiment in markdown format'
+            }
+          />
         </>
         <>
-          <Title level={5}>Parameters</Title>
+          <Title level={3}>Parameters</Title>
           <RecordTable
             title={'Parameters'}
             record={experimentRunPageState.run.parameters}
           />
         </>
         <>
-          <Title level={5}>Metrics</Title>
+          <Title level={3}>Metrics</Title>
           <RecordTable
             title={'Metrics'}
             record={experimentRunPageState.run.metrics}

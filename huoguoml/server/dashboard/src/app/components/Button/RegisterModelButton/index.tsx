@@ -52,13 +52,16 @@ export const RegisterModelButton = memo((props: Props) => {
     }
   };
 
+  const modelNotExist = !props.run.model_definition;
+  const modelRegistered = !!props.run.ml_model;
+
   return (
     <>
       <div>
         <Button
           type="primary"
           onClick={showModal}
-          disabled={!props.run.model_definition || !!props.run.ml_model}
+          disabled={modelNotExist || modelRegistered}
         >
           Register
         </Button>

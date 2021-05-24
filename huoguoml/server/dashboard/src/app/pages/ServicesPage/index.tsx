@@ -20,7 +20,7 @@ export function ServicesPage() {
   return (
     <>
       <ContentCardLayout contentUri={['services']}>
-        <Title level={4}>Services</Title>
+        <Title level={2}>Services</Title>
         <ServiceTable services={servicesPageState.services} />
       </ContentCardLayout>
     </>

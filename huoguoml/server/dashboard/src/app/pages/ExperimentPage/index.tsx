@@ -5,10 +5,12 @@ import { selectExperimentPage } from './slice/selectors';
 import { useExperimentPageSlice } from './slice';
 import { RunTable } from '../../components/Table/RunTable/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
-import { Alert, Button, Col, Row, Select, Typography } from 'antd';
+import { Alert, Button, Select, Typography } from 'antd';
 import { RunInterface } from '../../../types';
 import { DownloadOutlined, RedoOutlined } from '@ant-design/icons';
-import ReactMarkdown from 'react-markdown';
+
+import 'katex/dist/katex.min.css';
+import { MarkdownEditor } from '../../components/MarkdownEditor/Loadable'; // `rehype-katex` does not import the CSS for you
 
 export function ExperimentPage() {
   const { Title, Paragraph } = Typography;
@@ -40,22 +42,26 @@ export function ExperimentPage() {
     history.push(`/experiments/${experimentName}/compare?run_nrs=${runIds}`);
   }
 
+  const [description, setDescription] = React.useState<string>('');
+
   return (
     <>
       <ContentCardLayout contentUri={['experiments', experimentName]}>
         <>
-          <Title level={4}>Experiment: {experimentName}</Title>
+          <Title level={2}>Experiment: {experimentName}</Title>
         </>
         <>
-          <Title level={5}>Description</Title>
-          <Paragraph copyable={true} editable={true}>
-            {experimentPageState.experiment?.description
-              ? experimentPageState.experiment?.description
-              : ''}
-          </Paragraph>
+          <Title level={3}>Description</Title>
+          <MarkdownEditor
+            value={description}
+            onChange={setDescription}
+            placeholder={
+              'Add a description to your experiment in markdown format'
+            }
+          />
         </>
         <>
-          <Title level={5}>Filter runs</Title>
+          <Title level={3}>Filter runs</Title>
           <Select
             mode="tags"
             style={{ width: '100%' }}
@@ -67,7 +73,7 @@ export function ExperimentPage() {
           />
         </>
         <>
-          <Title level={5}>Available runs</Title>
+          <Title level={3}>Available runs</Title>
 
           <Button icon={<DownloadOutlined />} />
           <Button icon={<RedoOutlined />} />
@@ -98,11 +104,6 @@ export function ExperimentPage() {
             onClick={toRunPage}
             isLoading={experimentPageState.isLoading}
           />
-
-          <ReactMarkdown>
-            hi
-            hi
-          </ReactMarkdown>
         </>
       </ContentCardLayout>
     </>
