@@ -21,9 +21,11 @@ export function ModelDetailPage() {
   return (
     <>
       <ContentCardLayout contentUri={['models', mlModelName]} skip={-1}>
-        <Title level={4}>Model: {mlModelName}</Title>
-        <Title level={4}>Run</Title>
-        <Title level={4}>{modelDetailPageState.model.ml_models?.length}</Title>
+        <Title level={2}>Model: {mlModelName}</Title>
+        <Title level={3}>Production</Title>
+        <Title level={3}>Staging</Title>
+        <Title level={3}>Models</Title>
+        <Title level={3}>{modelDetailPageState.model.ml_models?.length}</Title>
       </ContentCardLayout>
     </>
   );

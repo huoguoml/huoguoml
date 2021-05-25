@@ -5,7 +5,6 @@ from pydantic import BaseModel, constr
 
 
 class MLModelBase(BaseModel):
-    name: constr(to_lower=True)
     tag: Optional[int]
 
     class Config:

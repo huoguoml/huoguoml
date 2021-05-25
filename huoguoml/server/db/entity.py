@@ -61,6 +61,18 @@ class MLServiceORM(Base):
     port = Column(Integer)
 
 
+class MLModelRegistry(Base):
+    __tablename__ = "ml_models_registry"
+
+    id = Column(Integer, primary_key=True, index=True)
+    ml_model_id = Column(Integer, ForeignKey('runs.id'))
+
+    @validates('name')
+    def convert_upper(self, key, value):
+        self.lower = value.lower()
+        return self.lower
+
+
 class MLModelORM(Base):
     __tablename__ = "ml_models"
 
@@ -70,8 +82,3 @@ class MLModelORM(Base):
 
     run_id = Column(Integer, ForeignKey('runs.id'))
     run = relationship("RunORM", back_populates="ml_model")
-
-    @validates('name')
-    def convert_upper(self, key, value):
-        self.lower = value.lower()
-        return self.lower

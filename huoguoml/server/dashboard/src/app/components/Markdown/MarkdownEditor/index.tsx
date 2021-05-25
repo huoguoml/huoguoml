@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { memo } from 'react';
 import { Button, Input } from 'antd';
-import 'katex/dist/katex.min.css';
 import { MarkdownPreview } from '../MarkdownPreview/Loadable';
 
 interface Props {
