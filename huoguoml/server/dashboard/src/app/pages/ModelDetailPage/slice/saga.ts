@@ -11,7 +11,7 @@ function* getModelDetailState(action: PayloadAction<string>) {
     );
     yield put(
       actions.getModelDetailStateSuccess({
-        model: mlModelResponse.data,
+        ml_models: mlModelResponse.data,
       }),
     );
   } catch (error) {

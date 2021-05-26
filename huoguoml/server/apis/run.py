@@ -30,7 +30,7 @@ class RunRouter(object):
                     numbers.append(int(el))
                 run_nrs = numbers
             runs = service.get_runs(experiment_name=experiment_name,
-                                   run_nrs=run_nrs)
+                                    run_nrs=run_nrs)
             return runs
 
         @router.get("/{run_id}", response_model=Run)

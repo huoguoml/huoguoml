@@ -1,26 +1,26 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { compareRunPageSaga } from './saga';
-import { CompareRunPageState } from './types';
+import { experimentRunCompareSaga } from './saga';
+import { ExperimentRunCompareState } from './types';
 
-export const initialState: CompareRunPageState = { runs: [] };
+export const initialState: ExperimentRunCompareState = { runs: [] };
 
 const slice = createSlice({
-  name: 'compareRunPage',
+  name: 'experimentRunComparePage',
   initialState,
   reducers: {
-    getCompareRunState(state, action: PayloadAction<string>) {
+    getExperimentRunCompareState(state, action: PayloadAction<string>) {
       state.isLoading = true;
     },
-    getCompareRunStateSuccess(
+    getExperimentRunCompareStateSuccess(
       state,
-      action: PayloadAction<CompareRunPageState>,
+      action: PayloadAction<ExperimentRunCompareState>,
     ) {
       state.runs = action.payload.runs;
       state.isLoading = false;
     },
-    getCompareRunStateFailure(state, action: PayloadAction<string>) {
+    getExperimentRunCompareStateFailure(state, action: PayloadAction<string>) {
       state.error = action.payload;
       state.isLoading = false;
     },
@@ -29,9 +29,9 @@ const slice = createSlice({
 
 export const { actions: compareRunPageActions } = slice;
 
-export const useCompareRunPageSlice = () => {
+export const useExperimentRunComparePageSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({ key: slice.name, saga: compareRunPageSaga });
+  useInjectSaga({ key: slice.name, saga: experimentRunCompareSaga });
   return { actions: slice.actions };
 };
 

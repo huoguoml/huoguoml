@@ -4,7 +4,7 @@
 
 import { lazyLoad } from 'utils/loadable';
 
-export const CompareRunPage = lazyLoad(
+export const ExperimentRunComparePage = lazyLoad(
   () => import('./index'),
-  module => module.CompareRunPage,
+  module => module.ExperimentRunComparePage,
 );

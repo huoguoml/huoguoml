@@ -3,23 +3,25 @@ import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { useCompareRunPageSlice } from './slice';
-import { selectCompareRunPage } from './slice/selectors';
+import { useExperimentRunComparePageSlice } from './slice';
+import { selectExperimentRunCompareState } from './slice/selectors';
 import { ParameterTable } from '../../components/Table/ParameterTable/Loadable';
 import { Typography } from 'antd';
 
-export function CompareRunPage() {
+export function ExperimentRunComparePage() {
   const { Title } = Typography;
 
   const { experimentName } = useParams<Record<string, string>>();
   const { search } = useLocation();
   const dispatch = useDispatch();
-  const { actions } = useCompareRunPageSlice();
-  const compareRunPageState = useSelector(selectCompareRunPage);
+  const { actions } = useExperimentRunComparePageSlice();
+  const compareRunPageState = useSelector(selectExperimentRunCompareState);
 
   React.useEffect(() => {
     dispatch(
-      actions.getCompareRunState(`${search}&experiment_name=${experimentName}`),
+      actions.getExperimentRunCompareState(
+        `${search}&experiment_name=${experimentName}`,
+      ),
     );
   }, [dispatch, experimentName, actions, search]);
 

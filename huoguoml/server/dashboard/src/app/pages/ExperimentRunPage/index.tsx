@@ -12,24 +12,24 @@ import { RegisterModelButton } from '../../components/Button/RegisterModelButton
 import { MarkdownEditor } from '../../components/Markdown/MarkdownEditor/Loadable';
 
 export function ExperimentRunPage() {
-  const { runId, experimentName } = useParams<Record<string, string>>();
+  const { runNr, experimentName } = useParams<Record<string, string>>();
 
   const dispatch = useDispatch();
   const { actions } = useExperimentRunPageSlice();
   const experimentRunPageState = useSelector(selectExperimentRunPage);
 
   React.useEffect(() => {
-    dispatch(actions.getExperimentRunState(`/${experimentName}/${runId}`));
-  }, [dispatch, runId, actions, experimentName]);
+    dispatch(actions.getExperimentRunState(`/${experimentName}/${runNr}`));
+  }, [dispatch, runNr, actions, experimentName]);
 
   const { Title } = Typography;
   const [description, setDescription] = React.useState<string>('');
 
   return (
     <>
-      <ContentCardLayout contentUri={['experiments', experimentName, runId]}>
+      <ContentCardLayout contentUri={['experiments', experimentName, runNr]}>
         <>
-          <Title level={2}>Run: {runId}</Title>
+          <Title level={2}>Run: {runNr}</Title>
           <RecordTags record={experimentRunPageState.run.tags} />
           <StatusTag status_code={experimentRunPageState.run.status} />
 

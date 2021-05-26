@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { Layout, Menu, Typography } from 'antd';
 import {
+  DatabaseOutlined,
   DesktopOutlined,
   ExperimentOutlined,
   HomeOutlined,
-  // QuestionOutlined,
-  DatabaseOutlined,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppLayoutSlice } from './slice';
@@ -18,7 +17,7 @@ import { ExperimentRunPage } from '../../pages/ExperimentRunPage/Loadable';
 import { ServicesPage } from '../../pages/ServicesPage/Loadable';
 import { HelpPage } from '../../pages/HelpPage/Loadable';
 import { ModelPage } from '../../pages/ModelPage/Loadable';
-import { CompareRunPage } from '../../pages/CompareRunPage/Loadable';
+import { ExperimentRunComparePage } from '../../pages/ExperimentRunComparePage/Loadable';
 import { ModelDetailPage } from '../../pages/ModelDetailPage/Loadable';
 
 export const AppLayout = React.memo(() => {
@@ -55,6 +54,10 @@ export const AppLayout = React.memo(() => {
     history.push('/services');
   }
 
+  function toRunPage() {
+    history.push('/runs');
+  }
+
   // function toHelpPage() {
   //   history.push('/help');
   // }
@@ -86,6 +89,13 @@ export const AppLayout = React.memo(() => {
             >
               Dashboard
             </Menu.Item>
+            {/*            <Menu.Item
+              key="runs"
+              icon={<ExperimentOutlined />}
+              onClick={toRunPage}
+            >
+              Runs
+            </Menu.Item>*/}
             <SubMenu
               key="experiments"
               title="Experiments"
@@ -131,6 +141,9 @@ export const AppLayout = React.memo(() => {
           <Content>
             <Switch>
               <Route exact path="/" component={HelpPage} />
+              {/*              <Route exact path="/runs" component={RunPage} />
+              <Route path="/runs/compare" component={ExperimentRunComparePage} />
+              <Route exact path="/runs/:runId" component={ExperimentRunPage} />*/}
               <Route
                 exact
                 path="/experiments/:experimentName"
@@ -138,11 +151,11 @@ export const AppLayout = React.memo(() => {
               />
               <Route
                 path="/experiments/:experimentName/compare"
-                component={CompareRunPage}
+                component={ExperimentRunComparePage}
               />
               <Route
                 exact
-                path="/experiments/:experimentName/:runId"
+                path="/experiments/:experimentName/:runNr"
                 component={ExperimentRunPage}
               />
               <Route exact path="/models" component={ModelPage} />

@@ -23,9 +23,18 @@ export function ModelDetailPage() {
       <ContentCardLayout contentUri={['models', mlModelName]} skip={-1}>
         <Title level={2}>Model: {mlModelName}</Title>
         <Title level={3}>Production</Title>
+        {
+          modelDetailPageState.ml_models?.find(ml_model => ml_model.tag === 0)
+            ?.version
+        }
+        {
+          modelDetailPageState.ml_models?.find(ml_model => ml_model.tag === 1)
+            ?.version
+        }
+        {modelDetailPageState.ml_models.map(ml_model => ml_model.version)}
         <Title level={3}>Staging</Title>
         <Title level={3}>Models</Title>
-        <Title level={3}>{modelDetailPageState.model.ml_models?.length}</Title>
+        <Title level={3}>{modelDetailPageState.ml_models?.length}</Title>
       </ContentCardLayout>
     </>
   );

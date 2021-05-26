@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectExperimentPage } from './slice/selectors';
-import { useExperimentPageSlice } from './slice';
+import { selectRunPage } from './slice/selectors';
+import { useRunPageSlice } from './slice';
 import { RunTable } from '../../components/Table/RunTable/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { Alert, Button, Select, Typography } from 'antd';
@@ -10,21 +10,18 @@ import { RunInterface } from '../../../types';
 import { DownloadOutlined, RedoOutlined } from '@ant-design/icons';
 
 import 'katex/dist/katex.min.css';
-import { MarkdownEditor } from '../../components/Markdown/MarkdownEditor/Loadable'; // `rehype-katex` does not import the CSS for you
 
-export function ExperimentPage() {
+export function RunPage() {
   const { Title } = Typography;
 
-  const { experimentName } = useParams<Record<string, string>>();
-
   const dispatch = useDispatch();
-  const { actions } = useExperimentPageSlice();
+  const { actions } = useRunPageSlice();
 
-  const experimentPageState = useSelector(selectExperimentPage);
+  const runPageState = useSelector(selectRunPage);
 
   React.useEffect(() => {
-    dispatch(actions.getExperimentState(experimentName));
-  }, [dispatch, experimentName, actions]);
+    dispatch(actions.getRunState());
+  }, [dispatch, actions]);
 
   let history = useHistory();
 
@@ -34,31 +31,19 @@ export function ExperimentPage() {
     console.log(`selected ${value}`);
   }
 
-  function toRunPage(runNr: number) {
-    history.push(`/experiments/${experimentName}/${runNr}`);
+  function toRunPage(runId: number) {
+    history.push(`/runs/${runId}`);
   }
 
   function toComparePage(runIds: number[]) {
-    history.push(`/experiments/${experimentName}/compare?run_nrs=${runIds}`);
+    history.push(`/runs/compare?run_nrs=${runIds}`);
   }
-
-  const [description, setDescription] = React.useState<string>('');
 
   return (
     <>
-      <ContentCardLayout contentUri={['experiments', experimentName]}>
+      <ContentCardLayout contentUri={['runs']}>
         <>
-          <Title level={2}>Experiment: {experimentName}</Title>
-        </>
-        <>
-          <Title level={3}>Description</Title>
-          <MarkdownEditor
-            value={description}
-            onChange={setDescription}
-            placeholder={
-              'Add a description to your experiment in markdown format'
-            }
-          />
+          <Title level={2}>All runs</Title>
         </>
         <>
           <Title level={3}>Filter runs</Title>
@@ -98,11 +83,11 @@ export function ExperimentPage() {
           />
 
           <RunTable
-            runs={experimentPageState.experiment?.runs}
+            runs={runPageState.runs}
             selectedRuns={selectedRows}
             setSelectedRuns={setSelectedRows}
             onClick={toRunPage}
-            isLoading={experimentPageState.isLoading}
+            isLoading={runPageState?.isLoading}
           />
         </>
       </ContentCardLayout>
