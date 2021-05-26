@@ -35,13 +35,7 @@ export const ModelRegistryTable = memo((props: Props) => {
       title: 'Latest Model',
       dataIndex: 'ml_models',
       key: 'lasted_ml_models',
-      render: ml_models => (
-        <>
-          {ml_models[ml_models.length - 1]
-            ? `v${ml_models[ml_models.length - 1].version}`
-            : ''}
-        </>
-      ),
+      render: ml_models => <>{ml_models[ml_models.length - 1]?.version}</>,
     },
     {
       title: 'Staging Model',
@@ -49,11 +43,7 @@ export const ModelRegistryTable = memo((props: Props) => {
       key: 'staged_ml_models',
       render: ml_models => (
         <>
-          <div>
-            {ml_models.find(ml_model => ml_model.tag === 0)
-              ? `v${ml_models.find(ml_model => ml_model.tag === 0).version}`
-              : ''}
-          </div>
+          <div>{ml_models.find(ml_model => ml_model.tag === 0)?.version}</div>
         </>
       ),
     },
@@ -63,11 +53,7 @@ export const ModelRegistryTable = memo((props: Props) => {
       key: 'productions_ml_models',
       render: ml_models => (
         <>
-          <div>
-            {ml_models.find(ml_model => ml_model.tag === 1)
-              ? `v${ml_models.find(ml_model => ml_model.tag === 1).version}`
-              : ''}
-          </div>
+          <div>{ml_models.find(ml_model => ml_model.tag === 1)?.version}</div>
         </>
       ),
     },

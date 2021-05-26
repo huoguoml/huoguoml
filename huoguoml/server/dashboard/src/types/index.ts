@@ -58,7 +58,7 @@ export interface MLModelRegistryInterface {
 
 export interface MLModelInterface {
   id: number;
-  version: number;
+  version: string;
   tag?: number;
 }
 

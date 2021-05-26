@@ -33,4 +33,9 @@ class MLModelRouter(object):
                 raise HTTPException(status_code=400)
             return ml_model
 
+        @router.get("/{ml_model_name}/{version}")
+        async def get_ml_model(ml_model_name: str, version: str):
+            # return FileResponse(run_file_path, media_type='application/zip')
+            raise NotImplementedError()
+
         self.router = router

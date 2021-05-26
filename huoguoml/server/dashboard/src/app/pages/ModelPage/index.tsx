@@ -24,26 +24,10 @@ export function ModelPage() {
     history.push(`/models/${modelName}`);
   }
 
-  function handleChange(value) {
-    console.log(`selected ${value}`);
-  }
-
   return (
     <>
       <ContentCardLayout contentUri={['models']} skip={-1}>
         <Title level={2}>Models</Title>
-        <>
-          <Title level={3}>Filter models</Title>
-          <Select
-            mode="tags"
-            style={{ width: '100%' }}
-            onChange={handleChange}
-            tokenSeparators={[',']}
-            placeholder={
-              'Search runs by their value by typing the value or specifying a range'
-            }
-          />
-        </>
         <>
           <Title level={3}>Available models</Title>
           <ModelRegistryTable

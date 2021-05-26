@@ -17,7 +17,7 @@ class MLModelIn(BaseModel):
 class MLModel(BaseModel):
     name: constr(to_lower=True)
     run_id: int
-    version: int
+    version: str
     tag: Optional[int]
 
     class Config:

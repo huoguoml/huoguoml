@@ -16,8 +16,6 @@ function* getLayoutStateExperiments() {
   }
 }
 
-
-
 export function* appLayoutSaga() {
   yield takeLatest(actions.getLayoutState.type, getLayoutStateExperiments);
   // yield takeLatest(actions.getLayoutState.type, getLayoutStateMLModels);

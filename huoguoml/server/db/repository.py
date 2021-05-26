@@ -138,7 +138,7 @@ class Repository(object):
         version = session.query(MLModelORM).filter_by(name=ml_model_in.name).count() + 1
         ml_model = MLModelORM(
             tag=None,
-            version=version,
+            version="v{}".format(version),
             **ml_model_in.dict())
         session.add(ml_model)
         session.commit()
