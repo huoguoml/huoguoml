@@ -34,7 +34,7 @@ export interface RunInterface {
   parameters?: Record<string, string>;
   metrics?: Record<string, string>;
   tags?: Record<string, string>;
-  ml_model?: MLModelBaseInterface;
+  ml_model?: MLModelRegistryInterface;
 }
 
 export interface ExperimentInterface {
@@ -56,14 +56,10 @@ export interface MLModelRegistryInterface {
   ml_models: MLModelInterface[];
 }
 
-export interface MLModelBaseInterface {
+export interface MLModelInterface {
   id: number;
-  name: string;
+  version: number;
   tag?: number;
-}
-
-export interface MLModelInterface extends MLModelBaseInterface {
-  run: RunInterface;
 }
 
 export type { RootState };

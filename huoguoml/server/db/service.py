@@ -104,18 +104,17 @@ class Service(object):
     def get_ml_models_groupby_name(self) -> List[MLModelRegistry]:
         ml_models_orm = self.repository.get_ml_models()
 
-        ml_models = []
+        registry_list = []
         for k, g in groupby(ml_models_orm, attrgetter('name')):
-            ml_models.append(
-                MLModelRegistry(
+            ml_models = list(g)
+            registry = MLModelRegistry(
                     name=k,
-                    ml_models=list(g)
+                    ml_models=ml_models
                 )
+            registry_list.append(
+                registry
             )
-        return ml_models
-
-    def update_or_create_ml_model(self, ml_model_name: str, ml_model_in: MLModelIn) -> MLModelORM:
-        return self.repository.update_or_create_ml_model(ml_model_name=ml_model_name, ml_model_in=ml_model_in)
+        return registry_list
 
     def get_runs(self, experiment_name: Optional[str], run_nrs: Optional[List[int]]) -> List[RunORM]:
         if experiment_name is not None and run_nrs is not None:

@@ -61,24 +61,18 @@ class MLServiceORM(Base):
     port = Column(Integer)
 
 
-class MLModelRegistry(Base):
-    __tablename__ = "ml_models_registry"
+class MLModelORM(Base):
+    __tablename__ = "ml_models"
 
     id = Column(Integer, primary_key=True, index=True)
-    ml_model_id = Column(Integer, ForeignKey('runs.id'))
+    version = Column(Integer, index=True)
+    tag = Column(Integer)
+    name = Column(String, index=True)
+
+    run_id = Column(Integer, ForeignKey('runs.id'), unique=True)
+    run = relationship("RunORM", back_populates="ml_model")
 
     @validates('name')
     def convert_upper(self, key, value):
         self.lower = value.lower()
         return self.lower
-
-
-class MLModelORM(Base):
-    __tablename__ = "ml_models"
-
-    id = Column(Integer, primary_key=True, index=True)
-    tag = Column(Integer)
-    name = Column(String, index=True)
-
-    run_id = Column(Integer, ForeignKey('runs.id'))
-    run = relationship("RunORM", back_populates="ml_model")

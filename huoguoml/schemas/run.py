@@ -3,12 +3,7 @@ from typing import Optional, List, Dict, Any, Union
 
 from pydantic import BaseModel, constr
 
-
-class MLModelBase(BaseModel):
-    tag: Optional[int]
-
-    class Config:
-        orm_mode = True
+from huoguoml.schemas.ml_model import MLModel
 
 
 class ModelNode(BaseModel):
@@ -70,7 +65,7 @@ class Run(RunIn):
     tags: Dict[str, str]
     model_definition: Optional[ModelDefinition]
 
-    ml_model: Optional[MLModelBase]
+    ml_model: Optional[MLModel]
 
     class Config:
         orm_mode = True

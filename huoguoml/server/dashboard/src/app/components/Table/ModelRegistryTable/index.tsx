@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MLModelInterface, MLModelRegistryInterface } from '../../../../types';
+import { MLModelRegistryInterface } from '../../../../types';
 import { Table } from 'antd';
 
 interface Props {
@@ -37,7 +37,9 @@ export const ModelRegistryTable = memo((props: Props) => {
       key: 'lasted_ml_models',
       render: ml_models => (
         <>
-          <div>{ml_models[ml_models.length - 1].run.id}</div>
+          {ml_models[ml_models.length - 1]
+            ? `v${ml_models[ml_models.length - 1].version}`
+            : ''}
         </>
       ),
     },
@@ -47,7 +49,11 @@ export const ModelRegistryTable = memo((props: Props) => {
       key: 'staged_ml_models',
       render: ml_models => (
         <>
-          <div>{ml_models.find(ml_model => ml_model.tag === 0)?.run.id}</div>
+          <div>
+            {ml_models.find(ml_model => ml_model.tag === 0)
+              ? `v${ml_models.find(ml_model => ml_model.tag === 0).version}`
+              : ''}
+          </div>
         </>
       ),
     },
@@ -57,7 +63,11 @@ export const ModelRegistryTable = memo((props: Props) => {
       key: 'productions_ml_models',
       render: ml_models => (
         <>
-          <div>{ml_models.find(ml_model => ml_model.tag === 1)?.run.id}</div>
+          <div>
+            {ml_models.find(ml_model => ml_model.tag === 1)
+              ? `v${ml_models.find(ml_model => ml_model.tag === 1).version}`
+              : ''}
+          </div>
         </>
       ),
     },

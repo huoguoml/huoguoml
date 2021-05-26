@@ -4,7 +4,7 @@ import { ExperimentRunPageState } from '../app/pages/ExperimentRunPage/slice/typ
 import { ServicesPageState } from '../app/pages/ServicesPage/slice/types';
 import { ModelPageState } from '../app/pages/ModelPage/slice/types';
 import { CompareRunPageState } from '../app/pages/CompareRunPage/slice/types';
-import {ModelDetailPageState} from "../app/pages/ModelDetailPage/slice/types";
+import { ModelDetailPageState } from '../app/pages/ModelDetailPage/slice/types';
 
 export interface PageState {
   isLoading?: boolean;
