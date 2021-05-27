@@ -43,8 +43,11 @@ class RunRouter(object):
             return service.create_run(run_in=run_in)
 
         @router.put("/{run_id}", response_model=Run)
-        async def update_or_create_run(run_id: int, run: Run):
-            return service.update_or_create_run(run_id=run_id, run=run)
+        async def update_run(run_id: int, run: Run):
+            run = service.update_run(run_id=run_id, run=run)
+            if run is None:
+                raise HTTPException(status_code=404)
+            return run
 
         @router.put("/files/{run_id}")
         async def update_or_create_run_files(run_id: int, files: List[UploadFile] = File(...)):

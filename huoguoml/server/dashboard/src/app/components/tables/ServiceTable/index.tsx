@@ -47,7 +47,6 @@ export const ServiceTable = memo((props: Props) => {
 
   return (
     <>
-      <Title level={4}>Services</Title>
       <Table
         rowKey={service => service.id}
         size="small"

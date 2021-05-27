@@ -40,6 +40,9 @@ class ExperimentRouter(object):
 
         @router.put("/{experiment_name}", response_model=Experiment)
         async def update_experiment(experiment_name: str, experiment: Experiment):
-            return service.update_experiment(experiment_name=experiment_name, experiment=experiment)
+            experiment = service.update_experiment(experiment_name=experiment_name, experiment=experiment)
+            if experiment is None:
+                raise HTTPException(status_code=404)
+            return experiment
 
         self.router = router

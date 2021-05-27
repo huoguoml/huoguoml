@@ -15,6 +15,7 @@ class MLServiceRouter(object):
 
         @router.post("", response_model=MLService)
         async def create_ml_service(ml_service_in: MLServiceIn):
+            # TODO: check if request host and port are equal
             ml_service = service.create_ml_service(ml_service_in=ml_service_in)
             if not ml_service:
                 raise HTTPException(status_code=400)

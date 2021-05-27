@@ -64,8 +64,7 @@ class Service(object):
     #     return zip_file_path
 
     def update_experiment(self, experiment_name: str, experiment: Experiment) -> Optional[ExperimentORM]:
-        update_data = experiment.dict(exclude_unset=True)
-        experiment_orm = self.repository.update_experiment(experiment_name=experiment_name, update_data=update_data)
+        experiment_orm = self.repository.update_experiment(experiment_name=experiment_name, experiment=experiment)
         return experiment_orm
 
     def create_ml_service(self, ml_service_in: MLServiceIn) -> MLService:
@@ -74,9 +73,9 @@ class Service(object):
     def get_ml_services(self) -> List[MLServiceORM]:
         return self.repository.get_ml_services()
 
-    def update_or_create_run(self, run_id: int, run: Run) -> RunORM:
-        return self.repository.update_or_create_run(run_id=run_id,
-                                                    run=run)
+    def update_run(self, run_id: int, run: Run) -> Optional[RunORM]:
+        return self.repository.update_run(run_id=run_id,
+                                          run=run)
 
     def update_or_create_run_files(self, run_id: int, files: List[UploadFile]) -> bool:
         run_orm = self.repository.get_run(run_id=run_id)

@@ -7,7 +7,7 @@ from typing import List, Dict, Optional
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from huoguoml.schemas.experiment import ExperimentIn
+from huoguoml.schemas.experiment import ExperimentIn, Experiment
 from huoguoml.schemas.ml_model import MLModelIn, MLModelTag
 from huoguoml.schemas.ml_service import MLServiceIn
 from huoguoml.schemas.run import RunIn, Run
@@ -77,19 +77,18 @@ class Repository(object):
         session = self.Session()
         return session.query(RunORM).filter_by(id=run_id).first()
 
-    def update_experiment(self, experiment_name: str, update_data: Dict) -> Optional[ExperimentORM]:
+    def update_experiment(self, experiment_name: str, experiment: Experiment) -> Optional[ExperimentORM]:
         session = self.Session()
-        experiment = session.query(ExperimentORM).filter_by(name=experiment_name).first()
-        if experiment:
-            for field, field_value in update_data.items():
-                setattr(experiment, field, field_value)
+        experiment_orm = session.query(ExperimentORM).filter_by(name=experiment_name, id=experiment.id).first()
+        if experiment_orm:
+            for field, field_value in experiment_orm.dict(exclude_unset=True).items():
+                setattr(experiment_orm, field, field_value)
 
             session.commit()
-            session.refresh(experiment)
-            return experiment
-        return None
+            session.refresh(experiment_orm)
+            return experiment_orm
 
-    def update_or_create_run(self, run_id: int, run: Run) -> RunORM:
+    def update_run(self, run_id: int, run: Run) -> Optional[RunORM]:
         session = self.Session()
         run_orm = session.query(RunORM).filter_by(id=run_id).first()
         update_data = run.dict(exclude={"id", "run_nr"})
@@ -97,15 +96,9 @@ class Repository(object):
         if run_orm:
             for field, field_value in update_data.items():
                 setattr(run_orm, field, field_value)
-        else:
-            experiment = session.query(ExperimentORM).filter_by(name=run.experiment_name).first()
-            run_orm = RunORM(
-                run_nr=len(experiment.runs) + 1,
-                **update_data)
-            session.add(run_orm)
-        session.commit()
-        session.refresh(run_orm)
-        return run_orm
+            session.commit()
+            session.refresh(run_orm)
+            return run_orm
 
     def get_experiment_run(self, experiment_name: str, experiment_run_nr: int) -> Optional[RunORM]:
         session = self.Session()

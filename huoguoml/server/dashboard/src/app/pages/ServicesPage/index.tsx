@@ -21,6 +21,7 @@ export function ServicesPage() {
     <>
       <ContentCardLayout contentUri={['services']}>
         <Title level={2}>Services</Title>
+        <Title level={3}>Available Services</Title>
         <ServiceTable services={servicesPageState.services} />
       </ContentCardLayout>
     </>
