@@ -1,5 +1,3 @@
-from typing import Optional
-
 from pydantic import BaseModel
 
 
@@ -11,7 +9,9 @@ class MLServiceIn(BaseModel):
 class MLService(MLServiceIn):
     id: int
 
-    run_id: Optional[str]
+    model_name: str
+    model_rule: str
+    model_version: str
 
     class Config:
         orm_mode = True

@@ -6,8 +6,8 @@ import uvicorn
 from fastapi import Depends, FastAPI
 
 from huoguoml.constants import HUOGUOML_METADATA_FILE
-from huoguoml.schemas.run import Run
 from huoguoml.schemas.ml_service import MLService
+from huoguoml.schemas.run import Run
 from huoguoml.utils.utils import read_json, download_and_extract_run_files
 
 
@@ -57,7 +57,7 @@ def get_ml_model() -> MLModel:
     return ML_MODEL
 
 
-def start_huoguoml_service(host: str, port: int, server_uri: str, artifact_dir: str):
+def start_huoguoml_service(host: str, port: int, model_name: str, model_rule: str, server_uri: str, artifact_dir: str):
     """
     Starts the HuoguoML service
 
@@ -65,6 +65,9 @@ def start_huoguoml_service(host: str, port: int, server_uri: str, artifact_dir: 
         server_uri: The URI to the HuoguoML server
         host: The network address to listen on
         port: The port to listen on
+        model_name: The name of the model that should be used
+        model_rule: The rule for pulling the model e.g. production for always using the production model
+                    (default: latest). Following rules are available: latest, staging, production
         artifact_dir: Location of the artifact directory
     """
     global ML_MODEL
@@ -104,4 +107,6 @@ def start_huoguoml_service(host: str, port: int, server_uri: str, artifact_dir: 
 if __name__ == '__main__':
     start_huoguoml_service(host="127.0.0.1", port=5000,
                            server_uri="http://localhost:8080",
+                           model_name="string",
+                           model_rule="latest",
                            artifact_dir="../../examples/huoguoml_service")

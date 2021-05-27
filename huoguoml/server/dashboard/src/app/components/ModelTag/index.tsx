@@ -21,7 +21,7 @@ export const ModelTag = memo((props: Props) => {
           </Tag>
         )}
         {props.tag === 0 && (
-          <Tag color="blue" key="pending">
+          <Tag color="yellow" key="pending">
             {'Staging'}
           </Tag>
         )}

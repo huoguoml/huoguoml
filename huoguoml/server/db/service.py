@@ -10,7 +10,7 @@ from fastapi import UploadFile
 
 from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER, HUOGUOML_DEFAULT_MODEL_FOLDER
 from huoguoml.schemas.experiment import ExperimentIn, Experiment
-from huoguoml.schemas.ml_model import MLModelIn, MLModelRegistry
+from huoguoml.schemas.ml_model import MLModelIn, MLModelRegistry, MLModelTag
 from huoguoml.schemas.ml_service import MLService
 from huoguoml.schemas.run import Run, RunIn
 from huoguoml.server.db.entity import ExperimentORM, RunORM, MLModelORM, MLServiceORM
@@ -127,9 +127,20 @@ class Service(object):
     def create_ml_model(self, ml_model_in: MLModelIn) -> Optional[MLModelORM]:
         return self.repository.create_ml_model(ml_model_in=ml_model_in)
 
-    def get_ml_model_files(self, ml_model_name: str, version: str) -> str:
-        run = self.repository.get_ml_model_by_name_and_version(ml_model_name=ml_model_name,
-                                                               version=version).run
-        run_dir = os.path.join(self.artifact_dir, run.experiment_name, str(run.run_nr))
-        zip_file_path = create_zip_file(src_dir=run_dir, dst_dir=self.zip_dir, zip_name=run.id)
-        return zip_file_path
+    def get_ml_model_files_by_rule(self, ml_model_name: str, rule: str) -> Optional[str]:
+        if rule == "latest":
+            ml_model = self.repository.get_ml_model_by_name_and_latest(ml_model_name=ml_model_name)
+        elif rule == "production":
+            ml_model = self.repository.get_ml_model_by_name_and_tag(ml_model_name=ml_model_name,
+                                                                    tag=MLModelTag.production.value)
+        elif rule == "staging":
+            ml_model = self.repository.get_ml_model_by_name_and_tag(ml_model_name=ml_model_name,
+                                                                    tag=MLModelTag.staging.value)
+        else:
+            return None
+
+        run = ml_model.run
+        if run:
+            run_dir = os.path.join(self.artifact_dir, run.experiment_name, str(run.run_nr))
+            zip_file_path = create_zip_file(src_dir=run_dir, dst_dir=self.zip_dir, zip_name=str(run.id))
+            return zip_file_path

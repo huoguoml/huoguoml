@@ -4,7 +4,7 @@ The huoguoml.database module provides the database that contains all information
 import time
 from typing import List, Dict, Optional
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from huoguoml.schemas.experiment import ExperimentIn
@@ -145,10 +145,14 @@ class Repository(object):
         session.refresh(ml_model)
         return ml_model
 
-    def get_ml_model_by_name_and_version(self, ml_model_name: str, version: str) -> Optional[MLModelORM]:
+    def get_ml_model_by_name_and_tag(self, ml_model_name: str, tag: int) -> Optional[MLModelORM]:
         session = self.Session()
         return session.query(MLModelORM).filter_by(name=ml_model_name,
-                                                   version=version).first()
+                                                   tag=tag).first()
+
+    def get_ml_model_by_name_and_latest(self, ml_model_name: str) -> Optional[MLModelORM]:
+        session = self.Session()
+        return session.query(MLModelORM).filter_by(name=ml_model_name).order_by(desc(MLModelORM.version)).first()
 
     # Services
     def get_or_create_ml_service(self, host: str, port: int) -> MLServiceORM:
