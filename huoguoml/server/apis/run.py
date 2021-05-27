@@ -6,9 +6,6 @@ from huoguoml.schemas.run import RunIn, Run
 from huoguoml.server.db.service import Service
 
 
-# from starlette.responses import FileResponse
-
-
 class RunRouter(object):
     def __init__(self, service: Service):
         router = APIRouter(
@@ -19,7 +16,8 @@ class RunRouter(object):
         @router.get("", response_model=List[Run])
         async def get_runs(experiment_name: Optional[str] = Query(None),
                            run_nrs: Optional[str] = Query(None,
-                                                          description="String that contains a set of comma seperated numbers e.g. '1,2,3,4'")):
+                                                          description="String that contains a set of comma seperated "
+                                                                      "numbers e.g. '1,2,3,4'")):
             if run_nrs is not None:
                 numbers = []
                 for el in run_nrs.split(','):
@@ -51,10 +49,5 @@ class RunRouter(object):
         @router.put("/files/{run_id}")
         async def update_or_create_run_files(run_id: int, files: List[UploadFile] = File(...)):
             return service.update_or_create_run_files(run_id=run_id, files=files)
-
-        @router.get("/files/{run_id}")
-        async def get_run_files(run_id: int):
-            # return FileResponse(run_file_path, media_type='application/zip')
-            raise NotImplementedError()
 
         self.router = router

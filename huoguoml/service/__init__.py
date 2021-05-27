@@ -11,15 +11,6 @@ from huoguoml.schemas.run import Run
 from huoguoml.utils.utils import read_json, download_and_extract_run_files
 
 
-def concat_uri(*args):
-    uri = ""
-    for arg in args:
-        uri += arg
-        if not uri.endswith("/"):
-            uri += "/"
-    return uri
-
-
 def register_ml_service(register_api: str, service_host: str, service_port: int) -> MLService:
     ml_service = MLService(host=service_host, port=service_port)
     response = requests.post(register_api, json=ml_service.dict(exclude_unset=True))

@@ -59,6 +59,10 @@ class MLServiceORM(Base):
     id = Column(Integer, primary_key=True, index=True)
     host = Column(String)
     port = Column(Integer)
+    model_rule = Column(String)
+
+    model_id = Column(String, ForeignKey('ml_models.id'), nullable=False)
+    model = relationship("MLModelORM", back_populates="ml_services")
 
 
 class MLModelORM(Base):
@@ -71,6 +75,9 @@ class MLModelORM(Base):
 
     run_id = Column(Integer, ForeignKey('runs.id'), unique=True)
     run = relationship("RunORM", back_populates="ml_model")
+
+    ml_services = relationship("MLServiceORM",
+                               back_populates="model")
 
     @validates('name')
     def convert_upper(self, key, value):

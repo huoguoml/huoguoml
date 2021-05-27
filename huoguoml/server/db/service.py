@@ -11,7 +11,7 @@ from fastapi import UploadFile
 from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER, HUOGUOML_DEFAULT_MODEL_FOLDER
 from huoguoml.schemas.experiment import ExperimentIn, Experiment
 from huoguoml.schemas.ml_model import MLModelIn, MLModelRegistry, MLModelTag
-from huoguoml.schemas.ml_service import MLService
+from huoguoml.schemas.ml_service import MLService, MLServiceIn
 from huoguoml.schemas.run import Run, RunIn
 from huoguoml.server.db.entity import ExperimentORM, RunORM, MLModelORM, MLServiceORM
 from huoguoml.server.db.repository import Repository
@@ -68,16 +68,11 @@ class Service(object):
         experiment_orm = self.repository.update_experiment(experiment_name=experiment_name, update_data=update_data)
         return experiment_orm
 
-    def create_ml_service(self, ml_service: MLService) -> MLServiceORM:
-        return self.repository.get_or_create_ml_service(host=ml_service.host, port=ml_service.port)
+    def create_ml_service(self, ml_service_in: MLServiceIn) -> MLService:
+        return self.repository.create_ml_service(ml_service_in=ml_service_in)
 
     def get_ml_services(self) -> List[MLServiceORM]:
         return self.repository.get_ml_services()
-
-    def update_ml_service(self, ml_service_id: int, ml_service: MLService) -> Optional[MLServiceORM]:
-        update_data = ml_service.dict(exclude_unset=True)
-        ml_service_orm = self.repository.update_ml_service(ml_service_id=ml_service_id, update_data=update_data)
-        return ml_service_orm
 
     def update_or_create_run(self, run_id: int, run: Run) -> RunORM:
         return self.repository.update_or_create_run(run_id=run_id,
@@ -144,3 +139,6 @@ class Service(object):
             run_dir = os.path.join(self.artifact_dir, run.experiment_name, str(run.run_nr))
             zip_file_path = create_zip_file(src_dir=run_dir, dst_dir=self.zip_dir, zip_name=str(run.id))
             return zip_file_path
+
+    def get_ml_service(self, service_id: int) -> Optional[MLServiceORM]:
+        return self.repository.get_ml_service(service_id=service_id)

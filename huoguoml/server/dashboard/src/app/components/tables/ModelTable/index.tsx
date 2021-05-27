@@ -19,7 +19,7 @@ export const ModelTable = memo((props: Props) => {
       title: 'Version',
       dataIndex: 'version',
       key: 'version',
-      sorter: (a, b) => a.name.localeCompare(b.name),
+      sorter: (a, b) => a.version.localeCompare(b.version),
       fixed: 'left',
       render: version => (
         <>

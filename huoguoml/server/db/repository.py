@@ -8,7 +8,8 @@ from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from huoguoml.schemas.experiment import ExperimentIn
-from huoguoml.schemas.ml_model import MLModelIn
+from huoguoml.schemas.ml_model import MLModelIn, MLModelTag
+from huoguoml.schemas.ml_service import MLServiceIn
 from huoguoml.schemas.run import RunIn, Run
 from huoguoml.server.db.entity import Base, RunORM, MLServiceORM, ExperimentORM, MLModelORM
 
@@ -155,31 +156,36 @@ class Repository(object):
         return session.query(MLModelORM).filter_by(name=ml_model_name).order_by(desc(MLModelORM.version)).first()
 
     # Services
-    def get_or_create_ml_service(self, host: str, port: int) -> MLServiceORM:
+    def create_ml_service(self, ml_service_in: MLServiceIn) -> Optional[MLServiceORM]:
         session = self.Session()
 
-        ml_service = session.query(MLServiceORM).filter_by(host=host, port=port).first()
-        if ml_service:
-            return ml_service
+        ml_model = None
+        if ml_service_in.model_rule == "production":
+            ml_model = self.get_ml_model_by_name_and_tag(ml_model_name=ml_service_in.model_name,
+                                                         tag=MLModelTag.staging.value)
+        elif ml_service_in.model_rule == "latest":
+            ml_model = self.get_ml_model_by_name_and_latest(ml_model_name=ml_service_in.model_name)
+        elif ml_service_in.model_rule == "staging":
+            ml_model = self.get_ml_model_by_name_and_tag(ml_model_name=ml_service_in.model_name,
+                                                         tag=MLModelTag.staging.value)
+        if ml_model:
+            ml_service = MLServiceORM(
+                model=ml_model,
+                host=ml_service_in.host,
+                port=ml_service_in.port,
+                model_rule=ml_service_in.model_rule,
+            )
 
-        ml_service = MLServiceORM(host=host, port=port)
-        session.add(ml_service)
-        session.commit()
-        session.refresh(ml_service)
-        return ml_service
+            session.add(ml_service)
+            session.commit()
+            session.refresh(ml_service)
+
+            return ml_service
 
     def get_ml_services(self):
         session = self.Session()
         return session.query(MLServiceORM).all()
 
-    def update_ml_service(self, ml_service_id: int, update_data: Dict) -> Optional[MLServiceORM]:
+    def get_ml_service(self, service_id: int) -> Optional[MLServiceORM]:
         session = self.Session()
-        ml_service = session.query(MLServiceORM).filter_by(name=ml_service_id).first()
-        if ml_service:
-            for field, field_value in update_data.items():
-                setattr(ml_service, field, field_value)
-
-            session.commit()
-            session.refresh(ml_service)
-            return ml_service
-        return None
+        return session.query(MLServiceORM).filter_by(id=service_id).first()

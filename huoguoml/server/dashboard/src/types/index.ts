@@ -48,7 +48,7 @@ export interface ServiceInterface {
   id: number;
   host: string;
   port: string;
-  run_id?: string;
+  model_rule: string;
 }
 
 export interface MLModelRegistryInterface {

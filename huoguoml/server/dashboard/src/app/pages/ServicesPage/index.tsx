@@ -13,7 +13,7 @@ export function ServicesPage() {
 
   React.useEffect(() => {
     dispatch(actions.getServicesState());
-  }, [dispatch]);
+  }, [dispatch, actions]);
 
   const { Title } = Typography;
 

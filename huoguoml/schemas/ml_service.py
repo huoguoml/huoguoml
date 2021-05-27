@@ -4,14 +4,15 @@ from pydantic import BaseModel
 class MLServiceIn(BaseModel):
     host: str
     port: int
-
-
-class MLService(MLServiceIn):
-    id: int
-
     model_name: str
     model_rule: str
-    model_version: str
+
+
+class MLService(BaseModel):
+    id: int
+    host: str
+    port: int
+    model_rule: str
 
     class Config:
         orm_mode = True

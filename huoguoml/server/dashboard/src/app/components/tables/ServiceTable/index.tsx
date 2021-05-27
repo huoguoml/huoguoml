@@ -14,11 +14,10 @@ export const ServiceTable = memo((props: Props) => {
 
   const fixedColumns: any = [
     {
-      title: 'Service',
+      title: 'Id',
       dataIndex: 'id',
       key: 'id',
       sorter: (a, b) => a.id - b.id,
-      sortDirections: ['ascend'],
       fixed: 'left',
     },
   ];
@@ -37,9 +36,10 @@ export const ServiceTable = memo((props: Props) => {
       sorter: (a, b) => a.port - b.port,
     },
     {
-      title: 'Run',
-      dataIndex: 'run_id',
-      key: 'run_id',
+      title: 'Rule',
+      dataIndex: 'model_rule',
+      key: 'model_rule',
+      sorter: (a, b) => a.model_rule.localeCompare(b.model_rule),
     },
   ];
 
