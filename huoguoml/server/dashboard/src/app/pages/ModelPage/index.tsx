@@ -3,9 +3,9 @@ import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { useDispatch, useSelector } from 'react-redux';
 import { useModelPageSlice } from './slice';
 import { selectModelPageState } from './slice/selectors';
-import { Select, Typography } from 'antd';
+import { Typography } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { ModelRegistryTable } from '../../components/Table/ModelRegistryTable/Loadable';
+import { ModelRegistryTable } from '../../components/tables/ModelRegistryTable/Loadable';
 
 export function ModelPage() {
   const { mlModelName } = useParams<Record<string, string>>();
@@ -31,7 +31,7 @@ export function ModelPage() {
         <>
           <Title level={3}>Available models</Title>
           <ModelRegistryTable
-            models={modelPageState.ml_registry}
+            registry={modelPageState.ml_registry}
             onClick={toModelDetailPage}
           />
         </>

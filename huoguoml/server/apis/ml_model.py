@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter, HTTPException
+from starlette.responses import FileResponse
 
 from huoguoml.schemas.ml_model import MLModelIn, MLModel, MLModelRegistry
 from huoguoml.server.db.service import Service
@@ -34,8 +35,9 @@ class MLModelRouter(object):
             return ml_model
 
         @router.get("/{ml_model_name}/{version}")
-        async def get_ml_model(ml_model_name: str, version: str):
-            # return FileResponse(run_file_path, media_type='application/zip')
-            raise NotImplementedError()
+        async def get_ml_model_files(ml_model_name: str, version: str):
+            file_path = service.get_ml_model_files(ml_model_name=ml_model_name,
+                                                   version=version)
+            return FileResponse(file_path, media_type='application/zip')
 
         self.router = router

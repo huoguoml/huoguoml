@@ -3,7 +3,7 @@ import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { useDispatch, useSelector } from 'react-redux';
 import { useServicesPageSlice } from './slice';
 import { selectServicesPageState } from './slice/selectors';
-import { ServiceTable } from '../../components/Table/ServiceTable/Loadable';
+import { ServiceTable } from '../../components/tables/ServiceTable/Loadable';
 import { Typography } from 'antd';
 
 export function ServicesPage() {

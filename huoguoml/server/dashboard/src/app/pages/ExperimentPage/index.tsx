@@ -3,14 +3,14 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectExperimentPage } from './slice/selectors';
 import { useExperimentPageSlice } from './slice';
-import { RunTable } from '../../components/Table/RunTable/Loadable';
+import { RunTable } from '../../components/tables/RunTable/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { Alert, Button, Select, Typography } from 'antd';
 import { RunInterface } from '../../../types';
 import { DownloadOutlined, RedoOutlined } from '@ant-design/icons';
 
 import 'katex/dist/katex.min.css';
-import { MarkdownEditor } from '../../components/Markdown/MarkdownEditor/Loadable'; // `rehype-katex` does not import the CSS for you
+import { MarkdownEditor } from '../../components/MarkdownEditor/Loadable'; // `rehype-katex` does not import the CSS for you
 
 export function ExperimentPage() {
   const { Title } = Typography;

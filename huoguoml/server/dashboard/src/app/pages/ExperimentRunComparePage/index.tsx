@@ -5,7 +5,7 @@ import { useLocation } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { useExperimentRunComparePageSlice } from './slice';
 import { selectExperimentRunCompareState } from './slice/selectors';
-import { ParameterTable } from '../../components/Table/ParameterTable/Loadable';
+import { ParameterTable } from '../../components/tables/ParameterTable/Loadable';
 import { Typography } from 'antd';
 
 export function ExperimentRunComparePage() {
@@ -30,7 +30,7 @@ export function ExperimentRunComparePage() {
       <ContentCardLayout
         contentUri={['experiments', experimentName, `compare${search}`]}
       >
-        <Title level={4}>
+        <Title level={2}>
           Comparing {compareRunPageState.runs.length} runs
         </Title>
 

@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useExperimentRunPageSlice } from './slice';
 import { selectExperimentRunPage } from './slice/selectors';
 import { Button, Typography } from 'antd';
-import { RecordTable } from '../../components/Table/RecordTable/Loadable';
+import { RecordTable } from '../../components/tables/RecordTable/Loadable';
 import { RecordTags } from '../../components/RecordTags/Loadable';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { StatusTag } from '../../components/StatusTag/Loadable';
-import { RegisterModelButton } from '../../components/Button/RegisterModelButton/Loadable';
-import { MarkdownEditor } from '../../components/Markdown/MarkdownEditor/Loadable';
+import { RegisterModelButton } from '../../components/buttons/RegisterModelButton/Loadable';
+import { MarkdownEditor } from '../../components/MarkdownEditor/Loadable';
 
 export function ExperimentRunPage() {
   const { runNr, experimentName } = useParams<Record<string, string>>();

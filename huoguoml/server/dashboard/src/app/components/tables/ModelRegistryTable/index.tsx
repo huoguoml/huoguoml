@@ -5,8 +5,8 @@ import { MLModelRegistryInterface } from '../../../../types';
 import { Table } from 'antd';
 
 interface Props {
-  models?: MLModelRegistryInterface[];
-  onClick: (modelName: string) => void;
+  registry: MLModelRegistryInterface[];
+  onClick?: (modelName: string) => void;
 }
 
 export const ModelRegistryTable = memo((props: Props) => {
@@ -64,7 +64,7 @@ export const ModelRegistryTable = memo((props: Props) => {
       <Table
         size="small"
         scroll={{ x: 'max-content' }}
-        dataSource={props.models}
+        dataSource={props.registry}
         columns={[...fixedColumns, ...nonFixedColumns]}
       />
     </>

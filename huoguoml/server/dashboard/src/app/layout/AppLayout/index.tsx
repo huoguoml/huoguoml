@@ -81,7 +81,7 @@ export const AppLayout = React.memo(() => {
               {collapsed ? '🍲' : '🍲 HuoguoML'}
             </Title>
           </div>
-          <Menu theme="dark" defaultSelectedKeys={['dashboard']} mode="inline">
+          <Menu theme="dark" mode="inline">
             <Menu.Item
               onClick={toDashboardPage}
               key="dashboard"

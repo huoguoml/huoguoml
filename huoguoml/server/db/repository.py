@@ -145,6 +145,11 @@ class Repository(object):
         session.refresh(ml_model)
         return ml_model
 
+    def get_ml_model_by_name_and_version(self, ml_model_name: str, version: str) -> Optional[MLModelORM]:
+        session = self.Session()
+        return session.query(MLModelORM).filter_by(name=ml_model_name,
+                                                   version=version).first()
+
     # Services
     def get_or_create_ml_service(self, host: str, port: int) -> MLServiceORM:
         session = self.Session()

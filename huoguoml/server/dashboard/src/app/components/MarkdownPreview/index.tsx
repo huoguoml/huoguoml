@@ -6,15 +6,12 @@ import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
-import { Typography } from 'antd';
 
 interface Props {
   value: string;
 }
 
 export const MarkdownPreview = memo((props: Props) => {
-  const { Title } = Typography;
-
   const components = {
     code({ node, inline, className, children, ...props }) {
       const match = /language-(\w+)/.exec(className || '');

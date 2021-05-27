@@ -12,7 +12,6 @@ interface Props {
 export const ContentCardLayout = memo((props: Props) => {
   let history = useHistory();
   function toPage(uri: string) {
-    console.log(uri);
     history.push(uri);
   }
 

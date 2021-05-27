@@ -15,6 +15,7 @@ from huoguoml.schemas.ml_service import MLService
 from huoguoml.schemas.run import Run, RunIn
 from huoguoml.server.db.entity import ExperimentORM, RunORM, MLModelORM, MLServiceORM
 from huoguoml.server.db.repository import Repository
+from huoguoml.utils.utils import create_zip_file
 
 
 class Service(object):
@@ -108,9 +109,9 @@ class Service(object):
         for k, g in groupby(ml_models_orm, attrgetter('name')):
             ml_models = list(g)
             registry = MLModelRegistry(
-                    name=k,
-                    ml_models=ml_models
-                )
+                name=k,
+                ml_models=ml_models
+            )
             registry_list.append(
                 registry
             )
@@ -125,3 +126,10 @@ class Service(object):
 
     def create_ml_model(self, ml_model_in: MLModelIn) -> Optional[MLModelORM]:
         return self.repository.create_ml_model(ml_model_in=ml_model_in)
+
+    def get_ml_model_files(self, ml_model_name: str, version: str) -> str:
+        run = self.repository.get_ml_model_by_name_and_version(ml_model_name=ml_model_name,
+                                                               version=version).run
+        run_dir = os.path.join(self.artifact_dir, run.experiment_name, str(run.run_nr))
+        zip_file_path = create_zip_file(src_dir=run_dir, dst_dir=self.zip_dir, zip_name=run.id)
+        return zip_file_path
