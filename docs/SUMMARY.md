@@ -1,18 +1,20 @@
-# Summary
+# Table of contents
 
-- [Quick Start](quick-start.md)
+* [Welcome to HuoguoML!](README.md)
+* [Quick Start](quick-start.md)
 
 ## HuoguoML Basics
 
-- [Introduction to HuoguoML](basics/introduction.md)
-- [HuoguoML Components](basics/components.md)
-- [HuoguoML Model Registry](basics/components.md)
-- [HuoguoML Service](basics/service.md)
+* [Introduction to HuoguoML](huoguoml-basics/introduction.md)
+* [HuoguoML Components](huoguoml-basics/components.md)
+* [HuoguoML Model Registry](huoguoml-basics/components-1.md)
+* [HuoguoML Service](huoguoml-basics/service.md)
 
 ## HuoguoML Examples
 
-- [MNIST with Tensorflow 2.X](examples/mnist.md)
+* [MNIST with Tensorflow 2.X](huoguoml-examples/mnist.md)
 
 ## Misc
 
-- [FAQ](misc/faq.md)
+* [FAQ](misc/faq.md)
+
