@@ -22,7 +22,10 @@ export const ModelRegistryTable = memo((props: Props) => {
       fixed: 'left',
       render: modelName => (
         <>
-          <a onClick={() => props.onClick && props.onClick(modelName)}>
+          <a
+            href={`#${modelName}`}
+            onClick={() => props.onClick && props.onClick(modelName)}
+          >
             {modelName}
           </a>
         </>

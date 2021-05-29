@@ -2,7 +2,7 @@ import * as React from 'react';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ServiceInterface } from '../../../../types';
-import { Table, Typography } from 'antd';
+import { Table } from 'antd';
 
 interface Props {
   services?: ServiceInterface[];
@@ -42,8 +42,6 @@ export const ServiceTable = memo((props: Props) => {
       sorter: (a, b) => a.model_rule.localeCompare(b.model_rule),
     },
   ];
-
-  const { Title } = Typography;
 
   return (
     <>

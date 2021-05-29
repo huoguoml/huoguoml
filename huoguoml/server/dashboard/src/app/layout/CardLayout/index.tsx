@@ -10,6 +10,7 @@ interface Props {
 
 export const CardLayout = memo((props: Props) => {
   let history = useHistory();
+
   function toPage(uri: string) {
     history.push(uri);
   }
@@ -23,6 +24,7 @@ export const CardLayout = memo((props: Props) => {
               {index === 0 && uri}
               {index > 0 && (
                 <a
+                  href={`#${uri}`}
                   onClick={() =>
                     toPage('/' + props.contentUri.slice(0, index + 1).join('/'))
                   }

@@ -11,6 +11,7 @@ interface Props {
 
 export const ContentCardLayout = memo((props: Props) => {
   let history = useHistory();
+
   function toPage(uri: string) {
     history.push(uri);
   }
@@ -25,6 +26,7 @@ export const ContentCardLayout = memo((props: Props) => {
               {index <= skip && uri}
               {index > skip && (
                 <a
+                  href={`#${uri}`}
                   onClick={() =>
                     toPage('/' + props.contentUri.slice(0, index + 1).join('/'))
                   }

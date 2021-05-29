@@ -30,8 +30,7 @@ def get_extra_requires(path, add_all=True):
 # get all packages in requirements file
 dependencies = get_extra_requires("extra-requirements.txt")
 
-pkg_name = "huoguoml"
-libinfo_py = os.path.join(pkg_name, "__init__.py")
+libinfo_py = os.path.join("huoguoml", "__init__.py")
 libinfo_content = open(libinfo_py, "r", encoding="utf8").readlines()
 version_line = [l.strip() for l in libinfo_content if l.startswith("__version__")][
     0
@@ -51,6 +50,8 @@ def package_files(directory):
             paths.append(os.path.join("..", path, filename))
     return paths
 
+
+pkg_name = "huoguoml"
 
 setup(
     name=pkg_name,

@@ -54,9 +54,9 @@ export const AppLayout = React.memo(() => {
     history.push('/services');
   }
 
-  function toRunPage() {
-    history.push('/runs');
-  }
+  // function toRunPage() {
+  //   history.push('/runs');
+  // }
 
   // function toHelpPage() {
   //   history.push('/help');
