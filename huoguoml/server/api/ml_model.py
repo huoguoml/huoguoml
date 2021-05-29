@@ -1,12 +1,12 @@
 from typing import List
 
+import requests
 from fastapi import APIRouter, HTTPException
 from starlette.background import BackgroundTasks
 from starlette.responses import FileResponse
 
 from huoguoml.schemas.ml_model import MLModelIn, MLModel, MLModelRegistry
 from huoguoml.schemas.ml_service import MLService
-from huoguoml.server.db.entity import MLServiceORM
 from huoguoml.server.db.service import Service
 from huoguoml.util.utils import concat_uri, coerce_url
 
@@ -19,12 +19,13 @@ class MLModelRouter(object):
             tags=["models"],
         )
 
-        def notify_services(ml_services: List[MLServiceORM]):
+        def notify_services(ml_model_name: str):
+            ml_services = service.update_ml_services_by_model_name(ml_model_name=ml_model_name)
             for ml_service in ml_services:
                 uri = "{}:{}".format(coerce_url(ml_service.host), ml_service.port)
-                ml_service_obj = MLService.from_orm(MLServiceORM)
+                ml_service_obj = MLService.from_orm(ml_service)
                 update_api = concat_uri(uri, "api", "update")
-                # requests.post(update_api, json=ml_service_obj.dict()).raise_for_status()
+                requests.post(update_api, json=ml_service_obj.dict()).raise_for_status()
 
         @router.get("", response_model=List[MLModelRegistry])
         async def get_ml_models_groupby_name():
@@ -34,7 +35,7 @@ class MLModelRouter(object):
         async def create_ml_model(ml_model_in: MLModelIn, background_tasks: BackgroundTasks):
             # TODO: Check if both ml_service.host and port are equal to the request one
             ml_model = service.create_ml_model(ml_model_in=ml_model_in)
-            background_tasks.add_task(notify_services, ml_services=ml_model.ml_services)
+            background_tasks.add_task(notify_services, ml_model_name=ml_model_in.name)
             if ml_model is None:
                 raise HTTPException(status_code=400)
             return ml_model

@@ -59,17 +59,12 @@ class Service(object):
     def get_run(self, run_id: int) -> Optional[RunORM]:
         return self.repository.get_run(run_id=run_id)
 
-    # def get_run_file_path(self, run_id: str) -> str:
-    #     run = self.get_run(run_id=run_id)
-    #     zip_file_path = create_zip_file(src_dir=run.run_dir, dst_dir=self.zip_dir, zip_name=run.id)
-    #     return zip_file_path
-
     def update_experiment(self, experiment_name: str, experiment: Experiment) -> Optional[ExperimentORM]:
         experiment_orm = self.repository.update_experiment(experiment_name=experiment_name, experiment=experiment)
         return experiment_orm
 
-    def create_ml_service(self, ml_service_in: MLServiceIn) -> MLService:
-        return self.repository.create_ml_service(ml_service_in=ml_service_in)
+    def create_or_update_ml_service(self, ml_service_in: MLServiceIn) -> MLService:
+        return self.repository.create_or_update_ml_service(ml_service_in=ml_service_in)
 
     def get_ml_services(self) -> List[MLServiceORM]:
         return self.repository.get_ml_services()
@@ -135,3 +130,7 @@ class Service(object):
 
     def get_ml_service(self, service_id: int) -> Optional[MLServiceORM]:
         return self.repository.get_ml_service(service_id=service_id)
+
+
+    def update_ml_services_by_model_name(self, ml_model_name: str) -> List[MLServiceORM]:
+        return self.repository.update_ml_services_by_model_name(ml_model_name=ml_model_name)

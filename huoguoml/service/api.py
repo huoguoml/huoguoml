@@ -18,7 +18,7 @@ class HuoguoMLRouter(object):
         )
 
         register_api = concat_uri(server_uri, "api", "services")
-        response = requests.post(register_api, json=ml_service_in.dict(exclude_unset=True))
+        response = requests.put(register_api, json=ml_service_in.dict())
         self.ml_service = MLService.parse_raw(response.text)
         self.artifact_dir = artifact_dir
         self.server_uri = server_uri
@@ -42,6 +42,8 @@ class HuoguoMLRouter(object):
         self.router = router
 
     def _update(self, ml_service: MLService):
+        self.ml_service = ml_service
+
         source_dir = os.getcwd()
         model_url = concat_uri(self.server_uri, "api", "models", ml_service.model_name, ml_service.model_version)
         model_dir = os.path.join(HUOGUOML_DEFAULT_FOLDER)

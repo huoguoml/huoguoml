@@ -154,7 +154,7 @@ class Repository(object):
                                                    version=ml_model_version).first()
 
     # Services
-    def create_ml_service(self, ml_service_in: MLServiceIn) -> Optional[MLServiceORM]:
+    def create_or_update_ml_service(self, ml_service_in: MLServiceIn) -> Optional[MLServiceORM]:
         session = self.Session()
 
         ml_model = None
@@ -167,19 +167,24 @@ class Repository(object):
             ml_model = self.get_ml_model_by_name_and_tag(ml_model_name=ml_service_in.model_name,
                                                          tag=MLModelTag.staging.value)
         if ml_model:
-            ml_service = MLServiceORM(
-                model=ml_model,
-                host=ml_service_in.host,
-                port=ml_service_in.port,
-                model_name=ml_model.name,
-                model_version=ml_model.version,
-                model_rule=ml_service_in.model_rule,
-            )
-
-            session.add(ml_service)
+            ml_service = session.query(MLServiceORM).filter_by(host=ml_service_in.host,
+                                                               port=ml_service_in.port).first()
+            if ml_service:
+                ml_service.model_name = ml_model.name
+                ml_service.model_version = ml_model.version
+                ml_service.model = ml_model
+            else:
+                ml_service = MLServiceORM(
+                    host=ml_service_in.host,
+                    port=ml_service_in.port,
+                    model=ml_model,
+                    model_name=ml_model.name,
+                    model_version=ml_model.version,
+                    model_rule=ml_service_in.model_rule,
+                )
+                session.add(ml_service)
             session.commit()
             session.refresh(ml_service)
-
             return ml_service
 
     def get_ml_services(self):
@@ -189,3 +194,17 @@ class Repository(object):
     def get_ml_service(self, service_id: int) -> Optional[MLServiceORM]:
         session = self.Session()
         return session.query(MLServiceORM).filter_by(id=service_id).first()
+
+    def update_ml_services_by_model_name(self, ml_model_name: str) -> List[MLServiceORM]:
+        session = self.Session()
+        ml_services = session.query(MLServiceORM).filter_by(model_name=ml_model_name,
+                                                            model_rule="latest").all()
+        ml_model = self.get_ml_model_by_name_and_latest(ml_model_name=ml_model_name)
+        for ml_service in ml_services:
+            ml_service.model_name = ml_model.name
+            ml_service.model_version = ml_model.version
+            ml_service.model = ml_model
+
+            session.commit()
+            session.refresh(ml_service)
+        return ml_services
