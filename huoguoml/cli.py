@@ -66,12 +66,21 @@ def server(host: str, port: int, artifact_dir: str):
     help="The uri to the HuoguoML server",
 )
 @click.option(
+    "--model_name",
+    help="The name of the model that should be used",
+)
+@click.option(
+    "--model_rule",
+    help="The rule for pulling the model e.g. production for always using the production model (default: latest). "
+         "Following rules are available: latest, staging, production",
+)
+@click.option(
     "--artifact_dir",
     default=HUOGUOML_DEFAULT_SERVICE_FOLDER,
     help="The location of the artifact directory for the HuoguoML service (default: {}).".format(
         HUOGUOML_DEFAULT_SERVICE_FOLDER),
 )
-def service(host: str, port: int, server_uri: str, artifact_dir: str):
+def service(host: str, port: int, server_uri: str, model_name: str, model_rule: str, artifact_dir: str):
     """
     Run a HuoguoML service.
     The service listens on http://127.0.0.1:8080 by default, and only
@@ -79,4 +88,5 @@ def service(host: str, port: int, server_uri: str, artifact_dir: str):
     request from other machines, you will need to pass `--host 0.0.0.0`
     to listen on all network interfaces (or a specific interface address).
     """
-    start_huoguoml_service(host=host, port=port, server_uri=server_uri, artifact_dir=artifact_dir)
+    start_huoguoml_service(host=host, port=port, server_uri=server_uri, model_name=model_name,
+                           model_rule=model_rule, artifact_dir=artifact_dir)

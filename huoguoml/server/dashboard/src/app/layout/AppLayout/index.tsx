@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Typography } from 'antd';
 import {
+  DatabaseOutlined,
   DesktopOutlined,
   ExperimentOutlined,
   HomeOutlined,
-  // QuestionOutlined,
-  DatabaseOutlined,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppLayoutSlice } from './slice';
@@ -18,8 +17,12 @@ import { ExperimentRunPage } from '../../pages/ExperimentRunPage/Loadable';
 import { ServicesPage } from '../../pages/ServicesPage/Loadable';
 import { HelpPage } from '../../pages/HelpPage/Loadable';
 import { ModelPage } from '../../pages/ModelPage/Loadable';
+import { ExperimentRunComparePage } from '../../pages/ExperimentRunComparePage/Loadable';
+import { ModelDetailPage } from '../../pages/ModelDetailPage/Loadable';
 
 export const AppLayout = React.memo(() => {
+  const { Title } = Typography;
+
   const dispatch = useDispatch();
   const { actions } = useAppLayoutSlice();
 
@@ -43,13 +46,18 @@ export const AppLayout = React.memo(() => {
     history.push(`/experiments/${experimentName}`);
   }
 
-  function toModelPageWithName(model_name?: string) {
-    history.push(`/models/${model_name}`);
+  function toModelPage() {
+    history.push(`/models`);
   }
 
   function toServicesPage() {
     history.push('/services');
   }
+
+  function toRunPage() {
+    history.push('/runs');
+  }
+
   // function toHelpPage() {
   //   history.push('/help');
   // }
@@ -68,8 +76,12 @@ export const AppLayout = React.memo(() => {
             left: 0,
           }}
         >
-          <div className="logo" />
-          <Menu theme="dark" defaultSelectedKeys={['dashboard']} mode="inline">
+          <div className="logo">
+            <Title style={{ color: 'white', textAlign: 'center' }} level={3}>
+              {collapsed ? '🍲' : '🍲 HuoguoML'}
+            </Title>
+          </div>
+          <Menu theme="dark" mode="inline">
             <Menu.Item
               onClick={toDashboardPage}
               key="dashboard"
@@ -77,6 +89,13 @@ export const AppLayout = React.memo(() => {
             >
               Dashboard
             </Menu.Item>
+            {/*            <Menu.Item
+              key="runs"
+              icon={<ExperimentOutlined />}
+              onClick={toRunPage}
+            >
+              Runs
+            </Menu.Item>*/}
             <SubMenu
               key="experiments"
               title="Experiments"
@@ -91,16 +110,13 @@ export const AppLayout = React.memo(() => {
                 </Menu.Item>
               ))}
             </SubMenu>
-            <SubMenu key="models" title="Models" icon={<DatabaseOutlined />}>
-              {appLayoutState.ml_models?.map(ml_model => (
-                <Menu.Item
-                  onClick={() => toModelPageWithName(ml_model.name)}
-                  key={`models_${ml_model.id}`}
-                >
-                  {ml_model.name}
-                </Menu.Item>
-              ))}
-            </SubMenu>
+            <Menu.Item
+              key="models"
+              icon={<DatabaseOutlined />}
+              onClick={toModelPage}
+            >
+              Models
+            </Menu.Item>
             <Menu.Item
               key="services"
               icon={<DesktopOutlined />}
@@ -125,17 +141,29 @@ export const AppLayout = React.memo(() => {
           <Content>
             <Switch>
               <Route exact path="/" component={HelpPage} />
+              {/*              <Route exact path="/runs" component={RunPage} />
+              <Route path="/runs/compare" component={ExperimentRunComparePage} />
+              <Route exact path="/runs/:runId" component={ExperimentRunPage} />*/}
               <Route
                 exact
                 path="/experiments/:experimentName"
                 component={ExperimentPage}
               />
               <Route
+                path="/experiments/:experimentName/compare"
+                component={ExperimentRunComparePage}
+              />
+              <Route
                 exact
-                path="/experiments/:experimentName/:runId"
+                path="/experiments/:experimentName/:runNr"
                 component={ExperimentRunPage}
               />
-              <Route exact path="/models/:mlModelName" component={ModelPage} />
+              <Route exact path="/models" component={ModelPage} />
+              <Route
+                exact
+                path="/models/:mlModelName"
+                component={ModelDetailPage}
+              />
               <Route exact path="/services" component={ServicesPage} />
               {/*<Route exact path="/help" component={HelpPage} />*/}
               <Route component={NotFoundPage} />

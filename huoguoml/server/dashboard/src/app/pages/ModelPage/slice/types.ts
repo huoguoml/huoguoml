@@ -1,7 +1,7 @@
 /* --- STATE --- */
 import { PageState } from '../../../../types/RootState';
-import { MLModelInterface } from '../../../../types';
+import { MLModelRegistryInterface } from '../../../../types';
 
 export interface ModelPageState extends PageState {
-  model: MLModelInterface;
+  ml_registry: MLModelRegistryInterface[];
 }

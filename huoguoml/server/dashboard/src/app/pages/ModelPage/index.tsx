@@ -4,11 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useModelPageSlice } from './slice';
 import { selectModelPageState } from './slice/selectors';
 import { Typography } from 'antd';
-import { useParams } from 'react-router-dom';
-import { RunTable } from '../../components/RunTable/Loadable';
+import { useHistory, useParams } from 'react-router-dom';
+import { ModelRegistryTable } from '../../components/tables/ModelRegistryTable/Loadable';
 
 export function ModelPage() {
   const { mlModelName } = useParams<Record<string, string>>();
+  const { Title } = Typography;
+  let history = useHistory();
 
   const dispatch = useDispatch();
   const { actions } = useModelPageSlice();
@@ -18,15 +20,21 @@ export function ModelPage() {
     dispatch(actions.getModelState(mlModelName));
   }, [dispatch, actions, mlModelName]);
 
-  const { Title } = Typography;
-
-  function toRunPage(runId: number) {}
+  function toModelDetailPage(modelName: string) {
+    history.push(`/models/${modelName}`);
+  }
 
   return (
     <>
-      <ContentCardLayout contentUri={['models', mlModelName]}>
-        <Title level={4}>Models</Title>
-        <RunTable runs={modelPageState.model.runs} onClick={toRunPage} />
+      <ContentCardLayout contentUri={['models']} skip={-1}>
+        <Title level={2}>Models</Title>
+        <>
+          <Title level={3}>Available models</Title>
+          <ModelRegistryTable
+            registry={modelPageState.ml_registry}
+            onClick={toModelDetailPage}
+          />
+        </>
       </ContentCardLayout>
     </>
   );

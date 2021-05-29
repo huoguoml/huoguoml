@@ -3,7 +3,7 @@ import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { useDispatch, useSelector } from 'react-redux';
 import { useServicesPageSlice } from './slice';
 import { selectServicesPageState } from './slice/selectors';
-import { ServiceTable } from '../../components/ServiceTable/Loadable';
+import { ServiceTable } from '../../components/tables/ServiceTable/Loadable';
 import { Typography } from 'antd';
 
 export function ServicesPage() {
@@ -13,14 +13,15 @@ export function ServicesPage() {
 
   React.useEffect(() => {
     dispatch(actions.getServicesState());
-  }, [dispatch]);
+  }, [dispatch, actions]);
 
   const { Title } = Typography;
 
   return (
     <>
       <ContentCardLayout contentUri={['services']}>
-        <Title level={4}>Services</Title>
+        <Title level={2}>Services</Title>
+        <Title level={3}>Available Services</Title>
         <ServiceTable services={servicesPageState.services} />
       </ContentCardLayout>
     </>

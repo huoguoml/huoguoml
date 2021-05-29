@@ -6,11 +6,10 @@ import { PayloadAction } from '@reduxjs/toolkit';
 
 function* getModelState(action: PayloadAction<string>) {
   try {
-    const modelsResponse = yield axios.get(`${ML_MODEL_URI}/${action.payload}`);
-
+    const mlModelsResponse = yield axios.get(ML_MODEL_URI);
     yield put(
       actions.getModelStateSuccess({
-        model: modelsResponse.data,
+        ml_registry: mlModelsResponse.data,
       }),
     );
   } catch (error) {

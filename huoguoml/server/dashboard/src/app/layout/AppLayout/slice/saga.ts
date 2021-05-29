@@ -16,20 +16,7 @@ function* getLayoutStateExperiments() {
   }
 }
 
-function* getLayoutStateMLModels() {
-  try {
-    const experimentsResponse = yield axios.get(ML_MODEL_URI);
-    yield put(
-      actions.getLayoutStateMLModelsSuccess({
-        ml_models: experimentsResponse.data,
-      }),
-    );
-  } catch (error) {
-    yield put(actions.getLayoutStateFailure(error.toLocaleString()));
-  }
-}
-
 export function* appLayoutSaga() {
   yield takeLatest(actions.getLayoutState.type, getLayoutStateExperiments);
-  yield takeLatest(actions.getLayoutState.type, getLayoutStateMLModels);
+  // yield takeLatest(actions.getLayoutState.type, getLayoutStateMLModels);
 }
