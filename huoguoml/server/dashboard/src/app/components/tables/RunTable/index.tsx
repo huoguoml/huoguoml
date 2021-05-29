@@ -13,10 +13,10 @@ interface Props {
   isLoading?: boolean;
 }
 
-const timestampToDate = (timestamp: number) => {
-  const dateObj = new Date(timestamp * 1000);
-  return dateObj.toDateString() + ' ' + dateObj.toLocaleTimeString();
-};
+// const timestampToDate = (timestamp: number) => {
+//   const dateObj = new Date(timestamp * 1000);
+//   return dateObj.toDateString() + ' ' + dateObj.toLocaleTimeString();
+// };
 
 const secondsToTime = (seconds: number) => {
   const days = Math.floor(seconds / (24 * 60 * 60));
@@ -51,7 +51,12 @@ export const RunTable = memo((props: Props) => {
       sorter: (a, b) => a.run_nr - b.run_nr,
       render: run_nr => (
         <>
-          <a onClick={() => props.onClick && props.onClick(run_nr)}>{run_nr}</a>
+          <a
+            href={`#${run_nr}`}
+            onClick={() => props.onClick && props.onClick(run_nr)}
+          >
+            {run_nr}
+          </a>
         </>
       ),
     },

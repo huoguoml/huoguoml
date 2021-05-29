@@ -1,11 +1,6 @@
 import * as React from 'react';
 import { memo } from 'react';
 import { Tag } from 'antd';
-import {
-  CheckCircleOutlined,
-  SyncOutlined,
-  CloseCircleOutlined,
-} from '@ant-design/icons';
 
 interface Props {
   tag: number;

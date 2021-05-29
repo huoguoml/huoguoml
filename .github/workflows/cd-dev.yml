@@ -7,7 +7,6 @@ on:
 jobs:
   deployment:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.7
@@ -29,11 +28,11 @@ jobs:
       - name: Change package name to huoguoml-dev
         run: |
           PKG_NAME=huoguoml-dev
-          PLACEHOLDER='name="huoguoml"'
-          SETUP_PY='huoguoml/setup.py'
+          PLACEHOLDER='pkg_name = "huoguoml"'
+          SETUP_PY='setup.py'
 
           grep "$PLACEHOLDER" "$SETUP_PY"
-          sed -i "s/$PLACEHOLDER/name = \"${PKG_NAME}\"/g" "$SETUP_PY"
+          sed -i "s/$PLACEHOLDER/pkg_name = \"${PKG_NAME}\"/g" "$SETUP_PY"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -42,7 +41,7 @@ jobs:
         working-directory: huoguoml/server/dashboard
         run: |
           yarn install
-          yarn run build
+          yarn build
           cp build/index.html build/404.html
           cp build/index.html build/405.html
       - name: Build and publish

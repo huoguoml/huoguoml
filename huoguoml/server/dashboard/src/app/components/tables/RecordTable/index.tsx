@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { memo } from 'react';
-import { Table, Typography } from 'antd';
+import { Table } from 'antd';
 
 interface Props {
   record?: Record<string, string>;
@@ -8,8 +8,6 @@ interface Props {
 }
 
 export const RecordTable = memo((props: Props) => {
-  const { Title } = Typography;
-
   const columns: any = [
     {
       title: 'Name',
