@@ -1,20 +1,17 @@
 # Table of contents
 
 * [Welcome to HuoguoML!](README.md)
-* [Quick Start](quick-start.md)
 
-## HuoguoML Basics
+## Introduction to HuoguoML <a id="huoguoml-basics"></a>
 
-* [Introduction to HuoguoML](huoguoml-basics/introduction.md)
-* [HuoguoML Components](huoguoml-basics/components.md)
+* [HuoguoML Tracking](huoguoml-basics/introduction.md)
 * [HuoguoML Model Registry](huoguoml-basics/components-1.md)
 * [HuoguoML Service](huoguoml-basics/service.md)
 
-## HuoguoML Examples
+## Misc <a id="misc-1"></a>
 
-* [MNIST with Tensorflow 2.X](huoguoml-examples/mnist.md)
-
-## Misc
-
-* [FAQ](misc/faq.md)
+* [FAQ](misc-1/faq.md)
+* [Changelog](misc-1/changelog.md)
+* [Contribute](https://github.com/HuoguoML/HuoguoML/blob/f223140ca529634fa32dd85e935b1a478f34690a/CONTRIBUTING.md)
+* [License](https://github.com/HuoguoML/HuoguoML/blob/f223140ca529634fa32dd85e935b1a478f34690a/LICENSE)
 
