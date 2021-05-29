@@ -148,6 +148,11 @@ class Repository(object):
         session = self.Session()
         return session.query(MLModelORM).filter_by(name=ml_model_name).order_by(desc(MLModelORM.version)).first()
 
+    def get_ml_model_files_by_name_and_version(self, ml_model_name: str, ml_model_version: str) -> Optional[MLModelORM]:
+        session = self.Session()
+        return session.query(MLModelORM).filter_by(name=ml_model_name,
+                                                   version=ml_model_version).first()
+
     # Services
     def create_ml_service(self, ml_service_in: MLServiceIn) -> Optional[MLServiceORM]:
         session = self.Session()
@@ -166,6 +171,8 @@ class Repository(object):
                 model=ml_model,
                 host=ml_service_in.host,
                 port=ml_service_in.port,
+                model_name=ml_model.name,
+                model_version=ml_model.version,
                 model_rule=ml_service_in.model_rule,
             )
 

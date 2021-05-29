@@ -9,7 +9,7 @@ import requests
 
 from huoguoml.schemas.experiment import Experiment, ExperimentIn
 from huoguoml.schemas.run import Run, RunIn, RunStatus
-from huoguoml.utils.utils import coerce_url, concat_uri
+from huoguoml.util.utils import coerce_url, concat_uri
 
 
 class HuoguoRun(object):

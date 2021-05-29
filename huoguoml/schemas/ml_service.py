@@ -8,11 +8,9 @@ class MLServiceIn(BaseModel):
     model_rule: str
 
 
-class MLService(BaseModel):
+class MLService(MLServiceIn):
     id: int
-    host: str
-    port: int
-    model_rule: str
+    model_version: str
 
     class Config:
         orm_mode = True

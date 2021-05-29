@@ -5,10 +5,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 
-from huoguoml.server.apis.experiment import ExperimentRouter
-from huoguoml.server.apis.ml_model import MLModelRouter
-from huoguoml.server.apis.ml_service import MLServiceRouter
-from huoguoml.server.apis.run import RunRouter
+from huoguoml.server.api.experiment import ExperimentRouter
+from huoguoml.server.api.ml_model import MLModelRouter
+from huoguoml.server.api.ml_service import MLServiceRouter
+from huoguoml.server.api.run import RunRouter
 from huoguoml.server.db.service import Service
 
 

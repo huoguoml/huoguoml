@@ -1,22 +1,24 @@
 """
-The huoguoml.utils module contains some utility functions used throughout the whole package
+The huoguoml.util module contains some utility functions used throughout the whole package
 """
 import hashlib
+import importlib
 import json
 import os
 import zipfile
 from io import BytesIO
-from typing import Any, Optional
+from typing import Any
 from urllib.request import urlopen
 from zipfile import ZipFile
 
+import yaml
 
-def read_json(json_path: str) -> Optional[Any]:
+from huoguoml.schemas.run import Run
+
+
+def read_json(json_path: str) -> Any:
     """Read a json file and return the content. Returns None if not exist
     """
-    if not os.path.isfile(json_path):
-        return None
-
     with open(json_path) as json_file:
         data = json.load(json_file)
         return data
@@ -27,6 +29,21 @@ def save_json(json_path: str, data: Any):
     """
     with open(json_path, 'w') as json_file:
         json.dump(data, json_file)
+
+
+def read_yaml(yaml_path: str) -> Any:
+    """Read a yaml file and return the content. Returns None if not exist
+    """
+    with open(yaml_path) as yaml_file:
+        data = yaml.load(yaml_file, Loader=yaml.FullLoader)
+        return data
+
+
+def save_yaml(yaml_path: str, data: Any):
+    """Save data as yaml format
+    """
+    with open(yaml_path, 'w') as yaml_file:
+        yaml.dump(data, yaml_file)
 
 
 def create_hash(value: str, algorithm: str) -> str:
@@ -110,3 +127,10 @@ def coerce_url(url: str) -> str:
         if url.startswith(proto):
             return url
     return "http://{0}".format(url)
+
+
+def load_run_model(run: Run):
+    module_name = 'huoguoml.tracking.{}'.format(run.model_definition.model_api.module)
+    module = importlib.import_module(module_name)
+    function = getattr(module, run.model_definition.model_api.name)
+    return function(**run.model_definition.model_api.arguments)

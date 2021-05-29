@@ -60,6 +60,8 @@ class MLServiceORM(Base):
     host = Column(String)
     port = Column(Integer)
     model_rule = Column(String)
+    model_version = Column(String)
+    model_name = Column(String)
 
     model_id = Column(String, ForeignKey('ml_models.id'), nullable=False)
     model = relationship("MLModelORM", back_populates="ml_services")
@@ -69,9 +71,9 @@ class MLModelORM(Base):
     __tablename__ = "ml_models"
 
     id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
     version = Column(Integer, index=True)
     tag = Column(Integer)
-    name = Column(String, index=True)
 
     run_id = Column(Integer, ForeignKey('runs.id'), unique=True)
     run = relationship("RunORM", back_populates="ml_model")

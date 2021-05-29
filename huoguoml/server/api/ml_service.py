@@ -1,6 +1,6 @@
 from typing import List
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
 from huoguoml.schemas.ml_service import MLService, MLServiceIn
 from huoguoml.server.db.service import Service
@@ -14,8 +14,9 @@ class MLServiceRouter(object):
         )
 
         @router.post("", response_model=MLService)
-        async def create_ml_service(ml_service_in: MLServiceIn):
-            # TODO: check if request host and port are equal
+        async def create_ml_service(ml_service_in: MLServiceIn, request: Request):
+            ml_service_in.port = request.client.port
+            ml_service_in.host = request.client.host
             ml_service = service.create_ml_service(ml_service_in=ml_service_in)
             if not ml_service:
                 raise HTTPException(status_code=400)
