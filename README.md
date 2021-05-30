@@ -2,12 +2,11 @@
 <h1>🍲 HuoguoML</h1>
 </div>
 
+When dealing with Machine Learning applications, there is a high management and coordination effort for data scientists, as they have to collaborately analyze, evaluate and update many different models with different metadata on a regular basis. **HuoguoML** aims to simplify the management process by providing a platform for managing and serving machine learning models. Key features are:
 
-HuoguoML is a platform for managing and serving machine learning models. It provides a set of functionalities that can be used with all existing machine learning applications. Key features are:
-
-- HuoguoML Tracking: An API to log parameters, code, and results of machine learning experiments 
-- HuoguoML Dashboard: A powerful dashboard for comparing and analysing logged experiments
-- HuoguoML Service: A CLI to easily launch a REST service from your logged experiments that can be updated over the air
+- An API to log parameters, code, and results of machine learning experiments. 
+- A powerful dashboard for comparing and analysing logged experiments
+- A CLI to easily launch a REST service from your logged experiments that are updated over the air and easily customizable.
 
 
 ## Installation
