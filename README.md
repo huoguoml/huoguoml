@@ -2,7 +2,9 @@
 <h1>🍲 HuoguoML</h1>
 </div>
 
-When dealing with Machine Learning applications, there is a high management and coordination effort for data scientists, as they have to collaborately analyze, evaluate and update many different models with different metadata on a regular basis. **HuoguoML** aims to simplify the management process by providing a platform for managing and serving machine learning models. Key features are:
+When dealing with Machine Learning applications, there is a high management and coordination effort for data scientists, as they have to collaborately analyze, evaluate and update many different models with different metadata on a regular basis. 
+
+**HuoguoML** aims to simplify the management process by providing a platform for managing and serving machine learning models. Key features are:
 
 - An API to log parameters, code, and results of machine learning experiments. 
 - A powerful dashboard for comparing and analysing logged experiments
@@ -11,7 +13,7 @@ When dealing with Machine Learning applications, there is a high management and 
 
 ## Installation
 
-Get the latest stable version of HuoguoML:
+HuoguoML can be installed via PyPI. Install the stable version of HuoguoML via PyPI:
 
 ```bash
 pip install huoguoml
