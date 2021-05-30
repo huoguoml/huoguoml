@@ -38,7 +38,7 @@ Just starting out? Try out our examples:
 
 Apart from learning from the examples, we highly recommended you go through our [documentation](https://steven-mi.gitbook.io/huoguoml/).
 
-Our docs are built on every push to the main or dev branch.
+Our docs are built on every push to the main or docs branch.
 
 ## Contributors
 
