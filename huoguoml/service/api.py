@@ -7,7 +7,10 @@ from fastapi import APIRouter
 from huoguoml.constants import HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_FOLDER
 from huoguoml.schemas.ml_service import MLServiceIn, MLService
 from huoguoml.schemas.run import Run
-from huoguoml.util.utils import concat_uri, download_and_extract_run_files, load_run_model, read_yaml
+from huoguoml.tracking import load_run_model
+from huoguoml.util.string import concat_uri
+from huoguoml.util.yaml import read_yaml
+from huoguoml.util.zip import download_and_extract_run_files
 
 
 class HuoguoMLRouter(object):

@@ -2,6 +2,7 @@
 The huoguoml.tracking module provides the options for tracking all experiment runs
 """
 import getpass
+import importlib
 import time
 from typing import List, Optional
 
@@ -9,7 +10,14 @@ import requests
 
 from huoguoml.schemas.experiment import Experiment, ExperimentIn
 from huoguoml.schemas.run import Run, RunIn, RunStatus
-from huoguoml.util.utils import coerce_url, concat_uri
+from huoguoml.util.string import concat_uri, coerce_url
+
+
+def load_run_model(run: Run):
+    module_name = 'huoguoml.tracking.{}'.format(run.model_definition.model_api.module)
+    module = importlib.import_module(module_name)
+    function = getattr(module, run.model_definition.model_api.name)
+    return function(**run.model_definition.model_api.arguments)
 
 
 class HuoguoRun(object):

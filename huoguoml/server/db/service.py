@@ -16,7 +16,8 @@ from huoguoml.schemas.ml_service import MLService, MLServiceIn
 from huoguoml.schemas.run import Run, RunIn
 from huoguoml.server.db.entity import ExperimentORM, RunORM, MLModelORM, MLServiceORM
 from huoguoml.server.db.repository import Repository
-from huoguoml.util.utils import create_zip_file, save_yaml
+from huoguoml.util.yaml import save_yaml
+from huoguoml.util.zip import create_zip_file
 
 
 class Service(object):
@@ -130,7 +131,6 @@ class Service(object):
 
     def get_ml_service(self, service_id: int) -> Optional[MLServiceORM]:
         return self.repository.get_ml_service(service_id=service_id)
-
 
     def update_ml_services_by_model_name(self, ml_model_name: str) -> List[MLServiceORM]:
         return self.repository.update_ml_services_by_model_name(ml_model_name=ml_model_name)

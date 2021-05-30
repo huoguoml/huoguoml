@@ -8,7 +8,7 @@ from starlette.responses import FileResponse
 from huoguoml.schemas.ml_model import MLModelIn, MLModel, MLModelRegistry
 from huoguoml.schemas.ml_service import MLService
 from huoguoml.server.db.service import Service
-from huoguoml.util.utils import concat_uri, coerce_url
+from huoguoml.util.string import concat_uri, coerce_url
 
 
 class MLModelRouter(object):

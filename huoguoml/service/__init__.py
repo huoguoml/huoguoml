@@ -4,7 +4,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from huoguoml.schemas.ml_service import MLServiceIn
 from huoguoml.service.api import HuoguoMLRouter
-from huoguoml.util.utils import coerce_url
+from huoguoml.util.string import coerce_url
 
 
 def start_huoguoml_service(host: str, port: int, model_name: str, model_rule: str, server_uri: str, artifact_dir: str):

@@ -4,8 +4,7 @@ The huoguoml.cli module contains code for the HuoguoML CLI
 
 import click
 
-from huoguoml.constants import HUOGUOML_DEFAULT_SERVER_FOLDER, HUOGUOML_DEFAULT_SERVICE_FOLDER, \
-    HUOGUOML_DEFAULT_SERVICE_HOST, HUOGUOML_DEFAULT_SERVICE_PORT
+from huoguoml.constants import HUOGUOML_DEFAULT_SERVICE_HOST, HUOGUOML_DEFAULT_SERVICE_PORT, HUOGUOML_DEFAULT_FOLDER
 from huoguoml.server import start_huoguoml_server
 from huoguoml.service import start_huoguoml_service
 
@@ -33,9 +32,9 @@ def cli():
 )
 @click.option(
     "--artifact_dir",
-    default=HUOGUOML_DEFAULT_SERVER_FOLDER,
+    default=HUOGUOML_DEFAULT_FOLDER,
     help="The location of the artifact directory for the HuoguoML server (default: {}).".format(
-        HUOGUOML_DEFAULT_SERVER_FOLDER),
+        HUOGUOML_DEFAULT_FOLDER),
 )
 def server(host: str, port: int, artifact_dir: str):
     """
@@ -76,9 +75,9 @@ def server(host: str, port: int, artifact_dir: str):
 )
 @click.option(
     "--artifact_dir",
-    default=HUOGUOML_DEFAULT_SERVICE_FOLDER,
+    default=HUOGUOML_DEFAULT_FOLDER,
     help="The location of the artifact directory for the HuoguoML service (default: {}).".format(
-        HUOGUOML_DEFAULT_SERVICE_FOLDER),
+        HUOGUOML_DEFAULT_FOLDER),
 )
 def service(host: str, port: int, server_uri: str, model_name: str, model_rule: str, artifact_dir: str):
     """
