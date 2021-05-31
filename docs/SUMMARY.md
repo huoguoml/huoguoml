@@ -22,8 +22,8 @@
 
 ## Advanced HuoguoML
 
-* [Using Prometheus](advanced-huoguoml/using-prometheus.md)
-* [Logging Predictions](advanced-huoguoml/logging-predictions.md)
+* [Prometheus](advanced-huoguoml/using-prometheus.md)
+* [Log Predictions](advanced-huoguoml/logging-predictions.md)
 
 ## Misc <a id="misc-1"></a>
 
