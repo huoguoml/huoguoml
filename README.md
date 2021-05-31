@@ -36,7 +36,7 @@ Apart from learning from the examples, we highly recommended you go through our 
 
 Our docs are built on every push to the main or docs branch.
 
-## Contributors
+## Contributing
 
 We encourage you to contribute to HuoguoML! Please check out the [Contributing guide](CONTRIBUTING.md) for guidelines about how to proceed.
 
