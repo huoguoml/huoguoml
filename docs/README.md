@@ -1,3 +1,9 @@
+---
+description: >-
+  The only machine learning model management and serving platform you and your
+  data science team need.
+---
+
 # Welcome to HuoguoML!
 
 ## Introduction
