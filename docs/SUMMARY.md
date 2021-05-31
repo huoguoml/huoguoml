@@ -11,7 +11,7 @@
 
 ## Recommendation
 
-* [Naming Convention](recommendation/naming-convention.md)
+* [Naming convention](recommendation/naming-convention.md)
 * [ML workflow](recommendation/ml-workflow.md)
 
 ## Deploy HuoguoML Server
