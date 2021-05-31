@@ -8,16 +8,16 @@
 * [HuoguoML Model Registry](huoguoml-basics/components-1.md)
 * [HuoguoML Service](huoguoml-basics/service.md)
 
-## Recommendation
-
-* [Naming Convention](recommendation/naming-convention.md)
-* [Workflow](recommendation/workflow.md)
-
 ## Deploy HuoguoML Server
 
 * [AWS](deploy-huoguoml-server/aws.md)
 * [Heroku](deploy-huoguoml-server/heroku.md)
 * [Google Cloud](deploy-huoguoml-server/google-cloud.md)
+
+## Recommendation
+
+* [Naming Convention](recommendation/naming-convention.md)
+* [Workflow](recommendation/workflow.md)
 
 ## Advanced HuoguoML
 
