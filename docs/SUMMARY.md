@@ -28,6 +28,9 @@
 ## Misc <a id="misc-1"></a>
 
 * [FAQ](misc-1/faq.md)
-* [Contribute](https://github.com/HuoguoML/HuoguoML/blob/f223140ca529634fa32dd85e935b1a478f34690a/CONTRIBUTING.md)
+
+## External Resources <a id="external"></a>
+
+* [Contributing Guide](https://github.com/HuoguoML/HuoguoML/blob/f223140ca529634fa32dd85e935b1a478f34690a/CONTRIBUTING.md)
 * [License](https://github.com/HuoguoML/HuoguoML/blob/f223140ca529634fa32dd85e935b1a478f34690a/LICENSE)
 
