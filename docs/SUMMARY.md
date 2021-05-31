@@ -4,14 +4,14 @@
 
 ## Introduction to HuoguoML <a id="huoguoml-basics"></a>
 
-* [HuoguoML Tracking](huoguoml-basics/experiment-tracking.md)
-* [HuoguoML Model Registry](huoguoml-basics/components-1.md)
-* [HuoguoML Service](huoguoml-basics/service.md)
+* [HuoguoML Tracking](huoguoml-basics/huoguoml-tracking.md)
+* [HuoguoML Model Registry](huoguoml-basics/huoguoml-model-registry.md)
+* [HuoguoML Service](huoguoml-basics/huoguoml-service.md)
 
 ## Recommendation
 
 * [Naming Convention](recommendation/naming-convention.md)
-* [Workflow](recommendation/workflow.md)
+* [ML Workflow](recommendation/ml-workflow.md)
 
 ## Deploy HuoguoML Server
 
