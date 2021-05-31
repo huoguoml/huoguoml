@@ -6,7 +6,7 @@ description: Guide for tracking and analysing your machine learning experiments
 
 ## Introduction
 
-As a data scientist, you work on machine learning problems. Most of the time you implement or modify different algorithms, train them with different parameters and select the best model. In the process, you store your results manually. To avoid this, use the **HuoguoML Tracking API,** which a Python API that allows you to save your metadata directly and easily. All metadata can be visualized on the **HuoguoML Dashboard**
+As a data scientist, you work on machine learning problems. Most of the time you implement or modify different algorithms, train them with different parameters and select the best model. In the process, you store your results manually. To avoid this, use the HuoguoML tracking API**,** which a Python API that allows you to save your metadata directly and easily. All metadata can be visualized on the HuoguoML Dashboard.
 
 ## Tracking Server
 
@@ -18,7 +18,7 @@ huoguoml server --host 127.0.0.1 --port 8080 --artifact_dir=./
 
 All files and logs will be saved in the current directory under the .huoguoml folder. In order to see, if it works, open your browser on `localhost:8080`. You should be able to see the HuoguoML dashboard.
 
-**Note:** If you want to run the tracking server on cloud rescources, check the guides under **Deploy HuoguoML Server.**
+**Note:** If you want to run the tracking server on cloud resources, check the guides under `Deploy HuoguoML Server`.
 
 ## Track Parameters, Metrics and Tags
 
