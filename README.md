@@ -24,7 +24,7 @@ pip install huoguoml-dev
 
 ## Examples
 
-Just starting out? Try out our examples:
+Just starting out? Try out our examples which work out of the box:
 
 | Example                          | Description   | 
 | --------------------------       | -------------| 
@@ -32,9 +32,9 @@ Just starting out? Try out our examples:
 
 ## Documentation
 
-Apart from learning from the examples, we highly recommended you go through our [documentation](https://steven-mi.gitbook.io/huoguoml/).
+Apart from learning from the examples, we highly recommended you go through our [documentation](https://steven-mi.gitbook.io/huoguoml/), as it gives you a more detailed guide to HuoguoML
 
-Our docs are built on every push to the main or docs branch.
+Our docs are built on every push to the main or docs branch. 
 
 ## Contributing
 
