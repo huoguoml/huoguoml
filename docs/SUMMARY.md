@@ -15,7 +15,7 @@
 
 ## Deploy HuoguoML Server
 
-* [AWS](deploy-huoguoml-server/aws.md)
+* [Amazon Web Services](deploy-huoguoml-server/amazon-web-services.md)
 * [Heroku](deploy-huoguoml-server/heroku.md)
 * [Google Cloud](deploy-huoguoml-server/google-cloud.md)
 
