@@ -18,7 +18,7 @@ All files and logs will be saved in the current directory under the .huoguoml fo
 
 ## Track Parameters, Metrics and Tags
 
-After the tracking server runs, you're able to use our Python API to start a HuoguoML experiment and log your metadata. Do so by adding following line to your code
+When the tracking server is running, you can use our Python API to run a HuoguoML experiment and log your parameters, metrics and tags. For this, you create a HuoguoML experiment run and use the built-in methods to log your parameters:
 
 ```python
 import huoguoml
@@ -31,7 +31,7 @@ run.log_tag("framework", "tensorflow")
 run.end_experiment_run()
 ```
 
-In addition, you can use the experiment run as a content manager within a `with` block, see:
+Besides the possibility to initialize the run and terminate it manually, you can also use the experiment run as a content manager within a `with` block, see:
 
 ```python
 import huoguoml
@@ -41,17 +41,13 @@ with huoguoml.start_experiment_run("mnist-15", "127.0.0.1:8080") as run
     run.log_tag("framework", "tensorflow")
 ```
 
-## Track Models
+## Track Model Files
 
-Besides tracking basic metadata, HuoguoML supports tracking models from the most prominent ML frameworks as well. 
+Besides tracking basic metadata, HuoguoML also supports tracking models from the most popular ML frameworks. A list of all supported ML frameworks can be seen below. Keep in mind that you can always ask for support of a new framework or implement it yourself. Implementing it is really simple and very manageable
 
-### Tensorflow
+### Tensorflow 2.X
 
-### PyTorch
+**Note:** Tensorflow 1.X won't be supported
 
-### Onyx
 
-### Scikit-Learn
-
-## Comparing Experiment Runs
 
