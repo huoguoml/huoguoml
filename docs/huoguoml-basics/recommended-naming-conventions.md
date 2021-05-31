@@ -1,2 +1,0 @@
-# Recommended Naming Conventions
-

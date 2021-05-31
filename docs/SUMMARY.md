@@ -4,10 +4,14 @@
 
 ## Introduction to HuoguoML <a id="huoguoml-basics"></a>
 
-* [Recommended Naming Conventions](huoguoml-basics/recommended-naming-conventions.md)
 * [HuoguoML Tracking](huoguoml-basics/experiment-tracking.md)
 * [HuoguoML Model Registry](huoguoml-basics/components-1.md)
 * [HuoguoML Service](huoguoml-basics/service.md)
+
+## Recommendation
+
+* [Naming Convention](recommendation/naming-convention.md)
+* [Workflow](recommendation/workflow.md)
 
 ## Deploy HuoguoML Server
 
