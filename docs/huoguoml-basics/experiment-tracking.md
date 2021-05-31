@@ -24,8 +24,8 @@ When the tracking server is running, you can use our Python API to run a HuoguoM
 import huoguoml
 run = huoguoml.start_experiment_run("mnist-15", "127.0.0.1:8080")
 
-run.log_parameter("batch_size", random.randint(0, 100))
-run.log_metric("batch_size", random.randint(0, 100))
+run.log_parameter("batch_size", 32)
+run.log_metric("accuracy", 92.75)
 run.log_tag("framework", "tensorflow")
 
 run.end_experiment_run()
@@ -36,8 +36,8 @@ Besides the possibility to initialize the run and terminate it manually, you can
 ```python
 import huoguoml
 with huoguoml.start_experiment_run("mnist-15", "127.0.0.1:8080") as run
-    run.log_parameter("batch_size", random.randint(0, 100))
-    run.log_metric("batch_size", random.randint(0, 100))
+    run.log_parameter("batch_size", 32)
+    run.log_metric("accuracy", 92.75)
     run.log_tag("framework", "tensorflow")
 ```
 
