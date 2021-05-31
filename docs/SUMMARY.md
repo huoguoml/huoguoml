@@ -29,9 +29,3 @@
 
 * [FAQ](misc-1/faq.md)
 
-## External Resources <a id="external"></a>
-
-* [GitHub Repository](https://github.com/HuoguoML/HuoguoML)
-* [Contributing Guide](https://github.com/HuoguoML/HuoguoML/blob/f223140ca529634fa32dd85e935b1a478f34690a/CONTRIBUTING.md)
-* [License](https://github.com/HuoguoML/HuoguoML/blob/f223140ca529634fa32dd85e935b1a478f34690a/LICENSE)
-
