@@ -1,5 +1,5 @@
 ---
-description: Guide for tracking your machine learning metadata
+description: Guide for tracking and analysing your machine learning experiments
 ---
 
 # HuoguoML Tracking
