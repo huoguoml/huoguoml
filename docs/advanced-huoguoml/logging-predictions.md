@@ -1,6 +1,6 @@
 ---
-description: Customizing the HuoguoML service to log or process the predictions
+description: Customizing a HuoguoML service to proccess the predictions
 ---
 
-# Log Predictions
+# Log predictions
 
