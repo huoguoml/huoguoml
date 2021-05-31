@@ -23,6 +23,7 @@ Each of the four Jina products has the following documentation types.
 * **Deploy HuoguoML Server:** Guides for deploying a HuoguoML server to cloud providers.
 * **Advanced HuoguoML:** More guides and examples for more advanced use cases.
 * **Misc**: Contains some information about the project itself, e.g. FAQ, license, ....
+* **External Resources**: Links to external resources that might be useful
 
 ## Installation
 
