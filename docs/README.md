@@ -22,9 +22,6 @@ The HuoguoML documentation is structured as follows:
 * **Recommentation:** Some recommendations about naming or using HuoguoML.
 * **Deploy HuoguoML Server:** Guides for deploying a HuoguoML server to cloud providers.
 * **Advanced HuoguoML:** More guides and examples for more advanced use cases.
-* **Misc**: Contains some information about the project itself, e.g. FAQ, license, ...
-
-
 
 ## Installation
 

@@ -1,6 +1,7 @@
 # Table of contents
 
 * [Welcome to HuoguoML!](README.md)
+* [FAQ](faq.md)
 
 ## Introduction to HuoguoML <a id="huoguoml-basics"></a>
 
@@ -24,8 +25,4 @@
 
 * [Prometheus](advanced-huoguoml/using-prometheus.md)
 * [Log Predictions](advanced-huoguoml/logging-predictions.md)
-
-## Misc <a id="misc-1"></a>
-
-* [FAQ](misc-1/faq.md)
 
