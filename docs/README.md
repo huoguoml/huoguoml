@@ -16,14 +16,15 @@ When dealing with Machine Learning applications, there is a high management and 
 
 ## Documentation overview
 
-Each of the four Jina products has the following documentation types.
+The HuoguoML documentation is structured as follows:
 
 * **Introduction to HuoguoML**: New to a HuoguoML? Take a look at the introduction pages. They contain simple examples to get you started right away.
 * **Recommentation:** Some recommendations about naming or using HuoguoML.
 * **Deploy HuoguoML Server:** Guides for deploying a HuoguoML server to cloud providers.
 * **Advanced HuoguoML:** More guides and examples for more advanced use cases.
-* **Misc**: Contains some information about the project itself, e.g. FAQ, license, ....
-* **External Resources**: Links to external resources that might be useful
+* **Misc**: Contains some information about the project itself, e.g. FAQ, license, ...
+
+
 
 ## Installation
 
