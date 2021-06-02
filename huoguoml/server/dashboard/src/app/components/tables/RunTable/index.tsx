@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RunInterface } from '../../../../types';
 import { Table } from 'antd';
 import { StatusTag } from '../../StatusTag/Loadable';
+import { secondsToTime } from '../../../../utils/time';
 
 interface Props {
   runs: RunInterface[] | undefined;
@@ -12,26 +13,6 @@ interface Props {
   setSelectedRuns: (run: RunInterface[]) => void;
   isLoading?: boolean;
 }
-
-// const timestampToDate = (timestamp: number) => {
-//   const dateObj = new Date(timestamp * 1000);
-//   return dateObj.toDateString() + ' ' + dateObj.toLocaleTimeString();
-// };
-
-const secondsToTime = (seconds: number) => {
-  const days = Math.floor(seconds / (24 * 60 * 60));
-  seconds -= days * (24 * 60 * 60);
-  const hours = Math.floor(seconds / (60 * 60));
-  seconds -= hours * (60 * 60);
-  const minutes = Math.floor(seconds / 60);
-  seconds -= minutes * 60;
-  return (
-    (0 < days ? days.toFixed(0) + ' d ' : '') +
-    (0 < hours ? hours.toFixed(0) + ' h ' : '') +
-    (0 < minutes ? minutes.toFixed(0) + ' m ' : '') +
-    (0 < seconds ? seconds.toFixed(0) + ' s ' : '')
-  );
-};
 
 const getUniqueKeys = (runs: RunInterface[], field_name: string) => {
   const record_keys = runs.flatMap(run => Object.keys(run[field_name]));
@@ -51,12 +32,7 @@ export const RunTable = memo((props: Props) => {
       sorter: (a, b) => a.run_nr - b.run_nr,
       render: run_nr => (
         <>
-          <a
-            href={`#${run_nr}`}
-            onClick={() => props.onClick && props.onClick(run_nr)}
-          >
-            {run_nr}
-          </a>
+          <a onClick={() => props.onClick && props.onClick(run_nr)}>{run_nr}</a>
         </>
       ),
     },

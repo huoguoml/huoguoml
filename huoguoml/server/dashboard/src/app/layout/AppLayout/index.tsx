@@ -169,9 +169,7 @@ export const AppLayout = React.memo(() => {
               <Route component={NotFoundPage} />
             </Switch>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
-            HuoguoML - Made by Data Scientist for Data Scientist
-          </Footer>
+          <Footer style={{ textAlign: 'center' }}>©2020 HuoguoML</Footer>
         </Layout>
       </Layout>
     </>

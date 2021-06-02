@@ -13,11 +13,13 @@ export const RecordTable = memo((props: Props) => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      sorter: (a, b) => String(a.name).localeCompare(String(b.name)),
     },
     {
       title: 'Value',
       dataIndex: 'value',
       key: 'value',
+      sorter: (a, b) => String(a.value).localeCompare(String(b.value)),
     },
   ];
 

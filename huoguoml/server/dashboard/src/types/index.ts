@@ -27,6 +27,7 @@ export interface RunInterface {
   run_nr: number;
   creation_time: number;
   finish_time: number;
+  duration: number;
   author: string;
   status: number;
   experiment_name: string;

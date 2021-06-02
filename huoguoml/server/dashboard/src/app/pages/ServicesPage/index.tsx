@@ -19,10 +19,12 @@ export function ServicesPage() {
 
   return (
     <>
-      <ContentCardLayout contentUri={['services']}>
+      <ContentCardLayout contentUri={['services']} skip={-1}>
         <Title level={2}>Services</Title>
-        <Title level={3}>Available Services</Title>
-        <ServiceTable services={servicesPageState.services} />
+        <>
+          <Title level={3}>Available Services</Title>
+          <ServiceTable services={servicesPageState.services} />
+        </>
       </ContentCardLayout>
     </>
   );

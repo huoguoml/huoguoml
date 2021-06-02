@@ -9,15 +9,12 @@ interface Props {
 export const RecordTags = memo((props: Props) => {
   return (
     <>
-      {props.record && (
-        <div>
-          {Object.entries(props.record).map(item => (
-            <Tag color="blue" key={item[0]}>
-              {item[0]}: {item[1]}
-            </Tag>
-          ))}
-        </div>
-      )}
+      {props.record &&
+        Object.entries(props.record).map(item => (
+          <Tag color="blue" key={item[0]}>
+            {item[0]}: {item[1]}
+          </Tag>
+        ))}
     </>
   );
 });
