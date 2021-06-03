@@ -23,10 +23,7 @@ export const ModelTable = memo((props: Props) => {
       fixed: 'left',
       render: version => (
         <>
-          <a
-            href={`#${version}`}
-            onClick={() => props.onClick && props.onClick(version)}
-          >
+          <a onClick={() => props.onClick && props.onClick(version)}>
             {version}
           </a>
         </>

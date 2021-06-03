@@ -51,7 +51,6 @@ export function ExperimentPage() {
             <Title level={2}>Experiment: {experimentName}</Title>
           </>
           <>
-            <Title level={3}>Description</Title>
             <MarkdownEditor
               value={description}
               onChange={setDescription}

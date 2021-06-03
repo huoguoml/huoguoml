@@ -32,13 +32,13 @@ export function ExperimentRunPage() {
         <ContentCardLayout contentUri={['experiments', experimentName, runNr]}>
           <>
             <Row justify={'space-between'} align={'top'}>
-              <Col span={16}>
+              <Col>
                 <Space align={'start'}>
                   <Title level={2}>Run: {runNr}</Title>
                   <StatusTag status_code={experimentRunPageState.run.status} />
                 </Space>
               </Col>
-              <Col span={4}>
+              <Col>
                 <Space>
                   <RegisterModelButton run={experimentRunPageState.run} />
                 </Space>
@@ -72,16 +72,13 @@ export function ExperimentRunPage() {
               </Descriptions.Item>
             </Descriptions>
           </>
-          <>
-            <Title level={3}>Description</Title>
-            <MarkdownEditor
-              value={description}
-              onChange={setDescription}
-              placeholder={
-                'Add a description to your experiment in markdown format'
-              }
-            />
-          </>
+          <MarkdownEditor
+            value={description}
+            onChange={setDescription}
+            placeholder={
+              'Add a description to your experiment in markdown format'
+            }
+          />
           <>
             <Title level={3}>Parameters</Title>
             <RecordTable
