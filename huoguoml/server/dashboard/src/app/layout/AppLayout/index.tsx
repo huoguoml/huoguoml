@@ -16,9 +16,10 @@ import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 import { ExperimentRunPage } from '../../pages/ExperimentRunPage/Loadable';
 import { ServicesPage } from '../../pages/ServicesPage/Loadable';
 import { HelpPage } from '../../pages/HelpPage/Loadable';
-import { ModelPage } from '../../pages/ModelPage/Loadable';
+import { ModelRegistryPage } from '../../pages/ModelRegistryPage/Loadable';
 import { ExperimentRunComparePage } from '../../pages/ExperimentRunComparePage/Loadable';
-import { ModelDetailPage } from '../../pages/ModelDetailPage/Loadable';
+import { ModelsPage } from '../../pages/ModelsPage/Loadable';
+import { ModelPage } from '../../pages/ModelPage/Loadable';
 
 export const AppLayout = React.memo(() => {
   const { Title } = Typography;
@@ -158,11 +159,12 @@ export const AppLayout = React.memo(() => {
                 path="/experiments/:experimentName/:runNr"
                 component={ExperimentRunPage}
               />
-              <Route exact path="/models" component={ModelPage} />
+              <Route exact path="/models" component={ModelRegistryPage} />
+              <Route exact path="/models/:mlModelName" component={ModelsPage} />
               <Route
                 exact
-                path="/models/:mlModelName"
-                component={ModelDetailPage}
+                path="/models/:mlModelName/:mlModelVersion"
+                component={ModelPage}
               />
               <Route exact path="/services" component={ServicesPage} />
               {/*<Route exact path="/help" component={HelpPage} />*/}

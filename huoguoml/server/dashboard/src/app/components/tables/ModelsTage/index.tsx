@@ -10,7 +10,7 @@ interface Props {
   onClick?: (modelName: string) => void;
 }
 
-export const ModelTable = memo((props: Props) => {
+export const ModelsTable = memo((props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
 

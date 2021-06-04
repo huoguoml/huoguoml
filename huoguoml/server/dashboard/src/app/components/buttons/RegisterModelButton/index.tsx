@@ -1,9 +1,19 @@
 import * as React from 'react';
 import { memo } from 'react';
-import { AutoComplete, Button, message, Modal, Select } from 'antd';
+import {
+  AutoComplete,
+  Button,
+  message,
+  Modal,
+  Select,
+  Space,
+  Tooltip,
+  Typography,
+} from 'antd';
 import axios from 'axios';
 import { ML_MODEL_URI } from '../../../../constants';
 import { MLModelRegistryInterface, RunInterface } from '../../../../types';
+import { useHistory } from 'react-router-dom';
 
 interface Props {
   run: RunInterface;
@@ -55,16 +65,45 @@ export const RegisterModelButton = memo((props: Props) => {
   const modelNotExist = !props.run.model_definition;
   const modelRegistered = !!props.run.ml_model;
 
+  let history = useHistory();
+
+  function toModelPage() {
+    history.push(
+      `/models/${props.run.ml_model?.name}/${props.run.ml_model?.version}`,
+    );
+  }
+  const { Text } = Typography;
+
   return (
     <>
       <div>
-        <Button
-          type="primary"
-          onClick={showModal}
-          disabled={modelNotExist || modelRegistered}
-        >
-          Register
-        </Button>
+        <Space direction={'vertical'} size={'small'}>
+          <Tooltip
+            title={
+              modelRegistered
+                ? `Model already registered to ${props.run.ml_model?.name} as ${props.run.ml_model?.version}`
+                : modelNotExist
+                ? 'Model cannot be registered'
+                : 'Add model to a model registry'
+            }
+          >
+            <Button
+              type="primary"
+              onClick={showModal}
+              disabled={modelNotExist || modelRegistered}
+            >
+              Register
+            </Button>
+          </Tooltip>
+          {modelRegistered && (
+            <Text type="secondary">
+              Model:
+              <a
+                onClick={toModelPage}
+              >{` ${props.run.ml_model?.name}, ${props.run.ml_model?.version}`}</a>
+            </Text>
+          )}
+        </Space>
         <Modal
           title="Register Modal to Registry"
           visible={isModalVisible}

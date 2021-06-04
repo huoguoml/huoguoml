@@ -1,39 +1,39 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { modelDetailPageSaga } from './saga';
-import { ModelDetailPageState } from './types';
+import { modelRegistryPageSaga } from './saga';
+import { ModelRegistryPageState } from './types';
 
-export const initialState: ModelDetailPageState = {
-  ml_models: [],
+export const initialState: ModelRegistryPageState = {
+  ml_registry: [],
 };
 
 const slice = createSlice({
-  name: 'modelDetailPage',
+  name: 'modelRegistryPage',
   initialState,
   reducers: {
-    getModelDetailState(state, action: PayloadAction<string>) {
+    getModelRegistryState(state, action: PayloadAction<string>) {
       state.isLoading = true;
     },
-    getModelDetailStateSuccess(
+    getModelRegistryStateSuccess(
       state,
-      action: PayloadAction<ModelDetailPageState>,
+      action: PayloadAction<ModelRegistryPageState>,
     ) {
-      state.ml_models = action.payload.ml_models;
+      state.ml_registry = action.payload.ml_registry;
       state.isLoading = false;
     },
-    getModelDetailStateFailure(state, action: PayloadAction<string>) {
+    getModelRegistryStateFailure(state, action: PayloadAction<string>) {
       state.error = action.payload;
       state.isLoading = false;
     },
   },
 });
 
-export const { actions: modelDetailPageActions } = slice;
+export const { actions: modelRegistryPageActions } = slice;
 
-export const useModelDetailPageSlice = () => {
+export const useModelRegistryPageSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({ key: slice.name, saga: modelDetailPageSaga });
+  useInjectSaga({ key: slice.name, saga: modelRegistryPageSaga });
   return { actions: slice.actions };
 };
 

@@ -48,7 +48,8 @@ class HuoguoMLRouter(object):
         self.ml_service = ml_service
 
         source_dir = os.getcwd()
-        model_url = concat_uri(self.server_uri, "api", "models", ml_service.model_name, ml_service.model_version)
+        model_url = concat_uri(self.server_uri, "api", "models", "files", ml_service.model_name,
+                               ml_service.model_version)
         model_dir = os.path.join(HUOGUOML_DEFAULT_FOLDER)
 
         if os.path.isdir(model_dir):

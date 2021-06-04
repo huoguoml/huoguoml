@@ -1,35 +1,36 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { modelPageSaga } from './saga';
-import { ModelPageState } from './types';
+import { modelsPageSaga } from './saga';
+import { ModelsPageState } from './types';
 
-export const initialState: ModelPageState = {};
+export const initialState: ModelsPageState = {
+  ml_models: [],
+};
 
 const slice = createSlice({
-  name: 'modelPage',
+  name: 'modelsPage',
   initialState,
   reducers: {
-    getModelState(state, action: PayloadAction<string>) {
+    getModelsState(state, action: PayloadAction<string>) {
       state.isLoading = true;
     },
-    getModelStateSuccess(state, action: PayloadAction<ModelPageState>) {
-      state.ml_model = action.payload.ml_model;
-      state.run = action.payload.run;
+    getModelsStateSuccess(state, action: PayloadAction<ModelsPageState>) {
+      state.ml_models = action.payload.ml_models;
       state.isLoading = false;
     },
-    getModelStateFailure(state, action: PayloadAction<string>) {
+    getModelsStateFailure(state, action: PayloadAction<string>) {
       state.error = action.payload;
       state.isLoading = false;
     },
   },
 });
 
-export const { actions: modelPageActions } = slice;
+export const { actions: modelsPageActions } = slice;
 
-export const useModelPageSlice = () => {
+export const useModelsPageSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({ key: slice.name, saga: modelPageSaga });
+  useInjectSaga({ key: slice.name, saga: modelsPageSaga });
   return { actions: slice.actions };
 };
 

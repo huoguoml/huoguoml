@@ -208,3 +208,8 @@ class Repository(object):
             session.commit()
             session.refresh(ml_service)
         return ml_services
+
+    def get_ml_model(self, ml_model_name: str, ml_model_version: str) -> Optional[MLModelORM]:
+        session = self.Session()
+        return session.query(MLModelORM).filter_by(name=ml_model_name,
+                                                   version=ml_model_version).first()

@@ -134,3 +134,7 @@ class Service(object):
 
     def update_ml_services_by_model_name(self, ml_model_name: str) -> List[MLServiceORM]:
         return self.repository.update_ml_services_by_model_name(ml_model_name=ml_model_name)
+
+    def get_ml_model(self, ml_model_name: str, ml_model_version: str) -> Optional[MLModelORM]:
+        return self.repository.get_ml_model(ml_model_name=ml_model_name,
+                                            ml_model_version=ml_model_version)

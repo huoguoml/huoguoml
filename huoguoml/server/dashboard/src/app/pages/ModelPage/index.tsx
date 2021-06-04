@@ -1,40 +1,32 @@
 import * as React from 'react';
-import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 import { useDispatch, useSelector } from 'react-redux';
 import { useModelPageSlice } from './slice';
 import { selectModelPageState } from './slice/selectors';
+import { useParams } from 'react-router-dom';
 import { Typography } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
-import { ModelRegistryTable } from '../../components/tables/ModelRegistryTable/Loadable';
+import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
 
 export function ModelPage() {
-  const { mlModelName } = useParams<Record<string, string>>();
-  const { Title } = Typography;
-  let history = useHistory();
+  const { mlModelName, mlModelVersion } = useParams<Record<string, string>>();
 
   const dispatch = useDispatch();
   const { actions } = useModelPageSlice();
   const modelPageState = useSelector(selectModelPageState);
 
   React.useEffect(() => {
-    dispatch(actions.getModelState(mlModelName));
-  }, [dispatch, actions, mlModelName]);
-
-  function toModelDetailPage(modelName: string) {
-    history.push(`/models/${modelName}`);
-  }
+    dispatch(actions.getModelState(`${mlModelName}/${mlModelVersion}`));
+  }, [dispatch, mlModelName, mlModelVersion, actions]);
+  const { Title } = Typography;
 
   return (
     <>
-      <ContentCardLayout contentUri={['models']} skip={-1}>
-        <Title level={2}>Models</Title>
-        <>
-          <Title level={3}>Available models</Title>
-          <ModelRegistryTable
-            registry={modelPageState.ml_registry}
-            onClick={toModelDetailPage}
-          />
-        </>
+      <ContentCardLayout
+        contentUri={['models', mlModelName, mlModelVersion]}
+        skip={-1}
+      >
+        <Title level={2}>{`Model ${mlModelName}, ${mlModelVersion}`}</Title>
+        {modelPageState.run?.experiment_name}
+        {modelPageState.run?.run_nr}
       </ContentCardLayout>
     </>
   );

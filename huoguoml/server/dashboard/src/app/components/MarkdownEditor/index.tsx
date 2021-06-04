@@ -2,9 +2,6 @@ import * as React from 'react';
 import { memo } from 'react';
 import { Button, Col, Input, Row, Space, Typography } from 'antd';
 import { MarkdownPreview } from '../MarkdownPreview/Loadable';
-import { EditOutlined } from '@ant-design/icons';
-import { StatusTag } from '../StatusTag/Loadable';
-import { RegisterModelButton } from '../buttons/RegisterModelButton/Loadable';
 
 interface Props {
   value: string;

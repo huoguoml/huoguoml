@@ -17,7 +17,9 @@ class MLModelIn(BaseModel):
 class MLModel(BaseModel):
     run_id: int
     version: str
+    name: str
     tag: Optional[int]
+    run_id: str
 
     class Config:
         orm_mode = True

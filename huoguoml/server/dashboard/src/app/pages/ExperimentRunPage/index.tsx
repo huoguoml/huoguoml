@@ -39,9 +39,7 @@ export function ExperimentRunPage() {
                 </Space>
               </Col>
               <Col>
-                <Space>
-                  <RegisterModelButton run={experimentRunPageState.run} />
-                </Space>
+                <RegisterModelButton run={experimentRunPageState.run} />
               </Col>
             </Row>
 

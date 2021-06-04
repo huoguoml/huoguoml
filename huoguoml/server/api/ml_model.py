@@ -47,8 +47,17 @@ class MLModelRouter(object):
                 raise HTTPException(status_code=404)
             return ml_model
 
-        @router.get("/{ml_model_name}/{ml_model_version}")
+        @router.get("/{ml_model_name}/{ml_model_version}", response_model=MLModel)
         async def get_ml_model(ml_model_name: str, ml_model_version: str):
+            ml_model = service.get_ml_model(ml_model_name=ml_model_name,
+                                            ml_model_version=ml_model_version)
+            if not ml_model:
+                raise HTTPException(status_code=404)
+
+            return ml_model
+
+        @router.get("/files/{ml_model_name}/{ml_model_version}")
+        async def get_ml_model_files(ml_model_name: str, ml_model_version: str):
             file_path = service.get_ml_model_files_by_name_and_version(ml_model_name=ml_model_name,
                                                                        ml_model_version=ml_model_version)
             if not file_path:
