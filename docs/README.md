@@ -37,11 +37,15 @@ or the development version, which is updated with every commit on the main branc
 pip install huoguoml-dev
 ```
 
-### Contributing
+## FAQ
+
+TBD
+
+## Contributing
 
 We encourage you to contribute to HuoguoML! Please check out the [Contributing guide](https://github.com/HuoguoML/HuoguoML/blob/main/CONTRIBUTING.md) for guidelines about how to proceed.
 
-### License
+## License
 
 Apache License Version 2.0, see [LICENSE](https://github.com/HuoguoML/HuoguoML/blob/main/LICENSE)
 

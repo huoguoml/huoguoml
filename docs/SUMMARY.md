@@ -1,11 +1,10 @@
 # Table of contents
 
 * [Welcome to HuoguoML!](README.md)
-* [FAQ](faq.md)
 
 ## HuoguoML Concepts
 
-* [Untitled](huoguoml-concepts/untitled.md)
+* [HuoguoML Architecture](huoguoml-concepts/huoguoml-architecture.md)
 
 ## HuoguoML Hello World <a id="huoguoml-basics"></a>
 
