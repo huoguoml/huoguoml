@@ -14,8 +14,8 @@
 
 ## HuoguoML Recommendations <a id="recommendation"></a>
 
-* [Naming convention](recommendation/naming-convention.md)
-* [ML workflow](recommendation/ml-workflow.md)
+* [Naming Convention](recommendation/naming-convention.md)
+* [ML-Workflow](recommendation/ml-workflow.md)
 
 ## HuoguoML Server Deployment <a id="deploy-huoguoml-server"></a>
 
@@ -26,6 +26,5 @@
 
 ## HuoguoML Advanced <a id="advanced-huoguoml"></a>
 
-* [Prometheus](advanced-huoguoml/using-prometheus.md)
-* [Log predictions](advanced-huoguoml/logging-predictions.md)
+* [Monitor HuoguoML Service](advanced-huoguoml/monitor-huoguoml-service.md)
 

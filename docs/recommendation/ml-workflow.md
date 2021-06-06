@@ -2,5 +2,5 @@
 description: Recommendation for using HuoguoML in your machine learning workflow
 ---
 
-# ML workflow
+# ML-Workflow
 
