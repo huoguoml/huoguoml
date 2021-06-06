@@ -1,5 +1,5 @@
 ---
-description: Customizing a HuoguoML service for external monitoring tools
+description: Customize a HuoguoML service for external monitoring tools
 ---
 
 # Monitor HuoguoML Service
