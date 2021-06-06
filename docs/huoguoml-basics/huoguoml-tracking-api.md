@@ -2,7 +2,7 @@
 description: Guide for tracking and analysing your machine learning experiments
 ---
 
-# HuoguoML tracking
+# HuoguoML Tracking API
 
 ## Introduction
 
