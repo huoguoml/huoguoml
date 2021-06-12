@@ -51,7 +51,11 @@ Besides tracking basic metadata, HuoguoML also supports tracking models from the
 
 ### Tensorflow 2.X
 
-**Note:** Tensorflow 1.X won't be supported
+HuoguoML supports the logging of Tensorflow model files in Saved Model format. During logging, the model is validated using TF 2.X methods. Since TF 2.X is not compatible with TF 1.X, the following code does not work with it. There are no plans to support TF 1.X.
 
-
+```python
+run.log_model("tensorflow", tf_saved_model_dir="./model",
+                            tf_meta_graph_tags="serve",
+                            tf_signature_def_key="serving_default")
+```
 
