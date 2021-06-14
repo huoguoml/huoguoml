@@ -10,7 +10,7 @@
 
 * [HuoguoML Tracking API](huoguoml-basics/huoguoml-tracking-api.md)
 * [HuoguoML Model Registry](huoguoml-basics/huoguoml-model-registry.md)
-* [HuoguoML Service](huoguoml-basics/huoguoml-service.md)
+* [HuoguoML Serving](huoguoml-basics/huoguoml-serving.md)
 
 ## HuoguoML Recommendations <a id="recommendation"></a>
 

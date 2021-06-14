@@ -39,7 +39,7 @@ Besides the possibility to initialize the run and terminate it manually, you can
 
 ```python
 import huoguoml
-with huoguoml.start_experiment_run("mnist-15", "127.0.0.1:8080") as run
+with huoguoml.start_experiment_run("mnist-15", "127.0.0.1:8080") as run:
     run.log_parameter("batch_size", 32)
     run.log_metric("accuracy", 92.75)
     run.log_tag("framework", "tensorflow")
