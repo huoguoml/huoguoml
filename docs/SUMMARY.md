@@ -11,6 +11,7 @@
 * [HuoguoML Tracking API](huoguoml-basics/huoguoml-tracking-api.md)
 * [HuoguoML Model Registry](huoguoml-basics/huoguoml-model-registry.md)
 * [HuoguoML Serving](huoguoml-basics/huoguoml-serving.md)
+* [Monitor HuoguoML Serving Service](huoguoml-basics/monitor-huoguoml-serving-service.md)
 
 ## HuoguoML Recommendations <a id="recommendation"></a>
 
@@ -23,8 +24,4 @@
 * [Amazon Web Services](deploy-huoguoml-server/amazon-web-services.md)
 * [Heroku](deploy-huoguoml-server/heroku.md)
 * [Google Cloud](deploy-huoguoml-server/google-cloud.md)
-
-## HuoguoML Advanced <a id="advanced-huoguoml"></a>
-
-* [Monitor HuoguoML Service](advanced-huoguoml/monitor-huoguoml-service.md)
 
