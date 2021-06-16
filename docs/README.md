@@ -19,7 +19,7 @@ When dealing with Machine Learning applications, there is a high management and 
 The HuoguoML documentation is structured as follows:
 
 * **HuoguoML Hello World**: New to a HuoguoML? Take a look at the introduction pages. They contain simple examples to get you started right away.
-* **HuoguoML Recommentation:** Some recommendations about naming or using HuoguoML.
+* **HuoguoML Recommendation:** Some recommendations about naming or using HuoguoML.
 * **HuoguoML Server Deployment:** Guides for deploying a HuoguoML server to cloud providers.
 
 ## Installation
