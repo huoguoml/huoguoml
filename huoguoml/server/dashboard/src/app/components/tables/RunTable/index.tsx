@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RunInterface } from '../../../../types';
 import { Table } from 'antd';
 import { StatusTag } from '../../StatusTag/Loadable';
-import { secondsToTime } from '../../../../utils/time';
+import { capitalize, getUniqueKeys } from '../../../../utils';
 
 interface Props {
   runs: RunInterface[] | undefined;
@@ -13,11 +13,6 @@ interface Props {
   setSelectedRuns: (run: RunInterface[]) => void;
   isLoading?: boolean;
 }
-
-const getUniqueKeys = (runs: RunInterface[], field_name: string) => {
-  const record_keys = runs.flatMap(run => Object.keys(run[field_name]));
-  return Array.from(new Set(record_keys));
-};
 
 export const RunTable = memo((props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -36,6 +31,9 @@ export const RunTable = memo((props: Props) => {
         </>
       ),
     },
+  ];
+
+  const nonFixedColumns = [
     {
       title: 'Status',
       key: 'status',
@@ -45,15 +43,6 @@ export const RunTable = memo((props: Props) => {
         <>
           <StatusTag status_code={status} />
         </>
-      ),
-    },
-    {
-      title: 'Duration',
-      dataIndex: 'duration',
-      key: 'duration',
-      sorter: (a, b) => a.creation_time - b.creation_time,
-      render: duration => (
-        <div>{duration === -1 ? '' : secondsToTime(parseFloat(duration))}</div>
       ),
     },
     {
@@ -76,34 +65,40 @@ export const RunTable = memo((props: Props) => {
     },
   ];
 
-  //const nonFixedColumns = [
-  // {
-  //   title: 'Start Time',
-  //   dataIndex: 'creation_time',
-  //   key: 'creation_time',
-  //   sorter: (a, b) => a.creation_time - b.creation_time,
-  //   render: creation_time => <div>{timestampToDate(creation_time)}</div>,
-  // },
-  // {
-  //   title: 'End Time',
-  //   dataIndex: 'finish_time',
-  //   key: 'finish_time',
-  //   sorter: (a, b) => a.finish_time - b.finish_time,
-  //   render: finish_time => (
-  //     <div>{finish_time === -1 ? '' : timestampToDate(finish_time)}</div>
-  //   ),
-  // },
-  //];
-
   const variableColumns = props.runs
-    ? getUniqueKeys(props.runs, 'metrics').map(key_name => {
-        return {
-          title: key_name,
-          dataIndex: ['metrics', key_name],
-          key: key_name,
-          sorter: (a, b) => a.metrics[key_name] - b.metrics[key_name],
-        };
-      })
+    ? [
+        ...getUniqueKeys(props.runs, 'metrics').map(key_name => {
+          return {
+            title: capitalize(key_name),
+            dataIndex: ['metrics', key_name],
+            key: key_name,
+            sorter: (a, b) =>
+              String(a.metrics[key_name]).localeCompare(
+                String(b.metrics[key_name]),
+              ),
+          };
+        }),
+        ...getUniqueKeys(props.runs, 'parameters').map(key_name => {
+          return {
+            title: capitalize(key_name),
+            dataIndex: ['parameters', key_name],
+            key: key_name,
+            sorter: (a, b) =>
+              String(a.parameters[key_name]).localeCompare(
+                String(b.parameters[key_name]),
+              ),
+          };
+        }),
+        ...getUniqueKeys(props.runs, 'tags').map(key_name => {
+          return {
+            title: capitalize(key_name),
+            dataIndex: ['tags', key_name],
+            key: key_name,
+            sorter: (a, b) =>
+              String(a.tags[key_name]).localeCompare(String(b.tags[key_name])),
+          };
+        }),
+      ]
     : [];
 
   const onSelectChange = (selectedRowKeys, selectedRows) => {
@@ -123,7 +118,7 @@ export const RunTable = memo((props: Props) => {
         rowSelection={rowSelection}
         scroll={{ x: 'max-content' }}
         dataSource={props.runs}
-        columns={[...fixedColumns, ...variableColumns]}
+        columns={[...fixedColumns, ...nonFixedColumns, ...variableColumns]}
         loading={props.isLoading}
       />
     </>

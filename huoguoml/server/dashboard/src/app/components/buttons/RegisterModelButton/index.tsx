@@ -17,6 +17,7 @@ import { useHistory } from 'react-router-dom';
 
 interface Props {
   run: RunInterface;
+  onClick?: () => void;
 }
 
 export const RegisterModelButton = memo((props: Props) => {
@@ -55,6 +56,7 @@ export const RegisterModelButton = memo((props: Props) => {
         .then(response => {
           message.success(`Added model to ${mlModelName}`);
           handleCancel();
+          props.onClick && props.onClick();
         })
         .catch(error => {
           message.error(error.message);
@@ -97,10 +99,10 @@ export const RegisterModelButton = memo((props: Props) => {
           </Tooltip>
           {modelRegistered && (
             <Text type="secondary">
-              Model:
+              Model
               <a
                 onClick={toModelPage}
-              >{` ${props.run.ml_model?.name}, ${props.run.ml_model?.version}`}</a>
+              >{` ${props.run.ml_model?.name}: ${props.run.ml_model?.version}`}</a>
             </Text>
           )}
         </Space>

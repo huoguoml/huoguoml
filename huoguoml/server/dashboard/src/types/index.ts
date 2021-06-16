@@ -25,6 +25,8 @@ export interface ModelDefinitionInterface {
 export interface RunInterface {
   id: number;
   run_nr: number;
+  description: string;
+  last_modification: number;
   creation_time: number;
   finish_time: number;
   duration: number;
@@ -61,10 +63,12 @@ export interface MLModelRegistryInterface {
 
 export interface MLModelInterface {
   id: number;
-  name: string;
   version: string;
   tag?: number;
+  name: string;
   run_id: number;
+  creation_time: number;
+  last_modification: number;
 }
 
 export type { RootState };

@@ -5,8 +5,8 @@ import { ServicesPageState } from '../app/pages/ServicesPage/slice/types';
 import { ModelRegistryPageState } from '../app/pages/ModelRegistryPage/slice/types';
 import { ExperimentRunCompareState } from '../app/pages/ExperimentRunComparePage/slice/types';
 import { ModelsPageState } from '../app/pages/ModelsPage/slice/types';
-import { RunPageState } from '../app/pages/RunPage/slice/types';
 import { ModelPageState } from '../app/pages/ModelPage/slice/types';
+import { ModelComparePageState } from '../app/pages/ModelComparePage/slice/types';
 
 export interface PageState {
   isLoading?: boolean;
@@ -21,6 +21,6 @@ export interface RootState {
   modelRegistryPage?: ModelRegistryPageState;
   modelsPage?: ModelsPageState;
   modelPage?: ModelPageState;
+  modelComparePage?: ModelComparePageState;
   experimentRunComparePage?: ExperimentRunCompareState;
-  runPage?: RunPageState;
 }

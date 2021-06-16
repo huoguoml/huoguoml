@@ -7,10 +7,10 @@ from typing import List, Dict, Optional
 from sqlalchemy import create_engine, desc
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from huoguoml.schemas.experiment import ExperimentIn, Experiment
-from huoguoml.schemas.ml_model import MLModelIn, MLModelTag
-from huoguoml.schemas.ml_service import MLServiceIn
-from huoguoml.schemas.run import RunIn, Run
+from huoguoml.schema.experiment import ExperimentIn, Experiment
+from huoguoml.schema.ml_model import MLModelIn, MLModelTag, MLModel
+from huoguoml.schema.ml_service import MLServiceIn
+from huoguoml.schema.run import RunIn, Run
 from huoguoml.server.db.entity import Base, RunORM, MLServiceORM, ExperimentORM, MLModelORM
 
 
@@ -58,6 +58,7 @@ class Repository(object):
         run = RunORM(
             run_nr=len(experiment.runs) + 1,
             creation_time=time.time(),
+            last_modification=time.time(),
             finish_time=-1,
             duration=-1,
             description="",
@@ -81,7 +82,7 @@ class Repository(object):
         session = self.Session()
         experiment_orm = session.query(ExperimentORM).filter_by(name=experiment_name, id=experiment.id).first()
         if experiment_orm:
-            for field, field_value in experiment_orm.dict(exclude_unset=True).items():
+            for field, field_value in experiment.dict(exclude_unset=True, exclude={"id", "runs"}).items():
                 setattr(experiment_orm, field, field_value)
 
             session.commit()
@@ -91,11 +92,11 @@ class Repository(object):
     def update_run(self, run_id: int, run: Run) -> Optional[RunORM]:
         session = self.Session()
         run_orm = session.query(RunORM).filter_by(id=run_id).first()
-        update_data = run.dict(exclude={"id", "run_nr"})
 
         if run_orm:
-            for field, field_value in update_data.items():
+            for field, field_value in run.dict(exclude={"id", "run_nr", "experiment_name", "ml_model"}).items():
                 setattr(run_orm, field, field_value)
+            run_orm.last_modification = time.time()
             session.commit()
             session.refresh(run_orm)
             return run_orm
@@ -121,7 +122,7 @@ class Repository(object):
 
     def get_ml_model_by_name(self, ml_model_name) -> List[MLModelORM]:
         session = self.Session()
-        return session.query(MLModelORM).filter_by(name=ml_model_name).all()
+        return session.query(MLModelORM).filter_by(name=ml_model_name).order_by(desc(MLModelORM.version)).all()
 
     def create_ml_model(self, ml_model_in: MLModelIn) -> Optional[MLModelORM]:
         session = self.Session()
@@ -131,8 +132,10 @@ class Repository(object):
 
         version = session.query(MLModelORM).filter_by(name=ml_model_in.name).count() + 1
         ml_model = MLModelORM(
-            tag=None,
+            tag=MLModelTag.none.value,
             version="v{}".format(version),
+            creation_time=time.time(),
+            last_modification=time.time(),
             **ml_model_in.dict())
         session.add(ml_model)
         session.commit()
@@ -195,11 +198,40 @@ class Repository(object):
         session = self.Session()
         return session.query(MLServiceORM).filter_by(id=service_id).first()
 
-    def update_ml_services_by_model_name(self, ml_model_name: str) -> List[MLServiceORM]:
+    def update_ml_services_by_latest(self, ml_model_name: str) -> List[MLServiceORM]:
         session = self.Session()
         ml_services = session.query(MLServiceORM).filter_by(model_name=ml_model_name,
                                                             model_rule="latest").all()
         ml_model = self.get_ml_model_by_name_and_latest(ml_model_name=ml_model_name)
+
+        for ml_service in ml_services:
+            ml_service.model_name = ml_model.name
+            ml_service.model_version = ml_model.version
+            ml_service.model = ml_model
+
+            session.commit()
+            session.refresh(ml_service)
+        return ml_services
+
+    def update_ml_services_by_staging(self, ml_model_name: str) -> List[MLServiceORM]:
+        session = self.Session()
+        ml_services = session.query(MLServiceORM).filter_by(model_name=ml_model_name,
+                                                            model_rule="staging").all()
+        ml_model = self.get_ml_model_by_name_and_tag(ml_model_name=ml_model_name, tag=MLModelTag.staging.value)
+        for ml_service in ml_services:
+            ml_service.model_name = ml_model.name
+            ml_service.model_version = ml_model.version
+            ml_service.model = ml_model
+            session.commit()
+            session.refresh(ml_service)
+        return ml_services
+
+    def update_ml_services_by_production(self, ml_model_name: str) -> List[MLServiceORM]:
+        session = self.Session()
+        ml_services = session.query(MLServiceORM).filter_by(model_name=ml_model_name,
+                                                            model_rule="production").all()
+        ml_model = self.get_ml_model_by_name_and_tag(ml_model_name=ml_model_name, tag=MLModelTag.production.value)
+
         for ml_service in ml_services:
             ml_service.model_name = ml_model.name
             ml_service.model_version = ml_model.version
@@ -213,3 +245,20 @@ class Repository(object):
         session = self.Session()
         return session.query(MLModelORM).filter_by(name=ml_model_name,
                                                    version=ml_model_version).first()
+
+    def update_ml_model(self, ml_model_name: str, ml_model_version: str, ml_model: MLModel) -> Optional[MLModelORM]:
+        session = self.Session()
+
+        ml_model_orm = session.query(MLModelORM).filter_by(name=ml_model_name,
+                                                           version=ml_model_version).first()
+        if ml_model_orm:
+            if ml_model.tag == MLModelTag.staging.value or ml_model.tag == MLModelTag.production.value:
+                temp = session.query(MLModelORM).filter_by(name=ml_model_name, tag=ml_model.tag).first()
+                temp.tag = MLModelTag.none.value
+
+            for field, field_value in ml_model.dict(exclude={"id", "run_id", "version", "name"}).items():
+                setattr(ml_model_orm, field, field_value)
+            session.commit()
+            session.refresh(ml_model_orm)
+
+        return ml_model_orm

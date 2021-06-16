@@ -4,18 +4,17 @@ import { Breadcrumb } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 interface Props {
-  children: React.ReactNode;
+  children: React.ReactNode[];
   contentUri: string[];
   skipUri?: string[];
 }
 
-export const ContentCardLayout = memo((props: Props) => {
+export const ContentCardsLayout = memo((props: Props) => {
   let history = useHistory();
 
   function toPage(uri: string) {
     history.push(uri);
   }
-
   return (
     <>
       <div style={{ margin: '16px 16px' }}>
@@ -37,9 +36,11 @@ export const ContentCardLayout = memo((props: Props) => {
           ))}
         </Breadcrumb>
       </div>
-      <div key={`content_card`} className="site-layout-card">
-        {props.children}
-      </div>
+      {props.children.map((child, index) => (
+        <div key={`content_card_${index}`} className="site-layout-card">
+          {child}
+        </div>
+      ))}
     </>
   );
 });

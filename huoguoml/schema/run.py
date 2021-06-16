@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any, Union
 
 from pydantic import BaseModel, constr
 
-from huoguoml.schemas.ml_model import MLModel
+from huoguoml.schema.ml_model import MLModel
 
 
 class ModelNode(BaseModel):
@@ -55,6 +55,7 @@ class Run(RunIn):
     run_nr: int
 
     creation_time: float
+    last_modification: float
     finish_time: float
     duration: float
 

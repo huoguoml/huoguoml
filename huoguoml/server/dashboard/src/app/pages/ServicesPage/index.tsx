@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
+import { ContentCardsLayout } from '../../layout/ContentCardsLayout/Loadable';
 import { useDispatch, useSelector } from 'react-redux';
 import { useServicesPageSlice } from './slice';
 import { selectServicesPageState } from './slice/selectors';
@@ -23,16 +23,16 @@ export function ServicesPage() {
   }
   return (
     <>
-      <ContentCardLayout contentUri={['services']} skip={-1}>
-        <Title level={2}>Services</Title>
+      <ContentCardsLayout contentUri={['services']}>
+        <Title level={1}>Services</Title>
         <>
-          <Title level={3}>Available Services</Title>
+          <Title level={2}>Available Services</Title>
           <ServiceTable
             services={servicesPageState.services}
             onClick={toPage}
           />
         </>
-      </ContentCardLayout>
+      </ContentCardsLayout>
     </>
   );
 }

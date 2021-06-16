@@ -3,16 +3,20 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useExperimentRunPageSlice } from './slice';
 import { selectExperimentRunPage } from './slice/selectors';
-import { Col, Descriptions, Row, Space, Typography } from 'antd';
+import { Col, Descriptions, message, Row, Space, Typography } from 'antd';
 import { RecordTable } from '../../components/tables/RecordTable/Loadable';
-import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
+import { ContentCardsLayout } from '../../layout/ContentCardsLayout/Loadable';
 import { StatusTag } from '../../components/StatusTag/Loadable';
 import { RegisterModelButton } from '../../components/buttons/RegisterModelButton/Loadable';
 import { MarkdownEditor } from '../../components/MarkdownEditor/Loadable';
 import { secondsToTime, timestampToDate } from '../../../utils/time';
 import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
+import axios from 'axios';
+import { RUN_URI } from '../../../constants';
 
 export function ExperimentRunPage() {
+  const { Title } = Typography;
+
   const { runNr, experimentName } = useParams<Record<string, string>>();
 
   const dispatch = useDispatch();
@@ -23,32 +27,59 @@ export function ExperimentRunPage() {
     dispatch(actions.getExperimentRunState(`/${experimentName}/${runNr}`));
   }, [dispatch, runNr, actions, experimentName]);
 
-  const { Title } = Typography;
-  const [description, setDescription] = React.useState<string>('');
+  function updateDescription(description: string) {
+    if (experimentRunPageState.run) {
+      axios
+        .put(`${RUN_URI}/${experimentRunPageState.run.id}`, {
+          ...experimentRunPageState.run,
+          description: description,
+        })
+        .then(response => {
+          message.success(`Updated description`);
+        })
+        .catch(error => {
+          message.error(error.message);
+        });
+    }
+  }
 
   return (
     <>
       {experimentRunPageState.run ? (
-        <ContentCardLayout contentUri={['experiments', experimentName, runNr]}>
+        <ContentCardsLayout contentUri={['experiments', experimentName, runNr]}>
           <>
             <Row justify={'space-between'} align={'top'}>
               <Col>
                 <Space align={'start'}>
-                  <Title level={2}>Run: {runNr}</Title>
+                  <Title level={1}>Run: {runNr}</Title>
                   <StatusTag status_code={experimentRunPageState.run.status} />
                 </Space>
               </Col>
               <Col>
-                <RegisterModelButton run={experimentRunPageState.run} />
+                <RegisterModelButton
+                  run={experimentRunPageState.run}
+                  onClick={() =>
+                    dispatch(
+                      actions.getExperimentRunState(
+                        `/${experimentName}/${runNr}`,
+                      ),
+                    )
+                  }
+                />
               </Col>
             </Row>
-
             <Descriptions>
               <Descriptions.Item
                 label="Created at"
                 labelStyle={{ fontWeight: 'bold' }}
               >
                 {timestampToDate(experimentRunPageState.run.creation_time)}
+              </Descriptions.Item>
+              <Descriptions.Item
+                label="Last modification at"
+                labelStyle={{ fontWeight: 'bold' }}
+              >
+                {timestampToDate(experimentRunPageState.run.last_modification)}
               </Descriptions.Item>
               <Descriptions.Item
                 label="Finished at"
@@ -71,34 +102,34 @@ export function ExperimentRunPage() {
             </Descriptions>
           </>
           <MarkdownEditor
-            value={description}
-            onChange={setDescription}
+            value={experimentRunPageState.run.description}
             placeholder={
               'Add a description to your experiment in markdown format'
             }
+            onSubmit={updateDescription}
           />
           <>
-            <Title level={3}>Parameters</Title>
-            <RecordTable
-              title={'Parameters'}
-              record={experimentRunPageState.run.parameters}
-            />
-          </>
-          <>
-            <Title level={3}>Metrics</Title>
+            <Title level={2}>Metrics</Title>
             <RecordTable
               title={'Metrics'}
               record={experimentRunPageState.run.metrics}
             />
           </>
           <>
-            <Title level={3}>Tags</Title>
+            <Title level={2}>Parameters</Title>
+            <RecordTable
+              title={'Parameters'}
+              record={experimentRunPageState.run.parameters}
+            />
+          </>
+          <>
+            <Title level={2}>Tags</Title>
             <RecordTable
               title={'Tags'}
               record={experimentRunPageState.run.tags}
             />
           </>
-        </ContentCardLayout>
+        </ContentCardsLayout>
       ) : (
         <NotFoundPage />
       )}

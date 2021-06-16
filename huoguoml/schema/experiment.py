@@ -2,7 +2,7 @@ from typing import List
 
 from pydantic import BaseModel, constr
 
-from huoguoml.schemas.run import Run
+from huoguoml.schema.run import Run
 
 
 class ExperimentIn(BaseModel):

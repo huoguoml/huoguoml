@@ -2,8 +2,8 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException
 
-from huoguoml.schemas.experiment import Experiment, ExperimentIn
-from huoguoml.schemas.run import Run
+from huoguoml.schema.experiment import Experiment, ExperimentIn
+from huoguoml.schema.run import Run
 from huoguoml.server.db.service import Service
 
 

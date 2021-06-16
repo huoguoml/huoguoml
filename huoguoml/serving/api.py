@@ -1,3 +1,4 @@
+import importlib
 import os
 import shutil
 
@@ -5,12 +6,18 @@ import requests
 from fastapi import APIRouter
 
 from huoguoml.constants import HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_FOLDER
-from huoguoml.schemas.ml_service import MLServiceIn, MLService
-from huoguoml.schemas.run import Run
-from huoguoml.tracking import load_run_model
+from huoguoml.schema.ml_service import MLServiceIn, MLService
+from huoguoml.schema.run import Run
 from huoguoml.util.string import concat_uri
 from huoguoml.util.yaml import read_yaml
 from huoguoml.util.zip import download_and_extract_run_files
+
+
+def load_run_model(run: Run):
+    module_name = 'huoguoml.tracking.{}'.format(run.model_definition.model_api.module)
+    module = importlib.import_module(module_name)
+    function = getattr(module, run.model_definition.model_api.name)
+    return function(**run.model_definition.model_api.arguments)
 
 
 class HuoguoMLRouter(object):
@@ -48,8 +55,8 @@ class HuoguoMLRouter(object):
         self.ml_service = ml_service
 
         source_dir = os.getcwd()
-        model_url = concat_uri(self.server_uri, "api", "models", "files", ml_service.model_name,
-                               ml_service.model_version)
+        model_url = concat_uri(self.server_uri, "api", "models", ml_service.model_name,
+                               ml_service.model_version, "files")
         model_dir = os.path.join(HUOGUOML_DEFAULT_FOLDER)
 
         if os.path.isdir(model_dir):

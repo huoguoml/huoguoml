@@ -5,7 +5,7 @@ import os
 from typing import List, Tuple
 
 from huoguoml.constants import HUOGUOML_DEFAULT_REQUIREMENTS, HUOGUOML_DEFAULT_MODEL_FOLDER
-from huoguoml.schemas.run import ModelNode, ModelDefinition, ModelAPI, ModelGraph
+from huoguoml.schema.run import ModelNode, ModelDefinition, ModelAPI, ModelGraph
 
 
 def get_requirements() -> List[str]:
@@ -94,7 +94,6 @@ def log_model(
     return model_definition, model_files
 
 
-# TODO: Refactor code, Update TFModel
 def load_model(tf_saved_model_dir: str, tf_meta_graph_tags: str, tf_signature_def_key: str):
     saved_model = _load_saved_model(tf_saved_model_dir=tf_saved_model_dir,
                                     tf_meta_graph_tags=tf_meta_graph_tags,

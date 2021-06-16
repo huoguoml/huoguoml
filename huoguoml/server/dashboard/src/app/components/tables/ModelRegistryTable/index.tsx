@@ -3,6 +3,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MLModelRegistryInterface } from '../../../../types';
 import { Table } from 'antd';
+import { timestampToDate } from 'utils/time';
 
 interface Props {
   registry: MLModelRegistryInterface[];
@@ -91,6 +92,20 @@ export const ModelRegistryTable = memo((props: Props) => {
           >
             {ml_models.find(ml_model => ml_model.tag === 1)?.version}
           </a>
+        </>
+      ),
+    },
+    {
+      title: 'Last Modification',
+      dataIndex: 'ml_models',
+      key: 'last_modification',
+      render: ml_models => (
+        <>
+          <div>
+            {timestampToDate(
+              ml_models[ml_models.length - 1]?.last_modification,
+            )}
+          </div>
         </>
       ),
     },

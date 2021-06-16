@@ -4,7 +4,7 @@
 
 import { lazyLoad } from 'utils/loadable';
 
-export const DashboardPage = lazyLoad(
+export const ModelComparePage = lazyLoad(
   () => import('./index'),
-  module => module.DashboardPage,
+  module => module.ModelComparePage,
 );

@@ -4,9 +4,7 @@ import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { modelsPageSaga } from './saga';
 import { ModelsPageState } from './types';
 
-export const initialState: ModelsPageState = {
-  ml_models: [],
-};
+export const initialState: ModelsPageState = {};
 
 const slice = createSlice({
   name: 'modelsPage',

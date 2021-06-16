@@ -45,6 +45,8 @@ export const ServiceTable = memo((props: Props) => {
     {
       title: 'Model',
       key: 'model',
+      sorter: (a, b) => a.service.version.localeCompare(b.service.version),
+
       render: service => (
         <>
           <a
@@ -54,7 +56,7 @@ export const ServiceTable = memo((props: Props) => {
                 `/models/${service.model_name}/${service.model_version}`,
               )
             }
-          >{`${service.model_name}, ${service.model_version}`}</a>
+          >{`${service.model_name}: ${service.model_version}`}</a>
         </>
       ),
     },

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
+import { ContentCardsLayout } from '../../layout/ContentCardsLayout/Loadable';
 import { useDispatch, useSelector } from 'react-redux';
 import { useModelRegistryPageSlice } from './slice';
 import { selectModelPageState } from './slice/selectors';
@@ -25,16 +25,16 @@ export function ModelRegistryPage() {
   }
   return (
     <>
-      <ContentCardLayout contentUri={['models']} skip={-1}>
-        <Title level={2}>Models</Title>
+      <ContentCardsLayout contentUri={['models']}>
+        <Title level={1}>Models</Title>
         <>
-          <Title level={3}>Available models</Title>
+          <Title level={2}>Available models</Title>
           <ModelRegistryTable
             registry={modelPageState.ml_registry}
             onClick={toModelPage}
           />
         </>
-      </ContentCardLayout>
+      </ContentCardsLayout>
     </>
   );
 }

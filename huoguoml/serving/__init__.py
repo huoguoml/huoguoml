@@ -2,14 +2,14 @@ import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from huoguoml.schemas.ml_service import MLServiceIn
-from huoguoml.service.api import HuoguoMLRouter
+from huoguoml.schema.ml_service import MLServiceIn
+from huoguoml.serving.api import HuoguoMLRouter
 from huoguoml.util.string import coerce_url
 
 
 def start_huoguoml_service(host: str, port: int, model_name: str, model_rule: str, server_uri: str, artifact_dir: str):
     """
-    Starts the HuoguoML service
+    Starts the HuoguoML serving
 
     Args:
         server_uri: The URI to the HuoguoML server
@@ -33,12 +33,17 @@ def start_huoguoml_service(host: str, port: int, model_name: str, model_rule: st
     router = HuoguoMLRouter(ml_service_in=ml_service_in, server_uri=coerce_url(server_uri),
                             artifact_dir=artifact_dir).router
     app.include_router(router)
+
+    @app.get("/")
+    async def ok():
+        return
+
     uvicorn.run(app, host=host, port=port)
 
 
 if __name__ == '__main__':
     start_huoguoml_service(host="127.0.0.1", port=5000,
                            server_uri="http://localhost:8080",
-                           model_name="test",
+                           model_name="mnist",
                            model_rule="latest",
                            artifact_dir="../../examples/huoguoml_service")
