@@ -8,10 +8,6 @@ description: Guide for managing your machine learning models
 
 After experimenting, you want to select a model and make it accessible for further use. For this you can use the HuoguoML Model Registry, which is the central repository for all your models.
 
-## Requirements
-
-* Logged experiments with model files
-
 ## Register Model
 
 Open the HuoguoML dashboard and go to an experiment run. In the upper right corner you will see a register button if the model experiment has logged model files \(for logging model files see [HuoguoML Tracking API](huoguoml-tracking-api.md#track-model-files)\). Click the button and enter the name of your registry or select the name of an existing registry:
