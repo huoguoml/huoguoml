@@ -78,5 +78,5 @@ Also, all questions are welcomed.
 
 ## License
 
-By contributing to the Open Sauced project, you agree that your contributions will be licensed
+By contributing to the HuoguoML project, you agree that your contributions will be licensed
 under its [Apache 2.0](LICENSE).

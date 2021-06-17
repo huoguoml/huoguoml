@@ -1,18 +1,27 @@
-# Summary
+# Table of contents
 
-- [Quick Start](quick-start.md)
+* [Welcome to HuoguoML!](README.md)
 
-## HuoguoML Basics
+## HuoguoML Concepts
 
-- [Introduction to HuoguoML](basics/introduction.md)
-- [HuoguoML Components](basics/components.md)
-- [HuoguoML Model Registry](basics/components.md)
-- [HuoguoML Service](basics/service.md)
+* [HuoguoML Architecture](huoguoml-concepts/huoguoml-architecture.md)
 
-## HuoguoML Examples
+## HuoguoML Hello World <a id="huoguoml-basics"></a>
 
-- [MNIST with Tensorflow 2.X](examples/mnist.md)
+* [HuoguoML Tracking API](huoguoml-basics/huoguoml-tracking-api.md)
+* [HuoguoML Model Registry](huoguoml-basics/huoguoml-model-registry.md)
+* [HuoguoML Serving](huoguoml-basics/huoguoml-serving.md)
+* [Monitor HuoguoML Serving Service](huoguoml-basics/monitor-huoguoml-serving-service.md)
 
-## Misc
+## HuoguoML Recommendations <a id="recommendation"></a>
 
-- [FAQ](misc/faq.md)
+* [Naming Convention](recommendation/naming-convention.md)
+* [ML-Workflow](recommendation/ml-workflow.md)
+
+## HuoguoML Server Deployment <a id="deploy-huoguoml-server"></a>
+
+* [Docker](deploy-huoguoml-server/docker.md)
+* [Amazon Web Services](deploy-huoguoml-server/amazon-web-services.md)
+* [Heroku](deploy-huoguoml-server/heroku.md)
+* [Google Cloud](deploy-huoguoml-server/google-cloud.md)
+
