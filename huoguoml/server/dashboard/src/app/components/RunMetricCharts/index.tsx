@@ -5,22 +5,17 @@ import { RunInterface } from '../../../types';
 import { Checkbox, Col, Divider, Popover, Row, Typography } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import Chart from 'react-apexcharts';
+import { capitalize, getUniqueKeys } from '../../../utils';
 
 interface Props {
   runs: RunInterface[];
 }
 
-const getUniqueKeys = (runs: RunInterface[], field_name: string): string[] => {
-  const record_keys = runs.flatMap(run =>
-    run.metrics ? Object.keys(run[field_name]) : undefined,
-  );
-  // @ts-ignore
-  return Array.from(new Set(record_keys)).filter(x => x);
-};
-
 export const RunMetricCharts = memo((props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { t, i18n } = useTranslation();
+  const CheckboxGroup = Checkbox.Group;
+  const { Title } = Typography;
 
   const metrics = getUniqueKeys(props.runs, 'metrics');
 
@@ -39,7 +34,6 @@ export const RunMetricCharts = memo((props: Props) => {
     setIndeterminate(false);
     setCheckAll(e.target.checked);
   };
-  const CheckboxGroup = Checkbox.Group;
 
   const menu = (
     <>
@@ -51,9 +45,9 @@ export const RunMetricCharts = memo((props: Props) => {
         Check all
       </Checkbox>
       <Divider />
-      <p>Metric Display:</p>
+      <p>Display:</p>
       <CheckboxGroup
-        options={metrics}
+        options={metrics.map(metric => capitalize(metric))}
         value={checkedList}
         onChange={onChange}
       />
@@ -89,23 +83,24 @@ export const RunMetricCharts = memo((props: Props) => {
             },
           },
         },
-        yaxis: {
-          tickAmount: 7,
-        },
         title: {
-          text: metric,
+          text: capitalize(metric),
         },
       },
     };
   });
-  const { Title } = Typography;
-
   return (
     <>
-      <Title level={4}>Metric Charts</Title>
-      <Popover placement="bottomLeft" content={menu} trigger="click">
-        <SettingOutlined />
-      </Popover>
+      <Row justify={'space-between'} align={'top'}>
+        <Col>
+          <Title level={2}>Charts</Title>
+        </Col>
+        <Col>
+          <Popover placement="bottomLeft" content={menu} trigger="click">
+            <SettingOutlined style={{ fontSize: 22 }} />
+          </Popover>
+        </Col>
+      </Row>
       <Row gutter={[8, 8]}>
         <>
           {plotData.map((data, index) => (

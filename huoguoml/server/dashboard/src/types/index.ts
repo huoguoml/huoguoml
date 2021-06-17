@@ -25,8 +25,11 @@ export interface ModelDefinitionInterface {
 export interface RunInterface {
   id: number;
   run_nr: number;
+  description: string;
+  last_modification: number;
   creation_time: number;
   finish_time: number;
+  duration: number;
   author: string;
   status: number;
   experiment_name: string;
@@ -34,7 +37,7 @@ export interface RunInterface {
   parameters?: Record<string, string>;
   metrics?: Record<string, string>;
   tags?: Record<string, string>;
-  ml_model?: MLModelRegistryInterface;
+  ml_model?: MLModelInterface;
 }
 
 export interface ExperimentInterface {
@@ -49,6 +52,8 @@ export interface ServiceInterface {
   host: string;
   port: string;
   model_rule: string;
+  model_version: string;
+  model_name: string;
 }
 
 export interface MLModelRegistryInterface {
@@ -60,6 +65,10 @@ export interface MLModelInterface {
   id: number;
   version: string;
   tag?: number;
+  name: string;
+  run_id: number;
+  creation_time: number;
+  last_modification: number;
 }
 
 export type { RootState };

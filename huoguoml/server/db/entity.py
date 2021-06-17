@@ -2,7 +2,7 @@
 The huoguoml.models module contains the model definition for our ORM mapper SQL Alchemy
 """
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Float, PickleType
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, PickleType, desc
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, validates
 
@@ -17,6 +17,7 @@ class RunORM(Base):
 
     creation_time = Column(Float)
     finish_time = Column(Float)
+    last_modification = Column(Float)
     duration = Column(Float)
 
     status = Column(Integer)
@@ -44,8 +45,9 @@ class ExperimentORM(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     description = Column(String)
+
     name = Column(String, index=True, unique=True, nullable=False)
-    runs = relationship("RunORM", back_populates="experiment")
+    runs = relationship("RunORM", back_populates="experiment", order_by="desc(RunORM.run_nr)")
 
     @validates('name')
     def convert_upper(self, key, value):
@@ -74,6 +76,8 @@ class MLModelORM(Base):
     name = Column(String, index=True)
     version = Column(Integer, index=True)
     tag = Column(Integer)
+    creation_time = Column(Float)
+    last_modification = Column(Float)
 
     run_id = Column(Integer, ForeignKey('runs.id'), unique=True)
     run = relationship("RunORM", back_populates="ml_model")

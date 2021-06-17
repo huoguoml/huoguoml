@@ -4,10 +4,9 @@ The huoguoml.cli module contains code for the HuoguoML CLI
 
 import click
 
-from huoguoml.constants import HUOGUOML_DEFAULT_SERVER_FOLDER, HUOGUOML_DEFAULT_SERVICE_FOLDER, \
-    HUOGUOML_DEFAULT_SERVICE_HOST, HUOGUOML_DEFAULT_SERVICE_PORT
+from huoguoml.constants import HUOGUOML_DEFAULT_SERVICE_HOST, HUOGUOML_DEFAULT_SERVICE_PORT, HUOGUOML_DEFAULT_FOLDER
 from huoguoml.server import start_huoguoml_server
-from huoguoml.service import start_huoguoml_service
+from huoguoml.serving import start_huoguoml_service
 
 
 @click.group()
@@ -15,7 +14,7 @@ from huoguoml.service import start_huoguoml_service
 def cli():
     """
     The HuoguoML CLI. Start the HuoguoML tracking server with 'huoguoml server' or
-    a service with 'huoguoml service'
+    a serving with 'huoguoml serving'
     """
     pass
 
@@ -33,9 +32,9 @@ def cli():
 )
 @click.option(
     "--artifact_dir",
-    default=HUOGUOML_DEFAULT_SERVER_FOLDER,
+    default=HUOGUOML_DEFAULT_FOLDER,
     help="The location of the artifact directory for the HuoguoML server (default: {}).".format(
-        HUOGUOML_DEFAULT_SERVER_FOLDER),
+        HUOGUOML_DEFAULT_FOLDER),
 )
 def server(host: str, port: int, artifact_dir: str):
     """
@@ -76,14 +75,14 @@ def server(host: str, port: int, artifact_dir: str):
 )
 @click.option(
     "--artifact_dir",
-    default=HUOGUOML_DEFAULT_SERVICE_FOLDER,
-    help="The location of the artifact directory for the HuoguoML service (default: {}).".format(
-        HUOGUOML_DEFAULT_SERVICE_FOLDER),
+    default=HUOGUOML_DEFAULT_FOLDER,
+    help="The location of the artifact directory for the HuoguoML serving (default: {}).".format(
+        HUOGUOML_DEFAULT_FOLDER),
 )
 def service(host: str, port: int, server_uri: str, model_name: str, model_rule: str, artifact_dir: str):
     """
-    Run a HuoguoML service.
-    The service listens on http://127.0.0.1:8080 by default, and only
+    Run a HuoguoML serving.
+    The serving listens on http://127.0.0.1:8080 by default, and only
     accept connections from the local machine. To let the server accept
     request from other machines, you will need to pass `--host 0.0.0.0`
     to listen on all network interfaces (or a specific interface address).

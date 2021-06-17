@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from fastapi import APIRouter, HTTPException, UploadFile, File, Query
 
-from huoguoml.schemas.run import RunIn, Run
+from huoguoml.schema.run import RunIn, Run
 from huoguoml.server.db.service import Service
 
 
@@ -49,7 +49,7 @@ class RunRouter(object):
                 raise HTTPException(status_code=404)
             return run
 
-        @router.put("/files/{run_id}")
+        @router.put("/{run_id}/files")
         async def update_or_create_run_files(run_id: int, files: List[UploadFile] = File(...)):
             return service.update_or_create_run_files(run_id=run_id, files=files)
 

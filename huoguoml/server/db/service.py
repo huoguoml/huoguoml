@@ -10,13 +10,14 @@ from fastapi import UploadFile
 
 from huoguoml.constants import HUOGUOML_DATABASE_FILE, HUOGUOML_DEFAULT_ZIP_FOLDER, HUOGUOML_DEFAULT_MODEL_FOLDER, \
     HUOGUOML_METADATA_FILE
-from huoguoml.schemas.experiment import ExperimentIn, Experiment
-from huoguoml.schemas.ml_model import MLModelIn, MLModelRegistry
-from huoguoml.schemas.ml_service import MLService, MLServiceIn
-from huoguoml.schemas.run import Run, RunIn
+from huoguoml.schema.experiment import ExperimentIn, Experiment
+from huoguoml.schema.ml_model import MLModelIn, MLModelRegistry, MLModel
+from huoguoml.schema.ml_service import MLService, MLServiceIn
+from huoguoml.schema.run import Run, RunIn
 from huoguoml.server.db.entity import ExperimentORM, RunORM, MLModelORM, MLServiceORM
 from huoguoml.server.db.repository import Repository
-from huoguoml.util.utils import create_zip_file, save_yaml
+from huoguoml.util.yaml import save_yaml
+from huoguoml.util.zip import create_zip_file
 
 
 class Service(object):
@@ -70,8 +71,12 @@ class Service(object):
         return self.repository.get_ml_services()
 
     def update_run(self, run_id: int, run: Run) -> Optional[RunORM]:
-        return self.repository.update_run(run_id=run_id,
-                                          run=run)
+        run = self.repository.update_run(run_id=run_id,
+                                         run=run)
+        run_dir = os.path.join(self.artifact_dir, run.experiment_name, str(run.run_nr))
+        save_yaml(yaml_path=os.path.join(run_dir, HUOGUOML_METADATA_FILE),
+                  data=Run.from_orm(run).dict())
+        return run
 
     def update_or_create_run_files(self, run_id: int, files: List[UploadFile]) -> bool:
         run_orm = self.repository.get_run(run_id=run_id)
@@ -123,14 +128,27 @@ class Service(object):
         if ml_model:
             run = ml_model.run
             run_dir = os.path.join(self.artifact_dir, run.experiment_name, str(run.run_nr))
-            save_yaml(yaml_path=os.path.join(run_dir, HUOGUOML_METADATA_FILE),
-                      data=Run.from_orm(run).dict())
             zip_file_path = create_zip_file(src_dir=run_dir, dst_dir=self.zip_dir, zip_name=str(run.id))
             return zip_file_path
 
     def get_ml_service(self, service_id: int) -> Optional[MLServiceORM]:
         return self.repository.get_ml_service(service_id=service_id)
 
+    def update_ml_model(self, ml_model_name: str, ml_model_version: str, ml_model: MLModel):
+        return self.repository.update_ml_model(ml_model_name=ml_model_name,
+                                               ml_model_version=ml_model_version,
+                                               ml_model=ml_model)
 
-    def update_ml_services_by_model_name(self, ml_model_name: str) -> List[MLServiceORM]:
-        return self.repository.update_ml_services_by_model_name(ml_model_name=ml_model_name)
+    def update_ml_services_by_model_name(self, ml_model_name: str, ml_model_rule: str) -> List[MLServiceORM]:
+        if ml_model_rule == "latest":
+            return self.repository.update_ml_services_by_latest(ml_model_name=ml_model_name)
+        elif ml_model_rule == "production":
+            return self.repository.update_ml_services_by_production(ml_model_name=ml_model_name)
+        elif ml_model_rule == "staging":
+            return self.repository.update_ml_services_by_staging(ml_model_name=ml_model_name)
+        else:
+            return []
+
+    def get_ml_model(self, ml_model_name: str, ml_model_version: str) -> Optional[MLModelORM]:
+        return self.repository.get_ml_model(ml_model_name=ml_model_name,
+                                            ml_model_version=ml_model_version)

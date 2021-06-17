@@ -4,9 +4,7 @@ import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { modelPageSaga } from './saga';
 import { ModelPageState } from './types';
 
-export const initialState: ModelPageState = {
-  ml_registry: [],
-};
+export const initialState: ModelPageState = {};
 
 const slice = createSlice({
   name: 'modelPage',
@@ -16,7 +14,8 @@ const slice = createSlice({
       state.isLoading = true;
     },
     getModelStateSuccess(state, action: PayloadAction<ModelPageState>) {
-      state.ml_registry = action.payload.ml_registry;
+      state.ml_model = action.payload.ml_model;
+      state.run = action.payload.run;
       state.isLoading = false;
     },
     getModelStateFailure(state, action: PayloadAction<string>) {

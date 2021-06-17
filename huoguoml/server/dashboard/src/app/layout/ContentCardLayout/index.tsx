@@ -4,9 +4,9 @@ import { Breadcrumb } from 'antd';
 import { useHistory } from 'react-router-dom';
 
 interface Props {
-  children: React.ReactNode[];
+  children: React.ReactNode;
   contentUri: string[];
-  skip?: number;
+  skipUri?: string[];
 }
 
 export const ContentCardLayout = memo((props: Props) => {
@@ -16,17 +16,16 @@ export const ContentCardLayout = memo((props: Props) => {
     history.push(uri);
   }
 
-  const skip = props.skip ? props.skip : 0;
   return (
     <>
       <div style={{ margin: '16px 16px' }}>
         <Breadcrumb>
           {props.contentUri.map((uri, index) => (
             <Breadcrumb.Item key={`${uri}_${index}`}>
-              {index <= skip && uri}
-              {index > skip && (
+              {props.skipUri && props.skipUri.find(skip => skip === uri) ? (
+                uri
+              ) : (
                 <a
-                  href={`#${uri}`}
                   onClick={() =>
                     toPage('/' + props.contentUri.slice(0, index + 1).join('/'))
                   }
@@ -38,11 +37,9 @@ export const ContentCardLayout = memo((props: Props) => {
           ))}
         </Breadcrumb>
       </div>
-      {props.children.map((child, index) => (
-        <div key={`content_card_${index}`} className="site-layout-card">
-          {child}
-        </div>
-      ))}
+      <div key={`content_card`} className="site-layout-card">
+        {props.children}
+      </div>
     </>
   );
 });

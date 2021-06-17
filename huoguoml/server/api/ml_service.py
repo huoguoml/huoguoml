@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, HTTPException, Request
 
-from huoguoml.schemas.ml_service import MLService, MLServiceIn
+from huoguoml.schema.ml_service import MLService, MLServiceIn
 from huoguoml.server.db.service import Service
 
 

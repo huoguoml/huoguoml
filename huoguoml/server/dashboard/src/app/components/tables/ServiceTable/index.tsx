@@ -6,6 +6,7 @@ import { Table } from 'antd';
 
 interface Props {
   services?: ServiceInterface[];
+  onClick?: (uri: string) => void;
 }
 
 export const ServiceTable = memo((props: Props) => {
@@ -40,6 +41,24 @@ export const ServiceTable = memo((props: Props) => {
       dataIndex: 'model_rule',
       key: 'model_rule',
       sorter: (a, b) => a.model_rule.localeCompare(b.model_rule),
+    },
+    {
+      title: 'Model',
+      key: 'model',
+      sorter: (a, b) => a.service.version.localeCompare(b.service.version),
+
+      render: service => (
+        <>
+          <a
+            onClick={() =>
+              props.onClick &&
+              props.onClick(
+                `/models/${service.model_name}/${service.model_version}`,
+              )
+            }
+          >{`${service.model_name}: ${service.model_version}`}</a>
+        </>
+      ),
     },
   ];
 

@@ -1,28 +1,26 @@
 import * as React from 'react';
-import { Layout, Menu, Typography } from 'antd';
+import { Layout, Menu } from 'antd';
 import {
   DatabaseOutlined,
   DesktopOutlined,
   ExperimentOutlined,
-  HomeOutlined,
 } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppLayoutSlice } from './slice';
 import { selectAppLayout } from './slice/selectors';
 import { Route, Switch, useHistory } from 'react-router-dom';
-// import { DashboardPage } from '../../pages/DashboardPage/Loadable';
 import { ExperimentPage } from '../../pages/ExperimentPage/Loadable';
 import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 import { ExperimentRunPage } from '../../pages/ExperimentRunPage/Loadable';
 import { ServicesPage } from '../../pages/ServicesPage/Loadable';
 import { HelpPage } from '../../pages/HelpPage/Loadable';
-import { ModelPage } from '../../pages/ModelPage/Loadable';
+import { ModelRegistryPage } from '../../pages/ModelRegistryPage/Loadable';
 import { ExperimentRunComparePage } from '../../pages/ExperimentRunComparePage/Loadable';
-import { ModelDetailPage } from '../../pages/ModelDetailPage/Loadable';
+import { ModelsPage } from '../../pages/ModelsPage/Loadable';
+import { ModelPage } from '../../pages/ModelPage/Loadable';
+import { ModelComparePage } from '../../pages/ModelComparePage/Loadable';
 
 export const AppLayout = React.memo(() => {
-  const { Title } = Typography;
-
   const dispatch = useDispatch();
   const { actions } = useAppLayoutSlice();
 
@@ -54,13 +52,6 @@ export const AppLayout = React.memo(() => {
     history.push('/services');
   }
 
-  // function toRunPage() {
-  //   history.push('/runs');
-  // }
-
-  // function toHelpPage() {
-  //   history.push('/help');
-  // }
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
@@ -76,26 +67,10 @@ export const AppLayout = React.memo(() => {
             left: 0,
           }}
         >
-          <div className="logo">
-            <Title style={{ color: 'white', textAlign: 'center' }} level={3}>
-              {collapsed ? '🍲' : '🍲 HuoguoML'}
-            </Title>
-          </div>
+          <a onClick={toDashboardPage}>
+            <p className={'logo'}>{collapsed ? '🍲' : '🍲 HuoguoML'}</p>
+          </a>
           <Menu theme="dark" mode="inline">
-            <Menu.Item
-              onClick={toDashboardPage}
-              key="dashboard"
-              icon={<HomeOutlined />}
-            >
-              Dashboard
-            </Menu.Item>
-            {/*            <Menu.Item
-              key="runs"
-              icon={<ExperimentOutlined />}
-              onClick={toRunPage}
-            >
-              Runs
-            </Menu.Item>*/}
             <SubMenu
               key="experiments"
               title="Experiments"
@@ -124,13 +99,6 @@ export const AppLayout = React.memo(() => {
             >
               Services
             </Menu.Item>
-            {/*            <Menu.Item
-              onClick={toHelpPage}
-              key="help"
-              icon={<QuestionOutlined />}
-            >
-              Help
-            </Menu.Item>*/}
           </Menu>
         </Sider>
         <Layout
@@ -141,37 +109,38 @@ export const AppLayout = React.memo(() => {
           <Content>
             <Switch>
               <Route exact path="/" component={HelpPage} />
-              {/*              <Route exact path="/runs" component={RunPage} />
-              <Route path="/runs/compare" component={ExperimentRunComparePage} />
-              <Route exact path="/runs/:runId" component={ExperimentRunPage} />*/}
               <Route
                 exact
                 path="/experiments/:experimentName"
                 component={ExperimentPage}
               />
               <Route
-                path="/experiments/:experimentName/compare"
-                component={ExperimentRunComparePage}
-              />
-              <Route
                 exact
                 path="/experiments/:experimentName/:runNr"
                 component={ExperimentRunPage}
               />
-              <Route exact path="/models" component={ModelPage} />
               <Route
                 exact
-                path="/models/:mlModelName"
-                component={ModelDetailPage}
+                path="/experiments/:experimentName/compare/:runNrs"
+                component={ExperimentRunComparePage}
+              />
+              <Route exact path="/models" component={ModelRegistryPage} />
+              <Route
+                exact
+                path="/models/:mlModelName/compare/:baseModelVersion...:baseModelStage"
+                component={ModelComparePage}
+              />
+              <Route exact path="/models/:mlModelName" component={ModelsPage} />
+              <Route
+                exact
+                path="/models/:mlModelName/:mlModelVersion"
+                component={ModelPage}
               />
               <Route exact path="/services" component={ServicesPage} />
-              {/*<Route exact path="/help" component={HelpPage} />*/}
               <Route component={NotFoundPage} />
             </Switch>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
-            HuoguoML - Made by Data Scientist for Data Scientist
-          </Footer>
+          <Footer style={{ textAlign: 'center' }}>©2020 HuoguoML</Footer>
         </Layout>
       </Layout>
     </>

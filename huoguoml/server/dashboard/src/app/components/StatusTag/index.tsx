@@ -8,7 +8,7 @@ import {
 } from '@ant-design/icons';
 
 interface Props {
-  status_code: number;
+  status_code: number | undefined;
 }
 
 export const StatusTag = memo((props: Props) => {

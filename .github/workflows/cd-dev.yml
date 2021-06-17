@@ -1,4 +1,4 @@
-name: CD dev version
+name: CD Pipeline - Development
 
 on:
   push:

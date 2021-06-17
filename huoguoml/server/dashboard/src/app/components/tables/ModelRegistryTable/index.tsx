@@ -3,6 +3,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MLModelRegistryInterface } from '../../../../types';
 import { Table } from 'antd';
+import { timestampToDate } from 'utils/time';
 
 interface Props {
   registry: MLModelRegistryInterface[];
@@ -22,10 +23,7 @@ export const ModelRegistryTable = memo((props: Props) => {
       fixed: 'left',
       render: modelName => (
         <>
-          <a
-            href={`#${modelName}`}
-            onClick={() => props.onClick && props.onClick(modelName)}
-          >
+          <a onClick={() => props.onClick && props.onClick(`${modelName}`)}>
             {modelName}
           </a>
         </>
@@ -38,7 +36,22 @@ export const ModelRegistryTable = memo((props: Props) => {
       title: 'Latest Model',
       dataIndex: 'ml_models',
       key: 'lasted_ml_models',
-      render: ml_models => <>{ml_models[ml_models.length - 1]?.version}</>,
+      render: ml_models => (
+        <>
+          <a
+            onClick={() =>
+              props.onClick &&
+              props.onClick(
+                `${ml_models[ml_models.length - 1]?.name}/${
+                  ml_models[ml_models.length - 1]?.version
+                }`,
+              )
+            }
+          >
+            {ml_models[ml_models.length - 1]?.version}
+          </a>
+        </>
+      ),
     },
     {
       title: 'Staging Model',
@@ -46,7 +59,18 @@ export const ModelRegistryTable = memo((props: Props) => {
       key: 'staged_ml_models',
       render: ml_models => (
         <>
-          <div>{ml_models.find(ml_model => ml_model.tag === 0)?.version}</div>
+          <a
+            onClick={() =>
+              props.onClick &&
+              props.onClick(
+                `${ml_models.find(ml_model => ml_model.tag === 0)?.name}/${
+                  ml_models.find(ml_model => ml_model.tag === 0)?.version
+                }`,
+              )
+            }
+          >
+            {ml_models.find(ml_model => ml_model.tag === 0)?.version}
+          </a>
         </>
       ),
     },
@@ -56,7 +80,32 @@ export const ModelRegistryTable = memo((props: Props) => {
       key: 'productions_ml_models',
       render: ml_models => (
         <>
-          <div>{ml_models.find(ml_model => ml_model.tag === 1)?.version}</div>
+          <a
+            onClick={() =>
+              props.onClick &&
+              props.onClick(
+                `${ml_models.find(ml_model => ml_model.tag === 1)?.name}/${
+                  ml_models.find(ml_model => ml_model.tag === 1)?.version
+                }`,
+              )
+            }
+          >
+            {ml_models.find(ml_model => ml_model.tag === 1)?.version}
+          </a>
+        </>
+      ),
+    },
+    {
+      title: 'Last Modification',
+      dataIndex: 'ml_models',
+      key: 'last_modification',
+      render: ml_models => (
+        <>
+          <div>
+            {timestampToDate(
+              ml_models[ml_models.length - 1]?.last_modification,
+            )}
+          </div>
         </>
       ),
     },
