@@ -22,7 +22,7 @@ Feature of HuoguoML Registry is that each registered model has its own unique ve
 
 ![All models within a model registry](../.gitbook/assets/model-detail-view.png)
 
-To transfer a model to another stage, you must go to a model and click the `Change Stage` button:
+To transfer a model to another stage, you must go to a model and click the `Change Stage` button. You will be forwarded to a new page, where you can select the new stage
 
 
 
