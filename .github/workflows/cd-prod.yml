@@ -1,3 +1,4 @@
+  
 name:  CD Pipeline - Production
 
 on:
@@ -35,7 +36,6 @@ jobs:
           VERSION=${RELEASE_VERSION}
           PLACEHOLDER='__version__ = "0.0.1"'
           VERSION_FILE='huoguoml/__init__.py'
-
           grep "$PLACEHOLDER" "$VERSION_FILE"
           sed -i "s/$PLACEHOLDER/__version__ = \"${VERSION}\"/g" "$VERSION_FILE"
       - name: Install python dependencies
@@ -44,6 +44,8 @@ jobs:
           pip install setuptools wheel twine
       - name: Build dashboard files
         working-directory: huoguoml/server/dashboard
+        env:
+          CI: false
         run: |
           yarn install
           yarn run build

@@ -22,7 +22,6 @@ jobs:
           VERSION=$(date +%s)
           PLACEHOLDER='__version__ = "0.0.1"'
           VERSION_FILE='huoguoml/__init__.py'
-
           grep "$PLACEHOLDER" "$VERSION_FILE"
           sed -i "s/$PLACEHOLDER/__version__ = \"${VERSION}\"/g" "$VERSION_FILE"
       - name: Change package name to huoguoml-dev
@@ -30,7 +29,6 @@ jobs:
           PKG_NAME=huoguoml-dev
           PLACEHOLDER='pkg_name = "huoguoml"'
           SETUP_PY='setup.py'
-
           grep "$PLACEHOLDER" "$SETUP_PY"
           sed -i "s/$PLACEHOLDER/pkg_name = \"${PKG_NAME}\"/g" "$SETUP_PY"
       - name: Install python dependencies
@@ -39,6 +37,8 @@ jobs:
           pip install setuptools wheel twine
       - name: Build dashboard files
         working-directory: huoguoml/server/dashboard
+        env:
+          CI: false
         run: |
           yarn install
           yarn build
