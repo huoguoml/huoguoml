@@ -46,7 +46,10 @@ export function ExperimentRunPage() {
   return (
     <>
       {experimentRunPageState.run ? (
-        <ContentCardsLayout contentUri={['experiments', experimentName, runNr]}>
+        <ContentCardsLayout
+          contentUri={['experiments', experimentName, runNr]}
+          skipUri={['experiments']}
+        >
           <>
             <Row justify={'space-between'} align={'top'}>
               <Col>

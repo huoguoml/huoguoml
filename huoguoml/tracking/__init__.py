@@ -17,14 +17,7 @@ class HuoguoMLRun(object):
     def __init__(self,
                  experiment_name: str,
                  server_uri: str):
-        self.server_uri = coerce_url(server_uri)
-
-        try:
-            requests.get(self.server_uri)
-        except:
-            raise ConnectionError(
-                "HuoguoML server is not running on {}. Start server with 'huoguoml server' and try again".format(
-                    server_uri))
+        self.server_uri = server_uri
 
         experiment_api = concat_uri(self.server_uri, "api", "experiments")
         exp_res = requests.get(concat_uri(experiment_api, experiment_name))
@@ -110,4 +103,12 @@ def start_experiment_run(experiment_name: str,
         experiment_name: Name of the experiment under which to create the experiment run
         server_uri: Uri to the HuoguoML server. (default: 127.0.0.1:8080)
     """
+    server_uri = coerce_url(server_uri)
+
+    server_res = requests.get(server_uri)
+    if server_res.status_code >= 400:
+        raise ConnectionError(
+            "HuoguoML server cannot be found on {}. Start server with 'huoguoml server' and or try another server uri".format(
+                server_uri))
+
     return HuoguoMLRun(server_uri=server_uri, experiment_name=experiment_name)

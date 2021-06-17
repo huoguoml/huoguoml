@@ -5,7 +5,7 @@ import { selectModelsPageState } from './slice/selectors';
 import { useHistory, useParams } from 'react-router-dom';
 import { Typography } from 'antd';
 import { ContentCardsLayout } from '../../layout/ContentCardsLayout/Loadable';
-import { ModelsTable } from '../../components/tables/ModelsTage/Loadable';
+import { ModelsTable } from '../../components/tables/ModelsTable/Loadable';
 import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 
 export function ModelsPage() {

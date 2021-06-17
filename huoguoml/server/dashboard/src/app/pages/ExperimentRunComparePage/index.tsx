@@ -24,7 +24,7 @@ export function ExperimentRunComparePage() {
         `?run_nrs=${runNrs}&experiment_name=${experimentName}`,
       ),
     );
-  }, [dispatch, experimentName, actions, search]);
+  }, [dispatch, experimentName, runNrs, actions, search]);
 
   return (
     <>

@@ -252,8 +252,8 @@ class Repository(object):
         ml_model_orm = session.query(MLModelORM).filter_by(name=ml_model_name,
                                                            version=ml_model_version).first()
         if ml_model_orm:
-            if ml_model.tag == MLModelTag.staging.value or ml_model.tag == MLModelTag.production.value:
-                temp = session.query(MLModelORM).filter_by(name=ml_model_name, tag=ml_model.tag).first()
+            temp = session.query(MLModelORM).filter_by(name=ml_model_name, tag=ml_model.tag).first()
+            if temp and (ml_model.tag == MLModelTag.staging.value or ml_model.tag == MLModelTag.production.value):
                 temp.tag = MLModelTag.none.value
 
             for field, field_value in ml_model.dict(exclude={"id", "run_id", "version", "name"}).items():

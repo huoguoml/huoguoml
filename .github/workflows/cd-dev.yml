@@ -39,6 +39,8 @@ jobs:
           pip install setuptools wheel twine
       - name: Build dashboard files
         working-directory: huoguoml/server/dashboard
+        env:
+          CI: false
         run: |
           yarn install
           yarn build

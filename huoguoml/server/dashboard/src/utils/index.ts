@@ -20,3 +20,13 @@ export const modelTagToString = (tag: number | undefined) => {
     return '';
   }
 };
+
+export const modelTagToNumber = (tag: string) => {
+  if (tag === 'staging') {
+    return 0;
+  } else if (tag === 'production') {
+    return 1;
+  } else {
+    return -1;
+  }
+};

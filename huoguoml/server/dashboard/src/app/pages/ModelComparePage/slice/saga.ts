@@ -24,25 +24,6 @@ function* getBaseModelState(action: PayloadAction<string>) {
   }
 }
 
-function* getCompareModelState(action: PayloadAction<string>) {
-  try {
-    const mlModelResponse = yield axios.get(
-      `${ML_MODEL_URI}/${action.payload}`,
-    );
-    const ml_model: MLModelInterface = mlModelResponse.data;
-    const runResponse = yield axios.get(`${RUN_URI}/${ml_model.run_id}`);
-    const run: RunInterface = runResponse.data;
-    yield put(
-      actions.getCompareModelStateSuccess({
-        compare: ml_model,
-        compare_run: run,
-      }),
-    );
-  } catch (error) {
-    yield put(actions.getCompareModelStateFailure(error.toLocaleString()));
-  }
-}
-
 function* getModelsState(action: PayloadAction<string>) {
   try {
     const mlModelResponse = yield axios.get(
@@ -60,6 +41,5 @@ function* getModelsState(action: PayloadAction<string>) {
 
 export function* modelComparePageSaga() {
   yield takeLatest(actions.getBaseModelState.type, getBaseModelState);
-  yield takeLatest(actions.getCompareModelState.type, getCompareModelState);
   yield takeLatest(actions.getModelsState.type, getModelsState);
 }

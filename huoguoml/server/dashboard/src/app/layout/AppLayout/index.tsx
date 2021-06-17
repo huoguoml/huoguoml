@@ -127,7 +127,7 @@ export const AppLayout = React.memo(() => {
               <Route exact path="/models" component={ModelRegistryPage} />
               <Route
                 exact
-                path="/models/:mlModelName/compare/:baseModel...:compareModel"
+                path="/models/:mlModelName/compare/:baseModelVersion...:baseModelStage"
                 component={ModelComparePage}
               />
               <Route exact path="/models/:mlModelName" component={ModelsPage} />

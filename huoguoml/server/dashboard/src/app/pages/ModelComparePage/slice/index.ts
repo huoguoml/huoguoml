@@ -36,21 +36,6 @@ const slice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     },
-    getCompareModelState(state, action: PayloadAction<string>) {
-      state.isLoading = true;
-    },
-    getCompareModelStateSuccess(
-      state,
-      action: PayloadAction<ModelComparePageState>,
-    ) {
-      state.compare = action.payload.compare;
-      state.compare_run = action.payload.compare_run;
-      state.isLoading = false;
-    },
-    getCompareModelStateFailure(state, action: PayloadAction<string>) {
-      state.error = action.payload;
-      state.isLoading = false;
-    },
   },
 });
 

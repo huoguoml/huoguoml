@@ -22,7 +22,9 @@ export const ContentCardLayout = memo((props: Props) => {
         <Breadcrumb>
           {props.contentUri.map((uri, index) => (
             <Breadcrumb.Item key={`${uri}_${index}`}>
-              {props.skipUri?.indexOf(uri) ? (
+              {props.skipUri && props.skipUri.find(skip => skip === uri) ? (
+                uri
+              ) : (
                 <a
                   onClick={() =>
                     toPage('/' + props.contentUri.slice(0, index + 1).join('/'))
@@ -30,8 +32,6 @@ export const ContentCardLayout = memo((props: Props) => {
                 >
                   {uri}
                 </a>
-              ) : (
-                uri
               )}
             </Breadcrumb.Item>
           ))}
