@@ -1,9 +1,11 @@
 import importlib
 import os
 import shutil
+from typing import List
 
 import requests
 from fastapi import APIRouter
+from pydantic import create_model
 
 from huoguoml.constants import HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_FOLDER
 from huoguoml.schema.ml_service import MLServiceIn, MLService
@@ -21,6 +23,8 @@ def load_run_model(run: Run):
 
 
 class HuoguoMLRouter(object):
+    output_model = None
+    input_model = None
 
     def __init__(self, ml_service_in: MLServiceIn, artifact_dir: str, server_uri: str):
         router = APIRouter(
@@ -40,10 +44,9 @@ class HuoguoMLRouter(object):
         async def update_model(ml_service: MLService):
             self._update(ml_service)
 
-        @router.post("/predict")
-        async def predict(data):
-            if self.model:
-                return self.model.predict(data)
+        @router.post("/predict", response_model=HuoguoMLRouter.output_model)
+        async def predict(data: HuoguoMLRouter.input_model):
+            return self.model.predict(data)
 
         @router.get("/version", response_model=MLService)
         async def version():
@@ -65,6 +68,16 @@ class HuoguoMLRouter(object):
 
         run_dict = read_yaml(os.path.join(model_dir, HUOGUOML_METADATA_FILE))
         run = Run(**run_dict)
+
+        input_model_type = {}
+        for input_name, _ in run.model_definition.model_graph.inputs.items():
+            input_model_type[input_name] = (List, [])
+        HuoguoMLRouter.input_model = create_model('Inputs', **input_model_type)
+
+        output_model_type = {}
+        for output_name, _ in run.model_definition.model_graph.outputs.items():
+            output_model_type[output_name] = (List, [])
+        HuoguoMLRouter.output_model = create_model('Outputs', **output_model_type)
 
         os.chdir(model_dir)
         self.model = load_run_model(run=run)

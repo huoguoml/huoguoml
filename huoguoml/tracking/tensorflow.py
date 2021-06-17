@@ -112,7 +112,10 @@ class TFModel(object):
     def predict(self, data):
         import tensorflow as tf
 
-        data_ten = tf.constant(data)
-        pred = self.saved_model(data_ten)
+        data_dict = data.dict()
+        for key in data_dict.keys():
+            data_dict[key] = tf.constant(data_dict[key])
+
+        pred = self.saved_model(**data_dict)
         pred_dict = {col_name: pred[col_name].numpy().tolist() for col_name in pred.keys()}
         return pred_dict
