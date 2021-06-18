@@ -25,7 +25,6 @@ class Service(object):
     """
 
     def __init__(self, artifact_dir: str):
-        # TODO: Check if absolute path is really necessary
         self.artifact_dir = os.path.realpath(artifact_dir)
         self.zip_dir = os.path.join(self.artifact_dir, HUOGUOML_DEFAULT_ZIP_FOLDER)
 
