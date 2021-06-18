@@ -27,13 +27,16 @@ jobs:
   dashboard-tests:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Set up Node 14
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Install dependencies
+      - name: Install dashboard dependencies
         working-directory: huoguoml/server/dashboard
         run: yarn install
       - name: Build dashboard files
+        env:
+          CI: false
         working-directory: huoguoml/server/dashboard
         run: yarn build
