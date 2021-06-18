@@ -1,6 +1,7 @@
 """
 The huoguoml.cli module contains code for the HuoguoML CLI
 """
+import os
 
 import click
 
@@ -32,9 +33,8 @@ def cli():
 )
 @click.option(
     "--artifact_dir",
-    default=HUOGUOML_DEFAULT_FOLDER,
-    help="The location of the artifact directory for the HuoguoML server (default: {}).".format(
-        HUOGUOML_DEFAULT_FOLDER),
+    default="/",
+    help="The location of the artifact directory for the HuoguoML server (default: /)",
 )
 def server(host: str, port: int, artifact_dir: str):
     """
@@ -44,7 +44,7 @@ def server(host: str, port: int, artifact_dir: str):
     connections from other machines, you will need to pass `--host 0.0.0.0`
     to listen on all network interfaces (or a specific interface address).
     """
-    start_huoguoml_server(artifact_dir=artifact_dir,
+    start_huoguoml_server(artifact_dir=os.path.join(artifact_dir, HUOGUOML_DEFAULT_FOLDER),
                           host=host,
                           port=port)
 
@@ -75,17 +75,16 @@ def server(host: str, port: int, artifact_dir: str):
 )
 @click.option(
     "--artifact_dir",
-    default=HUOGUOML_DEFAULT_FOLDER,
-    help="The location of the artifact directory for the HuoguoML serving (default: {}).".format(
-        HUOGUOML_DEFAULT_FOLDER),
+    default="/",
+    help="The location of the artifact directory for the HuoguoML serving. (default: /)",
 )
-def service(host: str, port: int, server_uri: str, model_name: str, model_rule: str, artifact_dir: str):
+def serving(host: str, port: int, server_uri: str, model_name: str, model_rule: str, artifact_dir: str):
     """
-    Run a HuoguoML serving.
-    The serving listens on http://127.0.0.1:8080 by default, and only
-    accept connections from the local machine. To let the server accept
+    Run a HuoguoML Serving client.
+    The client listens on http://127.0.0.1:8080 by default, and only
+    accept connections from the local machine. To let the client accept
     request from other machines, you will need to pass `--host 0.0.0.0`
     to listen on all network interfaces (or a specific interface address).
     """
     start_huoguoml_service(host=host, port=port, server_uri=server_uri, model_name=model_name,
-                           model_rule=model_rule, artifact_dir=artifact_dir)
+                           model_rule=model_rule, artifact_dir=os.path.join(artifact_dir, HUOGUOML_DEFAULT_FOLDER))
