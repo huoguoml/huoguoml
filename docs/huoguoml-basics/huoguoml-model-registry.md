@@ -26,8 +26,6 @@ To transfer a model to another stage, you must go to a model and click on the `C
 
 ## Access Model Registry
 
-### API
-
 To retrieve the model files, you must create an HTTP GET request. The following API endpoints are available:
 
 **Model files by version:**
