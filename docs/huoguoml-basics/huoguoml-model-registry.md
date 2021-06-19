@@ -30,13 +30,13 @@ To transfer a model to another stage, you must go to a model and click the `Chan
 
 ### API
 
-To retrieve the model files, you can create a GET request to the following uri:
+To retrieve the model files, you can create a GET request to the following URI:
 
 ```python
 SERVER_HOST:SERVER_PORT/api/models/MODEL_NAME/MODEL_VERSION/files
 ```
 
-This will give you a .ZIP file where you have a folder called model where your model files are located. Also, in the root directory you will find `huoguoml_meta`, which is a YAML file with the source run details.
+This will give you a ZIP file where you have a folder called model where your model files are located. Also, in the root directory, you will find `huoguoml_meta`, which is a YAML file with the source run details.
 
 ### 
 
