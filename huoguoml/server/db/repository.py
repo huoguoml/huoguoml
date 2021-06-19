@@ -120,7 +120,7 @@ class Repository(object):
         session = self.Session()
         return session.query(MLModelORM).order_by(MLModelORM.name).all()
 
-    def get_ml_model_by_name(self, ml_model_name) -> List[MLModelORM]:
+    def get_ml_models_by_name(self, ml_model_name) -> List[MLModelORM]:
         session = self.Session()
         return session.query(MLModelORM).filter_by(name=ml_model_name).order_by(desc(MLModelORM.version)).all()
 
@@ -262,3 +262,8 @@ class Repository(object):
             session.refresh(ml_model_orm)
 
         return ml_model_orm
+
+    def get_ml_model_by_tag(self, ml_model_name: str, tag: str) -> Optional[MLModelORM]:
+        session = self.Session()
+        return session.query(MLModelORM).filter_by(name=ml_model_name,
+                                                   tag=MLModelTag[tag.lower()]).first()

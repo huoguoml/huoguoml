@@ -12,7 +12,7 @@ from huoguoml.schema.ml_service import MLServiceIn, MLService
 from huoguoml.schema.run import Run
 from huoguoml.util.string import concat_uri
 from huoguoml.util.yaml import read_yaml
-from huoguoml.util.zip import download_and_extract_run_files
+from huoguoml.util.zip import download_and_extract_zip_file
 
 
 def load_run_model(run: Run):
@@ -59,12 +59,12 @@ class HuoguoMLRouter(object):
 
         source_dir = os.getcwd()
         model_url = concat_uri(self.server_uri, "api", "models", ml_service.model_name,
-                               ml_service.model_version, "files")
-        model_dir = os.path.join(HUOGUOML_DEFAULT_FOLDER)
+                               ml_service.model_version)
+        model_dir = os.path.join(self.artifact_dir, HUOGUOML_DEFAULT_FOLDER, ml_service.model_version)
 
         if os.path.isdir(model_dir):
             shutil.rmtree(model_dir)
-        download_and_extract_run_files(run_uri=model_url, dst_dir=model_dir)
+        download_and_extract_zip_file(zip_uri=model_url, dst_dir=model_dir)
 
         run_dict = read_yaml(os.path.join(model_dir, HUOGUOML_METADATA_FILE))
         run = Run(**run_dict)
