@@ -10,7 +10,7 @@ HuoguoML Serving is an external tool to create a REST service from your register
 
 ## Serving CLI
 
-Creating a service with HuoguoML Serving is very simple. You just need to start the cli with `huoguoml serving` and enter the correct arguments, see below:
+Creating a service with HuoguoML Serving is very simple. You just need to run `huoguoml serving` and enter the correct arguments, see below:
 
 ```text
 Usage: huoguoml serving [OPTIONS]
@@ -25,4 +25,3 @@ Options:
                        Following rules are available: latest, staging,
                        production
 ```
-
