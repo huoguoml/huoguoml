@@ -2,7 +2,7 @@
 The huoguoml.models module contains the model definition for our ORM mapper SQL Alchemy
 """
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Float, PickleType, desc
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, PickleType
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, validates
 
@@ -74,7 +74,7 @@ class MLModelORM(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
-    version = Column(Integer, index=True)
+    version = Column(String, index=True)
     tag = Column(Integer)
     creation_time = Column(Float)
     last_modification = Column(Float)

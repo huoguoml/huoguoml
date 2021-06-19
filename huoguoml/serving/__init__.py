@@ -46,4 +46,4 @@ if __name__ == '__main__':
                            server_uri="http://localhost:8080",
                            model_name="mnist",
                            model_rule="latest",
-                           artifact_dir="../../examples/huoguoml_service")
+                           artifact_dir="../../huoguoml-dev/serving")

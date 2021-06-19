@@ -93,8 +93,8 @@ class Service(object):
                 file_object.write(file.file.read())
         return True
 
-    def get_ml_model_by_name(self, ml_model_name: str) -> List[MLModelORM]:
-        return self.repository.get_ml_model_by_name(ml_model_name=ml_model_name)
+    def get_ml_models_by_name(self, ml_model_name: str) -> List[MLModelORM]:
+        return self.repository.get_ml_models_by_name(ml_model_name=ml_model_name)
 
     def get_ml_models_groupby_name(self) -> List[MLModelRegistry]:
         ml_models_orm = self.repository.get_ml_models()
@@ -151,3 +151,7 @@ class Service(object):
     def get_ml_model(self, ml_model_name: str, ml_model_version: str) -> Optional[MLModelORM]:
         return self.repository.get_ml_model(ml_model_name=ml_model_name,
                                             ml_model_version=ml_model_version)
+
+    def get_ml_model_by_tag(self, ml_model_name: str, tag: str) -> Optional[MLModelORM]:
+        return self.repository.get_ml_model_by_tag(ml_model_name=ml_model_name,
+                                                   tag=tag)

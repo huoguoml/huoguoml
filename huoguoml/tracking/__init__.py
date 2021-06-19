@@ -25,13 +25,13 @@ class HuoguoMLRun(object):
             exp_in = ExperimentIn(name=experiment_name)
             exp_res = requests.post(
                 experiment_api,
-                data=exp_in.json())
+                json=exp_in.dict())
         experiment = Experiment.parse_raw(exp_res.text)
 
         run_in = RunIn(experiment_name=experiment.name, author=getpass.getuser())
         run_res = requests.post(
             concat_uri(self.server_uri, "api", "runs"),
-            data=run_in.json())
+            json=run_in.dict())
 
         self._run = Run.parse_raw(run_res.text)
 
@@ -80,7 +80,7 @@ class HuoguoMLRun(object):
 
         requests.put(
             api,
-            data=self._run.json())
+            json=self._run.dict())
 
     def __enter__(self):
         return self

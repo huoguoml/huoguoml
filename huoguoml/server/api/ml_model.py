@@ -1,7 +1,7 @@
-from typing import List
+from typing import List, Optional
 
 import requests
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request, Query
 from starlette.background import BackgroundTasks
 from starlette.responses import FileResponse
 
@@ -58,29 +58,44 @@ class MLModelRouter(object):
                 raise HTTPException(status_code=400)
             return ml_model
 
-        @router.get("/{ml_model_name}", response_model=List[MLModel])
-        async def get_ml_models(ml_model_name: str):
-            ml_model = service.get_ml_model_by_name(ml_model_name=ml_model_name)
-            if not ml_model:
-                raise HTTPException(status_code=404)
-            return ml_model
-
-        @router.get("/{ml_model_name}/{ml_model_version}", response_model=MLModel)
-        async def get_ml_model(ml_model_name: str, ml_model_version: str):
-            ml_model = service.get_ml_model(ml_model_name=ml_model_name,
+        @router.get("/{ml_model_name}/{ml_model_version}", response_model=MLModel, responses={
+            200: {
+                "content": {"application/zip": {}},
+                "description": "Return the model as json or models files as zip",
+            }
+        })
+        async def get_ml_model_by_version(ml_model_name: str, ml_model_version: str, request: Request):
+            response = service.get_ml_model(ml_model_name=ml_model_name,
                                             ml_model_version=ml_model_version)
-            if not ml_model:
+            if not response:
                 raise HTTPException(status_code=404)
 
-            return ml_model
+            if request.headers.get('accept', "") == "application/zip":
+                file_path = service.get_ml_model_files_by_name_and_version(ml_model_name=response.name,
+                                                                           ml_model_version=response.version)
+                response = FileResponse(file_path, media_type='application/zip')
+            return response
 
-        @router.get("/{ml_model_name}/{ml_model_version}/files")
-        async def get_ml_model_files(ml_model_name: str, ml_model_version: str):
-            file_path = service.get_ml_model_files_by_name_and_version(ml_model_name=ml_model_name,
-                                                                       ml_model_version=ml_model_version)
-            if not file_path:
-                raise HTTPException(status_code=404)
+        @router.get("/{ml_model_name}", response_model=MLModel)
+        async def get_ml_model(ml_model_name: str,
+                               tag: Optional[str] = Query(None,
+                                                          description="Model tag as string (available: "
+                                                                      "production, staging"),
+                               ):
+            if tag is not None:
+                ml_model = service.get_ml_model_by_tag(ml_model_name=ml_model_name,
+                                                       tag=tag)
+                if not ml_model:
+                    raise HTTPException(status_code=404)
+                file_path = service.get_ml_model_files_by_name_and_version(ml_model_name=ml_model.name,
+                                                                           ml_model_version=ml_model.version)
 
-            return FileResponse(file_path, media_type='application/zip')
+                return FileResponse(file_path, media_type='application/zip')
+
+            else:
+                ml_models = service.get_ml_models_by_name(ml_model_name=ml_model_name)
+                if not ml_models:
+                    raise HTTPException(status_code=404)
+                return ml_models
 
         self.router = router

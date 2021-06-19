@@ -50,4 +50,4 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
 
 
 if __name__ == '__main__':
-    start_huoguoml_server("../../examples/huoguoml", "127.0.0.1", 8080)
+    start_huoguoml_server("../../huoguoml-dev", "127.0.0.1", 8080)
