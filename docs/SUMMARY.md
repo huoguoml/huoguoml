@@ -2,10 +2,6 @@
 
 * [Welcome to HuoguoML!](README.md)
 
-## HuoguoML Concepts
-
-* [HuoguoML Architecture](huoguoml-concepts/huoguoml-architecture.md)
-
 ## HuoguoML Hello World <a id="huoguoml-basics"></a>
 
 * [HuoguoML Tracking API](huoguoml-basics/huoguoml-tracking-api.md)
