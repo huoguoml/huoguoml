@@ -41,4 +41,3 @@ SERVER_HOST:SERVER_PORT/api/models/MODEL_NAME?tag=production
 ```
 
 This will give you a ZIP file where you have a folder called model where your model files are located. Also, in the root directory, you will find `huoguoml_meta`, which is a YAML file with the source run details.
-
