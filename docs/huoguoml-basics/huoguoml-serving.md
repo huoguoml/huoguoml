@@ -25,3 +25,4 @@ Options:
                        Following rules are available: latest, staging,
                        production
 ```
+

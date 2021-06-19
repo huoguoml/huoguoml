@@ -26,18 +26,23 @@ To transfer a model to another stage, you must go to a model and click on the `C
 
 ## Access Model Registry
 
-To retrieve the model files, you must create an HTTP GET request. The following API endpoints are available:
+The model files can be retrieved using HTTP GET requests. Below are examples that show the available API endpoints.
 
 **Model files by version:**
 
 ```python
-SERVER_HOST:SERVER_PORT/api/models/MODEL_NAME/MODEL_VERSION/files
+curl -X 'GET' \
+  'http://SERVER_HOST:SERVER_PORT/api/models/MODEL_NAME/MODEL_VERSION' \
+  -H 'accept: application/zip'
 ```
 
-**Model files by tag \(production, staging or latest\):**
+**Model files by tag \(production or staging\):**
 
 ```python
-SERVER_HOST:SERVER_PORT/api/models/MODEL_NAME?tag=production
+curl -X 'GET' \
+  'http://SERVER_HOST:SERVER_PORT/api/models/MODEL_NAME?tag=TAG' \
+  -H 'accept: application/zip'
 ```
 
-This will give you a ZIP file where you have a folder called model where your model files are located. Also, in the root directory, you will find `huoguoml_meta`, which is a YAML file with the source run details.
+For all endpoints, you will receive a ZIP file containing the logged files under the `model` directory. In the root directory you will find `huoguoml_meta`, which is a YAML file with the details of the source run.
+
