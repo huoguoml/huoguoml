@@ -10,7 +10,10 @@ from huoguoml.server.api.experiment import ExperimentRouter
 from huoguoml.server.api.ml_model import MLModelRouter
 from huoguoml.server.api.ml_service import MLServiceRouter
 from huoguoml.server.api.run import RunRouter
-from huoguoml.server.db.service import Service
+from huoguoml.server.service.experiment import ExperimentService
+from huoguoml.server.service.ml_model import MLModelService
+from huoguoml.server.service.ml_service import MLServiceService
+from huoguoml.server.service.run import RunService
 
 
 def start_huoguoml_server(artifact_dir: str, host: str, port: int):
@@ -22,7 +25,6 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
         host: The network address to listen on
         port: The port to listen on
     """
-    service = Service(artifact_dir=artifact_dir)
 
     app = FastAPI()
 
@@ -34,10 +36,10 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
         allow_headers=["*"],
     )
 
-    app.include_router(ExperimentRouter(service=service).router)
-    app.include_router(RunRouter(service=service).router)
-    app.include_router(MLServiceRouter(service=service).router)
-    app.include_router(MLModelRouter(service=service).router)
+    app.include_router(ExperimentRouter(service=ExperimentService(artifact_dir=artifact_dir)))
+    app.include_router(RunRouter(service=RunService(artifact_dir=artifact_dir)))
+    app.include_router(MLServiceRouter(service=MLServiceService(artifact_dir=artifact_dir)))
+    app.include_router(MLModelRouter(service=MLModelService(artifact_dir=artifact_dir)))
 
     dashboard_files_dir = os.path.join(os.path.dirname(__file__),
                                        "dashboard",
@@ -64,4 +66,4 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
 
 
 if __name__ == '__main__':
-    start_huoguoml_server("../../huoguoml-dev", "127.0.0.1", 8060)
+    start_huoguoml_server("../../huoguoml-dev", "127.0.0.1", 8080)
