@@ -1,6 +1,5 @@
-export const BACKEND_API: string = process.env
-  .REACT_APP_HUOGUOML_SERVER_BACKEND_API
-  ? process.env.REACT_APP_HUOGUOML_SERVER_BACKEND_API
+export const BACKEND_API: string = window['HUOGUOML_API_URL']
+  ? window['HUOGUOML_API_URL']
   : 'http://localhost:8080';
 
 export const EXPERIMENT_URI: string = BACKEND_API + '/api/experiments';

@@ -1,5 +1,4 @@
-  
-name:  CD Pipeline - Production
+name: CD Pipeline - Production
 
 on:
   push:
@@ -49,8 +48,7 @@ jobs:
         run: |
           yarn install
           yarn run build
-          cp build/index.html build/404.html
-          cp build/index.html build/405.html
+          mv build/index.html build/index.html.orig
       - name: Build and publish pip package
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
