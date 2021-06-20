@@ -33,7 +33,8 @@ The model files can be retrieved using HTTP GET requests. Below are examples tha
 ```python
 curl -X 'GET' \
   'http://SERVER_HOST:SERVER_PORT/api/models/MODEL_NAME/MODEL_VERSION' \
-  -H 'accept: application/zip'
+  -H 'accept: application/zip' \
+  --output model_files.zip
 ```
 
 **Model files by tag \(production or staging\):**
@@ -41,7 +42,8 @@ curl -X 'GET' \
 ```python
 curl -X 'GET' \
   'http://SERVER_HOST:SERVER_PORT/api/models/MODEL_NAME?tag=TAG' \
-  -H 'accept: application/zip'
+  -H 'accept: application/zip' \
+  --output model_files.zip
 ```
 
 For all endpoints, you will receive a ZIP file containing the logged files under the `model` directory. In the root directory you will find `huoguoml_meta`, which is a YAML file with the details of the source run.
