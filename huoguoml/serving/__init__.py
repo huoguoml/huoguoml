@@ -31,13 +31,9 @@ def start_huoguoml_service(host: str, port: int, model_name: str, model_rule: st
 
     ml_service_in = MLServiceIn(host=host, port=port, model_name=model_name, model_rule=model_rule)
     router = HuoguoMLRouter(ml_service_in=ml_service_in, server_uri=coerce_url(server_uri),
-                            artifact_dir=artifact_dir).router
+                            artifact_dir=artifact_dir, prefix="/api",
+                            )
     app.include_router(router)
-
-    @app.get("/")
-    async def ok():
-        return
-
     uvicorn.run(app, host=host, port=port)
 
 

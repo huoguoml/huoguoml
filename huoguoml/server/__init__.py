@@ -1,4 +1,5 @@
 import os
+import shutil
 
 import uvicorn
 from fastapi import FastAPI
@@ -41,13 +42,26 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
     dashboard_files_dir = os.path.join(os.path.dirname(__file__),
                                        "dashboard",
                                        "build")
+    if os.path.isdir(dashboard_files_dir):
+        shutil.copyfile(os.path.join(dashboard_files_dir, "index.html.orig"),
+                        os.path.join(dashboard_files_dir, "index.html"))
 
-    app.mount("/",
-              StaticFiles(directory=dashboard_files_dir, html=True),
-              name="static")
+        with open(os.path.join(dashboard_files_dir, "index.html")) as f:
+            newIndexFile = f.read().replace('__HUOGUOML_API_URL__', "http://{}:{}".format(host, port))
+
+        with open(os.path.join(dashboard_files_dir, "index.html"), "w") as f:
+            f.write(newIndexFile)
+
+        shutil.copyfile(os.path.join(dashboard_files_dir, "index.html"),
+                        os.path.join(dashboard_files_dir, "404.html"))
+        shutil.copyfile(os.path.join(dashboard_files_dir, "index.html"),
+                        os.path.join(dashboard_files_dir, "405.html"))
+        app.mount("/",
+                  StaticFiles(directory=dashboard_files_dir, html=True),
+                  name="static")
 
     uvicorn.run(app, host=host, port=port)
 
 
 if __name__ == '__main__':
-    start_huoguoml_server("../../huoguoml-dev", "127.0.0.1", 8080)
+    start_huoguoml_server("../../huoguoml-dev", "127.0.0.1", 8060)

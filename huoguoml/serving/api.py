@@ -1,7 +1,7 @@
 import importlib
 import os
 import shutil
-from typing import List
+from typing import List, Any
 
 import requests
 from fastapi import APIRouter
@@ -22,14 +22,12 @@ def load_run_model(run: Run):
     return function(**run.model_definition.model_api.arguments)
 
 
-class HuoguoMLRouter(object):
+class HuoguoMLRouter(APIRouter):
     output_model = None
     input_model = None
 
-    def __init__(self, ml_service_in: MLServiceIn, artifact_dir: str, server_uri: str):
-        router = APIRouter(
-            prefix="/api",
-        )
+    def __init__(self, ml_service_in: MLServiceIn, artifact_dir: str, server_uri: str, **extra: Any):
+        super().__init__(**extra)
 
         register_api = concat_uri(server_uri, "api", "services")
         response = requests.put(register_api, json=ml_service_in.dict())
@@ -40,19 +38,17 @@ class HuoguoMLRouter(object):
         # TODO: Check if register model is available in artifact_dir, otherwise download
         self._update(ml_service=self.ml_service)
 
-        @router.post("/update", response_model=MLService)
+        @self.post("/update", response_model=MLService)
         async def update_model(ml_service: MLService):
             self._update(ml_service)
 
-        @router.post("/predict", response_model=HuoguoMLRouter.output_model)
+        @self.post("/predict", response_model=HuoguoMLRouter.output_model)
         async def predict(data: HuoguoMLRouter.input_model):
             return self.model.predict(data)
 
-        @router.get("/version", response_model=MLService)
+        @self.get("/version", response_model=MLService)
         async def version():
             return self.ml_service
-
-        self.router = router
 
     def _update(self, ml_service: MLService):
         self.ml_service = ml_service
