@@ -1,10 +1,11 @@
+import requests
 import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from huoguoml.schema.ml_service import MLServiceIn
+from huoguoml.schema.ml_service import MLServiceIn, MLService
 from huoguoml.serving.api import HuoguoMLRouter
-from huoguoml.util.string import coerce_url
+from huoguoml.util.string import coerce_url, concat_uri
 
 
 def start_huoguoml_service(host: str, port: int, model_name: str, model_rule: str, server_uri: str, artifact_dir: str):
@@ -29,10 +30,20 @@ def start_huoguoml_service(host: str, port: int, model_name: str, model_rule: st
         allow_headers=["*"],
     )
 
+    server_uri = coerce_url(server_uri)
+
+    server_res = requests.get(server_uri)
+    if server_res.status_code >= 400:
+        raise ConnectionError(
+            "HuoguoML server cannot be found on {}. Start server with 'huoguoml server' and or try another server uri".format(
+                server_uri))
+
     ml_service_in = MLServiceIn(host=host, port=port, model_name=model_name, model_rule=model_rule)
-    router = HuoguoMLRouter(ml_service_in=ml_service_in, server_uri=coerce_url(server_uri),
-                            artifact_dir=artifact_dir, prefix="/api",
-                            )
+    response = requests.post(concat_uri(server_uri, "api", "services"), json=ml_service_in.dict())
+    ml_service = MLService.parse_raw(response.text)
+
+    router = HuoguoMLRouter(ml_service=ml_service, server_uri=server_uri,
+                            artifact_dir=artifact_dir, prefix="/api")
     app.include_router(router)
     uvicorn.run(app, host=host, port=port)
 

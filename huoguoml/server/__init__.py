@@ -42,7 +42,7 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
     app.include_router(MLModelRouter(service=MLModelService(artifact_dir=artifact_dir)))
 
     dashboard_files_dir = os.path.join(os.path.dirname(__file__),
-                                       ".."
+                                       "..",
                                        "dashboard",
                                        "build")
     if os.path.isdir(dashboard_files_dir):
@@ -67,4 +67,4 @@ def start_huoguoml_server(artifact_dir: str, host: str, port: int):
 
 
 if __name__ == '__main__':
-    start_huoguoml_server("../../huoguoml-dev", "127.0.0.1", 8080)
+    start_huoguoml_server("../../huoguoml-dev/server", "127.0.0.1", 8080)

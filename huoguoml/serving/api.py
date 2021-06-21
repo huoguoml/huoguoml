@@ -3,12 +3,11 @@ import os
 import shutil
 from typing import List, Any
 
-import requests
 from fastapi import APIRouter
 from pydantic import create_model
 
 from huoguoml.constants import HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_FOLDER
-from huoguoml.schema.ml_service import MLServiceIn, MLService
+from huoguoml.schema.ml_service import MLService
 from huoguoml.schema.run import Run
 from huoguoml.util.string import concat_uri
 from huoguoml.util.yaml import read_yaml
@@ -26,21 +25,19 @@ class HuoguoMLRouter(APIRouter):
     output_model = None
     input_model = None
 
-    def __init__(self, ml_service_in: MLServiceIn, artifact_dir: str, server_uri: str, **extra: Any):
+    def __init__(self, ml_service: MLService, artifact_dir: str, server_uri: str, **extra: Any):
         super().__init__(**extra)
-
-        register_api = concat_uri(server_uri, "api", "services")
-        response = requests.put(register_api, json=ml_service_in.dict())
-        self.ml_service = MLService.parse_raw(response.text)
         self.artifact_dir = artifact_dir
         self.server_uri = server_uri
+        self.ml_service = ml_service
 
         # TODO: Check if register model is available in artifact_dir, otherwise download
-        self._update(ml_service=self.ml_service)
+        self._update()
 
         @self.post("/update", response_model=MLService)
-        async def update_model(ml_service: MLService):
-            self._update(ml_service)
+        async def update_model(updated_ml_service: MLService):
+            self.ml_service = updated_ml_service
+            self._update()
 
         @self.post("/predict", response_model=HuoguoMLRouter.output_model)
         async def predict(data: HuoguoMLRouter.input_model):
@@ -50,13 +47,11 @@ class HuoguoMLRouter(APIRouter):
         async def version():
             return self.ml_service
 
-    def _update(self, ml_service: MLService):
-        self.ml_service = ml_service
-
+    def _update(self):
         source_dir = os.getcwd()
-        model_url = concat_uri(self.server_uri, "api", "models", ml_service.model_name,
-                               ml_service.model_version)
-        model_dir = os.path.join(self.artifact_dir, HUOGUOML_DEFAULT_FOLDER, ml_service.model_version)
+        model_url = concat_uri(self.server_uri, "api", "models", self.ml_service.model_name,
+                               self.ml_service.model_version)
+        model_dir = os.path.join(self.artifact_dir, HUOGUOML_DEFAULT_FOLDER, self.ml_service.model_version)
 
         if os.path.isdir(model_dir):
             shutil.rmtree(model_dir)

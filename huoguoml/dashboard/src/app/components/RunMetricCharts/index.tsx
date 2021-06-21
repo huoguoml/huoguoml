@@ -47,7 +47,7 @@ export const RunMetricCharts = memo((props: Props) => {
       <Divider />
       <p>Display:</p>
       <CheckboxGroup
-        options={metrics.map(metric => capitalize(metric))}
+        options={metrics}
         value={checkedList}
         onChange={onChange}
       />
@@ -61,8 +61,7 @@ export const RunMetricCharts = memo((props: Props) => {
           name: metric,
           data: props.runs.map(run => [
             run.run_nr,
-            //@ts-ignore
-            run.metrics[metric],
+            run.metrics ? run.metrics[metric] : '',
           ]),
         },
       ],
@@ -83,6 +82,13 @@ export const RunMetricCharts = memo((props: Props) => {
             },
           },
         },
+        yaxis: {
+          labels: {
+            formatter: function (val) {
+              return parseFloat(val).toFixed(4);
+            },
+          },
+        },
         title: {
           text: capitalize(metric),
         },
@@ -97,7 +103,7 @@ export const RunMetricCharts = memo((props: Props) => {
         </Col>
         <Col>
           <Popover placement="bottomLeft" content={menu} trigger="click">
-            <SettingOutlined style={{ fontSize: 22 }} />
+            <SettingOutlined style={{ fontSize: 18 }} />
           </Popover>
         </Col>
       </Row>

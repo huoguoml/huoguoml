@@ -52,13 +52,13 @@ def server(host: str, port: int, artifact_dir: str):
 @cli.command()
 @click.option(
     "--host",
-    default=HUOGUOML_DEFAULT_SERVICE_HOST,
-    help="The network address to listen on (default: {}).".format(HUOGUOML_DEFAULT_SERVICE_HOST),
+    default="127.0.0.1",
+    help="The network address to listen on (default: {127.0.0.1}).",
 )
 @click.option(
     "--port",
-    default=HUOGUOML_DEFAULT_SERVICE_PORT,
-    help="The port to listen on (default: {}).".format(HUOGUOML_DEFAULT_SERVICE_PORT),
+    default=5000,
+    help="The port to listen on (default: 5000).",
 )
 @click.option(
     "--server_uri",
@@ -81,7 +81,7 @@ def server(host: str, port: int, artifact_dir: str):
 def serving(host: str, port: int, server_uri: str, model_name: str, model_rule: str, artifact_dir: str):
     """
     Run a HuoguoML Serving client.
-    The client listens on http://127.0.0.1:8080 by default, and only
+    The client listens on http://127.0.0.1:5000 by default, and only
     accept connections from the local machine. To let the client accept
     request from other machines, you will need to pass `--host 0.0.0.0`
     to listen on all network interfaces (or a specific interface address).
