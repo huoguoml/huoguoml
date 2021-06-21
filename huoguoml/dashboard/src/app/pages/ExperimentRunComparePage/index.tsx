@@ -35,7 +35,6 @@ export function ExperimentRunComparePage() {
         <Title level={1}>
           Comparing {compareRunPageState.runs.length} runs
         </Title>
-
         <RunMetricCharts runs={compareRunPageState.runs} />
         <>
           <Title level={2}>Metrics</Title>
