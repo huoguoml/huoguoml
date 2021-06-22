@@ -36,7 +36,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install setuptools wheel twine
       - name: Build dashboard files
-        working-directory: huoguoml/server/dashboard
+        working-directory: huoguoml/dashboard
         env:
           CI: false
         run: |
