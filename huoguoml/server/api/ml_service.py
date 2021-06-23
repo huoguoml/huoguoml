@@ -15,7 +15,6 @@ class MLServiceRouter(APIRouter):
 
         @self.post("", response_model=MLService)
         async def create_or_update_ml_service(ml_service_in: MLServiceIn, request: Request):
-            ml_service_in.host = request.client.host
             ml_service = service.create_or_update_ml_service(ml_service_in=ml_service_in)
             if not ml_service:
                 raise HTTPException(status_code=400)

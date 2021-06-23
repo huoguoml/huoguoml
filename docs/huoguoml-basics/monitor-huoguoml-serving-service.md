@@ -24,22 +24,35 @@ huoguoml_router = HuoguoMLRouter(host=host,
                                  model_rule=model_rule,
                                  server_uri=server_uri,
                                  artifact_dir=artifact_dir)
+
+# add new endpoints before adding your router to the application                                 
 app.include_router(router)
 ```
 
-This allows you to add middleware and co using FastAPI. Next, you can overwrite the existing prediction endpoint to add some logging functions or save them. If you want to run additional tasks in the background, you can use background tasks:
+This allows you to add middleware and co using FastAPI. You can add another prediction endpoint with a logging functions or run additional tasks in the background with background tasks:
 
 ```python
-from fastapi import BackgroundTasks
+from fastapi import FastAPI, BackgroundTasks
+
+from huoguoml.serving.api import HuoguoMLRouter
+
+app = FastAPI()
+huoguoml_router = HuoguoMLRouter(host=host, 
+                                 port=port, 
+                                 model_name=model_name, 
+                                 model_rule=model_rule,
+                                 server_uri=server_uri,
+                                 artifact_dir=artifact_dir)
 
 def your_background_tasks(argument1, argument2):
     print(argument1)
     print(argument2)
 
-@huoguoml_router.post("/predict", response_model=HuoguoMLRouter.output_model)
+@huoguoml_router.post("/customon/predict", response_model=HuoguoMLRouter.output_model)
 async def predict(data: HuoguoMLRouter.input_model, background_tasks: BackgroundTask):
     prediction = huoguoml_router.model.predict(data)
     background_tasks.add_task(your_background_tasks, argument1="hello", argument2="word")
     return prediction
+    
+app.include_router(router)
 ```
-
