@@ -33,10 +33,10 @@ jobs:
         with:
           node-version: '14'
       - name: Install dashboard dependencies
-        working-directory: huoguoml/server/dashboard
+        working-directory: huoguoml/dashboard
         run: yarn install
       - name: Build dashboard files
         env:
           CI: false
-        working-directory: huoguoml/server/dashboard
+        working-directory: huoguoml/dashboard
         run: yarn build

@@ -36,14 +36,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install setuptools wheel twine
       - name: Build dashboard files
-        working-directory: huoguoml/server/dashboard
+        working-directory: huoguoml/dashboard
         env:
           CI: false
         run: |
           yarn install
           yarn build
-          cp build/index.html build/404.html
-          cp build/index.html build/405.html
+          mv build/index.html build/index.html.orig
       - name: Build and publish pip package
         env:
           TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}

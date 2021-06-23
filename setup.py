@@ -63,7 +63,7 @@ setup(
     url="https://huoguoml.github.io",
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
-    package_data={"huoguoml": package_files(os.path.join("huoguoml", "server", "dashboard", "build"))},
+    package_data={"huoguoml": package_files(os.path.join("huoguoml", "dashboard", "build"))},
     python_requires=">=3.7.*",
     install_requires=list(dependencies["all"]),
     extras_require=dependencies,

@@ -14,11 +14,10 @@
 # 3. Tag order doesn't matter; case-sensitive; duplicated tag will be ignored
 # 4. Tag `all` is reserved for representing all packages
 
-fastapi:                    dev
+fastapi>=0.65:              dev
 aiofiles:                   dev
 uvicorn:                    dev
 python-multipart:           dev
 sqlalchemy:                 dev
 click:                      dev
-pydoc-markdown:             documentation
 pytest:                     test
