@@ -38,7 +38,7 @@ def your_background_tasks(argument1, argument2):
 
 @huoguoml_router.post("/predict", response_model=HuoguoMLRouter.output_model)
 async def predict(data: HuoguoMLRouter.input_model, background_tasks: BackgroundTask):
-    prediction = self.model.predict(data)
+    prediction = huoguoml_router.model.predict(data)
     background_tasks.add_task(your_background_tasks, argument1="hello", argument2="word")
     return prediction
 
