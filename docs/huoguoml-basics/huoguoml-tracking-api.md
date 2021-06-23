@@ -20,7 +20,9 @@ run = huoguoml.start_experiment_run("mnist-15", artifact_dir="./")
 run.end_experiment_run()
 ```
 
-### **Distributed tracking \(HuoguoML Tracking Server must be running\):**
+### **Distributed tracking**
+
+The HuoguoML tracking server must be running on the given uri.
 
 ```python
 import huoguoml
@@ -37,7 +39,7 @@ with huoguoml.start_experiment_run("mnist-15", server_uri="127.0.0.1:8080") as r
     ...
 ```
 
-## Tracking Server
+## Launch Tracking Server
 
 You can launch a HuoguoML tracking server with following command:
 
@@ -49,7 +51,9 @@ All files and logs will be saved in the current directory under the .huoguoml fo
 
 **Note:** If you want to run the tracking server on cloud resources, check the guides under `HuoguoML Server Deployment`.
 
-## Track Parameters, Metrics and Tags
+## Tracking API
+
+### Parameters, Metrics and Tags
 
 When the tracking server is running, you can use our Python API to run a HuoguoML experiment and log your parameters, metrics and tags. For this, you create a HuoguoML experiment run and use the built-in methods to log your parameters:
 
@@ -61,11 +65,11 @@ run.log_metric("accuracy", 92.75)
 run.log_tag("framework", "tensorflow")
 ```
 
-## Track Model Files
+### Model Files
 
 Besides tracking basic metadata, HuoguoML also supports tracking models from the most popular ML frameworks. A list of all supported ML frameworks can be seen below. Keep in mind that HuoguoML is still growing. We will constantly add more ML frameworks.
 
-### Tensorflow 2.X
+#### Tensorflow 2.X
 
 HuoguoML supports the logging of Tensorflow model files in Saved Model format. During logging, the model is validated using TF 2.X methods. Since TF 2.X is not compatible with TF 1.X, the following code does not work with it. There are no plans to support TF 1.X.
 
