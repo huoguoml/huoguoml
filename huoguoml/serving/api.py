@@ -3,13 +3,14 @@ import os
 import shutil
 from typing import List, Any
 
+import requests
 from fastapi import APIRouter
 from pydantic import create_model
 
 from huoguoml.constants import HUOGUOML_METADATA_FILE, HUOGUOML_DEFAULT_FOLDER
-from huoguoml.schema.ml_service import MLService
+from huoguoml.schema.ml_service import MLService, MLServiceIn
 from huoguoml.schema.run import Run
-from huoguoml.util.string import concat_uri
+from huoguoml.util.string import concat_uri, coerce_url
 from huoguoml.util.yaml import read_yaml
 from huoguoml.util.zip import download_and_extract_zip_file
 
@@ -25,13 +26,18 @@ class HuoguoMLRouter(APIRouter):
     output_model = None
     input_model = None
 
-    def __init__(self, ml_service: MLService, artifact_dir: str, server_uri: str, **extra: Any):
-        super().__init__(**extra)
+    def __init__(self, host: str, port: int, model_name: str, model_rule: str, artifact_dir: str, server_uri: str,
+                 prefix: str = "/api",
+                 **extra: Any):
+        super().__init__(**extra, prefix=prefix)
+        server_uri = coerce_url(server_uri)
+
+        ml_service_in = MLServiceIn(host=host, port=port, model_name=model_name, model_rule=model_rule)
+        response = requests.post(concat_uri(server_uri, "api", "services"), json=ml_service_in.dict())
+        self.ml_service = MLService.parse_raw(response.text)
+
         self.artifact_dir = artifact_dir
         self.server_uri = server_uri
-        self.ml_service = ml_service
-
-        # TODO: Check if register model is available in artifact_dir, otherwise download
         self._update()
 
         @self.post("/update", response_model=MLService)
