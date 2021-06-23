@@ -12,6 +12,8 @@ const slice = createSlice({
   reducers: {
     getExperimentRunState(state, action: PayloadAction<string>) {
       state.isLoading = true;
+      state.run = undefined;
+      state.error = undefined;
     },
     getExperimentRunStateSuccess(
       state,
@@ -19,10 +21,12 @@ const slice = createSlice({
     ) {
       state.run = action.payload.run;
       state.isLoading = false;
+      state.error = undefined;
     },
     getExperimentRunStateFailure(state, action: PayloadAction<string>) {
       state.error = action.payload;
       state.isLoading = false;
+      state.run = undefined;
     },
   },
 });

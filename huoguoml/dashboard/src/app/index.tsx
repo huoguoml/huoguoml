@@ -18,12 +18,8 @@ export function App() {
 
   return (
     <BrowserRouter>
-      <Helmet
-        titleTemplate="HuoguoML"
-        defaultTitle="React Boilerplate"
-        htmlAttributes={{ lang: i18n.language }}
-      >
-        <meta name="description" content="A React Boilerplate application" />
+      <Helmet defaultTitle="HuoguoML" htmlAttributes={{ lang: i18n.language }}>
+        <meta name="description" content="HuoguoML" />
       </Helmet>
 
       <AppLayout />

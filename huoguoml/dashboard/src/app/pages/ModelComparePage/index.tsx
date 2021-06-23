@@ -10,6 +10,7 @@ import { modelTagToNumber, modelTagToString } from '../../../utils';
 import { useHistory } from 'react-router';
 import axios from 'axios';
 import { ML_MODEL_URI } from '../../../constants';
+import { Helmet } from 'react-helmet-async';
 
 export function ModelComparePage() {
   const { Option } = Select;
@@ -52,6 +53,10 @@ export function ModelComparePage() {
 
   return (
     <>
+      <Helmet>
+        <title>HuoguoML | Compare models</title>
+        <meta name="description" content="Compare models" />
+      </Helmet>
       <ContentCardsLayout
         contentUri={[
           'models',

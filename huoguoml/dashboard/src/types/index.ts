@@ -28,7 +28,7 @@ export interface RunInterface {
   description: string;
   last_modification: number;
   creation_time: number;
-  finish_time: number;
+  finish_time?: number;
   duration: number;
   author: string;
   status: number;

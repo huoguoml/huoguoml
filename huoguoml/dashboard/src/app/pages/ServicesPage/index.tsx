@@ -6,6 +6,7 @@ import { selectServicesPageState } from './slice/selectors';
 import { ServiceTable } from '../../components/tables/ServiceTable/Loadable';
 import { Typography } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 export function ServicesPage() {
   const dispatch = useDispatch();
@@ -23,6 +24,10 @@ export function ServicesPage() {
   }
   return (
     <>
+      <Helmet>
+        <title>HuoguoML | Services</title>
+        <meta name="description" content="Services" />
+      </Helmet>
       <ContentCardsLayout contentUri={['services']}>
         <Title level={1}>Services</Title>
         <>

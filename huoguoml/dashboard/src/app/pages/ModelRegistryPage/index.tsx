@@ -6,6 +6,7 @@ import { selectModelPageState } from './slice/selectors';
 import { Typography } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { ModelRegistryTable } from '../../components/tables/ModelRegistryTable/Loadable';
+import { Helmet } from 'react-helmet-async';
 
 export function ModelRegistryPage() {
   const { mlModelName } = useParams<Record<string, string>>();
@@ -25,6 +26,10 @@ export function ModelRegistryPage() {
   }
   return (
     <>
+      <Helmet>
+        <title>HuoguoML | Model registry</title>
+        <meta name="description" content="Model registry" />
+      </Helmet>
       <ContentCardsLayout contentUri={['models']}>
         <Title level={1}>Models</Title>
         <>
