@@ -12,7 +12,7 @@ As a data scientist, you work on machine learning problems. Most of the time you
 
 To track your experiment, you need to create an experiment run. When you do this, you specify whether you want to track your metadata locally or send it to a server:
 
-**Local tracking:**
+### **Local tracking**
 
 ```python
 import huoguoml
@@ -20,7 +20,7 @@ run = huoguoml.start_experiment_run("mnist-15", artifact_dir="./")
 run.end_experiment_run()
 ```
 
-**Distributed tracking \(HuoguoML Tracking Server must be running\):**
+### **Distributed tracking \(HuoguoML Tracking Server must be running\):**
 
 ```python
 import huoguoml
@@ -28,7 +28,7 @@ run = huoguoml.start_experiment_run("mnist-15", server_uri="127.0.0.1:8080")
 run.end_experiment_run()
 ```
 
-Furthermore, you can use the Run object as a context manager within a w`ith` block
+**Note:** You can use the Run object as a context manager within a `with` block
 
 ```python
 import huoguoml
