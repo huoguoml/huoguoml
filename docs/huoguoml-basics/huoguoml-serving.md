@@ -33,7 +33,7 @@ All created services are logged on the dashboard. Also, the server notifies the 
 The clients provide an API documentation that is accessible at `SERVICEHOST:SERVICE_PORT/docs`. Generally, there are two main endpoints:
 
 * `GET SERVICE_HOST:SERVICE_PORT/API/version`: Returns the current service information \(model version, model rule, etc.\).
-* `POST SERVICE_HOST:SERVICE_PORT/API/predict`: Returns the prediction for a given input. The input scheme is defined as json, where the key is the input names and the values are the list of values. Keep in mind that the form of the list depends on your network. If your network requires a tensor, you must convert it to a list with the required form.
+* `POST SERVICE_HOST:SERVICE_PORT/API/predict`: Returns the prediction for a given input. The input scheme is defined as json, where the key is the input names and the values are the list of values. Keep in mind that the form of the list depends on your network. If your network requires a tensor, you must convert it to a list with the required shape.
 
 
 
