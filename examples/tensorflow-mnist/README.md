@@ -8,7 +8,7 @@ This example shows how to use HuoguoML to track your experiment metadata using t
 pip install -r requirements.txt
 ```
 
-## Getting Started - Local
+## Local Tracking
 
 Start the training script with different parameters:
 
@@ -25,7 +25,7 @@ huoguoml server --host 127.0.0.1 --port 8080 --artifact_dir .
 Go to `127.0.0.1:8080/experiments/mnist` and see your results. Now you can create a registry and create a REST service with HuoguoML Serving.
 
 
-## Getting Started - Server
+## Distributed Tracking
 
 Start a HuoguoML tracking server on `127.0.0.1:8080` and set the artifact directory to the current directory:
 
