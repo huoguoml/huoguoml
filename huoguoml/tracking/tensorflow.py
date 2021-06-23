@@ -15,7 +15,7 @@ def get_requirements() -> List[str]:
     import tensorflow as tf
 
     requirements = HUOGUOML_DEFAULT_REQUIREMENTS.copy()
-    requirements.append("tensorflow={}".format(tf.__version__))
+    requirements.append("tensorflow=={}".format(tf.__version__))
     return requirements
 
 

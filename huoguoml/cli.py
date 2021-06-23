@@ -34,7 +34,7 @@ def cli():
 @click.option(
     "--artifact_dir",
     default="/",
-    help="The location of the artifact directory for the HuoguoML server (default: /)",
+    help="The location of the .huoguoml artifact directory for the HuoguoML server (default: /)",
 )
 def server(host: str, port: int, artifact_dir: str):
     """
@@ -76,7 +76,7 @@ def server(host: str, port: int, artifact_dir: str):
 @click.option(
     "--artifact_dir",
     default="/",
-    help="The location of the artifact directory for the HuoguoML serving. (default: /)",
+    help="The location of the .huoguoml artifact directory for the HuoguoML serving. (default: /)",
 )
 def serving(host: str, port: int, server_uri: str, model_name: str, model_rule: str, artifact_dir: str):
     """

@@ -13,6 +13,10 @@ import { secondsToTime, timestampToDate } from '../../../utils/time';
 import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 import axios from 'axios';
 import { RUN_URI } from '../../../constants';
+import { MarkdownPreview } from '../../components/MarkdownPreview/Loadable';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { github } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import 'katex/dist/katex.min.css';
 
 export function ExperimentRunPage() {
   const { Title } = Typography;
@@ -130,6 +134,17 @@ export function ExperimentRunPage() {
             <RecordTable
               title={'Tags'}
               record={experimentRunPageState.run.tags}
+            />
+          </>
+          <>
+            <Title level={2}>Requirements</Title>
+            <SyntaxHighlighter
+              style={github}
+              language={'bash'}
+              PreTag="div"
+              children={experimentRunPageState.run.model_definition?.requirements.join(
+                '\n',
+              )}
             />
           </>
         </ContentCardsLayout>

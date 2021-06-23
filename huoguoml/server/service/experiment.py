@@ -1,7 +1,6 @@
-import os
 from typing import List, Optional
 
-from huoguoml.schema.experiment import ExperimentIn, Experiment
+from huoguoml.schema.experiment import Experiment
 from huoguoml.server.entity.experiment import ExperimentORM
 from huoguoml.server.entity.run import RunORM
 from huoguoml.server.repository.experiment import ExperimentRepository
@@ -25,11 +24,6 @@ class ExperimentService(Service):
     def get_experiment_run(self, experiment_name: str, experiment_run_nr: int) -> Optional[RunORM]:
         return self.repository.get_experiment_run(experiment_name=experiment_name,
                                                   experiment_run_nr=experiment_run_nr)
-
-    def create_experiment(self, experiment_in: ExperimentIn) -> Optional[ExperimentORM]:
-        experiment_orm = self.repository.create_experiment(experiment_in=experiment_in)
-        os.makedirs(os.path.join(self.artifact_dir, experiment_orm.name))
-        return experiment_orm
 
     def update_experiment(self, experiment_name: str, experiment: Experiment) -> Optional[ExperimentORM]:
         experiment_orm = self.repository.update_experiment(experiment_name=experiment_name, experiment=experiment)

@@ -10,13 +10,13 @@ import huoguoml
 
 @click.command()
 @click.option("--server_uri", default="127.0.0.1:8080",
-              help="URI to the HuoguoML tracking server (default: 127.0.0.1:8080")
+              help="URI to the HuoguoML tracking server (default: 127.0.0.1:8080)")
 @click.option("--experiment_name", default="mnist", help="Name of the experiment (default: mnist)")
 @click.option("--learning_rate", default=0.001, help="Learning rate (default: 0.001)")
 @click.option("--batch_size", default=32, help="Batch size (default: 32)")
 @click.option("--epochs", default=5, help="Epochs (default: 10)")
 def main(server_uri: str, experiment_name: str, learning_rate: float, batch_size: int, epochs: int):
-    with huoguoml.start_experiment_run(experiment_name, server_uri) as run:
+    with huoguoml.start_experiment_run(experiment_name, server_uri=server_uri) as run:
         print("START DATA FETCHING")
         (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
         x_train, x_test = x_train / 255.0, x_test / 255.0

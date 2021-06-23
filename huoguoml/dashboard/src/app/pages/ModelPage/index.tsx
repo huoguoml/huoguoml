@@ -32,6 +32,12 @@ export function ModelPage() {
     );
   }
 
+  function toExperimentRunPage() {
+    history.push(
+      `/experiments/${modelPageState.run?.experiment_name}/${modelPageState.run?.run_nr}`,
+    );
+  }
+
   return (
     <>
       {modelPageState.ml_model || modelPageState.isLoading ? (
@@ -69,7 +75,9 @@ export function ModelPage() {
               label="Source experiment run"
               labelStyle={{ fontWeight: 'bold' }}
             >
-              {`${modelPageState.run?.experiment_name}/${modelPageState.run?.run_nr}`}
+              <a onClick={toExperimentRunPage}>
+                {`${modelPageState.run?.experiment_name}/${modelPageState.run?.run_nr}`}
+              </a>
             </Descriptions.Item>
             <Descriptions.Item
               label="Author"

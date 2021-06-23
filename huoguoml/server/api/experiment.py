@@ -2,7 +2,7 @@ from typing import List, Any
 
 from fastapi import APIRouter, HTTPException
 
-from huoguoml.schema.experiment import Experiment, ExperimentIn
+from huoguoml.schema.experiment import Experiment
 from huoguoml.schema.run import Run
 from huoguoml.server.service.experiment import ExperimentService
 
@@ -17,13 +17,6 @@ class ExperimentRouter(APIRouter):
         @self.get("", response_model=List[Experiment])
         async def get_experiments():
             return service.get_experiments()
-
-        @self.post("", response_model=Experiment)
-        async def create_experiment(experiment_in: ExperimentIn):
-            experiment = service.create_experiment(experiment_in=experiment_in)
-            if experiment is None:
-                raise HTTPException(status_code=422)
-            return experiment
 
         @self.get("/{experiment_name}", response_model=Experiment)
         async def get_experiment(experiment_name: str):
