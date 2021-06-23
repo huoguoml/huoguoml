@@ -5,7 +5,7 @@ import os
 
 import click
 
-from huoguoml.constants import HUOGUOML_DEFAULT_SERVICE_HOST, HUOGUOML_DEFAULT_SERVICE_PORT, HUOGUOML_DEFAULT_FOLDER
+from huoguoml.constants import HUOGUOML_DEFAULT_FOLDER
 from huoguoml.server import start_huoguoml_server
 from huoguoml.serving import start_huoguoml_service
 

@@ -18,6 +18,8 @@ fastapi>=0.65:              dev
 aiofiles:                   dev
 uvicorn:                    dev
 python-multipart:           dev
+pyyaml:                     dev
+requests:                   dev
 sqlalchemy:                 dev
 click:                      dev
 pytest:                     test
