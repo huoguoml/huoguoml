@@ -22,7 +22,11 @@ class RunService(Service):
 
     def create_run(self, run_in: RunIn) -> RunORM:
         run_orm = self.repository.create_run(run_in=run_in)
-        os.makedirs(os.path.join(self.artifact_dir, run_orm.experiment_name, str(run_orm.run_nr)))
+        run_dir = os.path.join(self.artifact_dir, run_orm.experiment_name, str(run_orm.run_nr))
+        os.makedirs(run_dir, exist_ok=True)
+
+        save_yaml(yaml_path=os.path.join(run_dir, HUOGUOML_METADATA_FILE),
+                  data=Run.from_orm(run_orm).dict())
         return run_orm
 
     def get_run(self, run_id: int) -> Optional[RunORM]:

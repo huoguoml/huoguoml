@@ -24,7 +24,13 @@ export const MarkdownPreview = memo((props: Props) => {
           {...props}
         />
       ) : (
-        <code className={className} {...props} />
+        <SyntaxHighlighter
+          style={github}
+          language={'bash'}
+          PreTag="div"
+          children={String(children).replace(/\n$/, '')}
+          {...props}
+        />
       );
     },
   };

@@ -16,6 +16,14 @@ class RunRepository(Repository):
         session = self.Session()
         experiment = session.query(ExperimentORM).filter_by(name=run_in.experiment_name).first()
 
+        if not experiment:
+            experiment = ExperimentORM(
+                description="",
+                name=run_in.experiment_name)
+            session.add(experiment)
+            session.commit()
+            session.refresh(experiment)
+
         run = RunORM(
             run_nr=len(experiment.runs) + 1,
             creation_time=time.time(),

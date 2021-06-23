@@ -1,114 +1,51 @@
 """
 The huoguoml.tracking module provides the options for tracking all experiment runs
 """
-import getpass
-import time
-from typing import List, Optional
+import os
+from typing import Optional
 
 import requests
 
-from huoguoml.schema.experiment import Experiment, ExperimentIn
-from huoguoml.schema.run import Run, RunIn, RunStatus
-from huoguoml.util.string import concat_uri, coerce_url
-
-
-class HuoguoMLRun(object):
-
-    def __init__(self,
-                 experiment_name: str,
-                 server_uri: str):
-        self.server_uri = server_uri
-
-        experiment_api = concat_uri(self.server_uri, "api", "experiments")
-        exp_res = requests.get(concat_uri(experiment_api, experiment_name))
-        if exp_res.status_code.real == 404:
-            exp_in = ExperimentIn(name=experiment_name)
-            exp_res = requests.post(
-                experiment_api,
-                json=exp_in.dict())
-        experiment = Experiment.parse_raw(exp_res.text)
-
-        run_in = RunIn(experiment_name=experiment.name, author=getpass.getuser())
-        run_res = requests.post(
-            concat_uri(self.server_uri, "api", "runs"),
-            json=run_in.dict())
-
-        self._run = Run.parse_raw(run_res.text)
-
-    def log_model(self,
-                  model_type: str,
-                  **kwargs):
-        if self._run.model_definition:
-            raise FileExistsError("Model already logged")
-
-        if model_type == "tensorflow":
-            from huoguoml.tracking.tensorflow import log_model
-            model_definition, model_files = log_model(**kwargs)
-        else:
-            raise NotImplementedError("HuoguoML does not support {} at the moment".format(model_type))
-
-        self._run.model_definition = model_definition
-        self._update_experiment_run(model_files)
-
-    def log_parameter(self, parameter_name: str, parameter_value: str):
-        self._run.parameters[parameter_name] = parameter_value
-        self._update_experiment_run()
-
-    def log_metric(self, metric_name: str, metric_value: str):
-        self._run.metrics[metric_name] = metric_value
-        self._update_experiment_run()
-
-    def log_tag(self, tag_name: str, tag_value: str):
-        self._run.tags[tag_name] = tag_value
-        self._update_experiment_run()
-
-    def end_experiment_run(self, failed=False):
-        self._run.finish_time = time.time()
-        self._run.duration = self._run.finish_time - self._run.creation_time
-
-        if failed:
-            self._run.status = RunStatus.failed.value
-        else:
-            self._run.status = RunStatus.completed.value
-
-        self._update_experiment_run()
-
-    def _update_experiment_run(self, files: Optional[List] = None):
-        api = concat_uri(self.server_uri, "api", "runs", str(self._run.id))
-        if files:
-            requests.put(concat_uri(api, "files"), files=files)
-
-        requests.put(
-            api,
-            json=self._run.dict())
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        if exc_value:
-            self.end_experiment_run(failed=True)
-        else:
-            self.end_experiment_run(failed=False)
+from huoguoml.constants import HUOGUOML_DEFAULT_FOLDER
+from huoguoml.tracking.client import HuoguoMLAPIRun, HuoguoMLRun, HuoguoMLLocalRun
+from huoguoml.util.string import coerce_url
 
 
 def start_experiment_run(experiment_name: str,
-                         server_uri: str = "127.0.0.1:8080"):
+                         artifact_dir: Optional[str] = None,
+                         server_uri: Optional[str] = None) -> HuoguoMLRun:
     """
     Start a HuoguoML experiments run and returns it. The return value can be used as a context manager within a with
-    block; otherwise, you must call end_experiment_run() to terminate the current run. In addition the HuoguoML server
-    must be running.
+    block; otherwise, you must call end_experiment_run() to terminate the current run.
+
+    The HugouoML run helps you keep track of your experiment metadata. You can store the metadata in the local file
+    system if artifact_dir is specified, or you can send it directly to a HuoguoML tracking server by specifying a
+    server_uri.
 
     Args:
         experiment_name: Name of the experiment under which to create the experiment run
-        server_uri: Uri to the HuoguoML server. (default: 127.0.0.1:8080)
+        server_uri: Uri to the HuoguoML server e.g 127.0.0.1:8080
+        artifact_dir: The location of the .huoguoml artifact directory for the metadata
+
+    Raises:
+        ConnectionError: If Server cannot be found
+        ValueError: If server_uri and artifact_dir are both given
     """
-    server_uri = coerce_url(server_uri)
+    if artifact_dir and server_uri:
+        raise ValueError("Either server_rui or artifact_dir must be passed, not both")
 
-    server_res = requests.get(server_uri)
-    if server_res.status_code >= 400:
-        raise ConnectionError(
-            "HuoguoML server cannot be found on {}. Start server with 'huoguoml server' and or try another server uri".format(
-                server_uri))
+    elif server_uri:
+        server_uri = coerce_url(server_uri)
 
-    return HuoguoMLRun(server_uri=server_uri, experiment_name=experiment_name)
+        server_res = requests.get(server_uri)
+        if server_res.status_code >= 400:
+            raise ConnectionError(
+                "HuoguoML server cannot be found on {}. Start server with 'huoguoml server' and or try another server "
+                "uri".format(
+                    server_uri))
+
+        return HuoguoMLAPIRun(server_uri=server_uri, experiment_name=experiment_name)
+
+    elif artifact_dir:
+        return HuoguoMLLocalRun(experiment_name=experiment_name,
+                                artifact_dir=os.path.join(artifact_dir, HUOGUOML_DEFAULT_FOLDER))
