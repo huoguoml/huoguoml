@@ -12,15 +12,21 @@ const slice = createSlice({
   reducers: {
     getModelState(state, action: PayloadAction<string>) {
       state.isLoading = true;
+      state.run = undefined;
+      state.ml_model = undefined;
+      state.error = undefined;
     },
     getModelStateSuccess(state, action: PayloadAction<ModelPageState>) {
       state.ml_model = action.payload.ml_model;
       state.run = action.payload.run;
       state.isLoading = false;
+      state.error = undefined;
     },
     getModelStateFailure(state, action: PayloadAction<string>) {
       state.error = action.payload;
       state.isLoading = false;
+      state.run = undefined;
+      state.ml_model = undefined;
     },
   },
 });

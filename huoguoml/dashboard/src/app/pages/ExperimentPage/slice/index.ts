@@ -12,16 +12,20 @@ const slice = createSlice({
   reducers: {
     getExperimentState(state, action: PayloadAction<string>) {
       state.isLoading = true;
+      state.experiment = undefined;
+      state.error = undefined;
     },
     getExperimentStateSuccess(
       state,
       action: PayloadAction<ExperimentPageState>,
     ) {
       state.experiment = action.payload.experiment;
+      state.error = undefined;
       state.isLoading = false;
     },
     getExperimentStateFailure(state, action: PayloadAction<string>) {
       state.error = action.payload;
+      state.experiment = undefined;
       state.isLoading = false;
     },
   },

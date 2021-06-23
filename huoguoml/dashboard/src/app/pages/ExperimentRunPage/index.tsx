@@ -3,20 +3,28 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useExperimentRunPageSlice } from './slice';
 import { selectExperimentRunPage } from './slice/selectors';
-import { Col, Descriptions, message, Row, Space, Typography } from 'antd';
+import {
+  Col,
+  Descriptions,
+  message,
+  Result,
+  Row,
+  Space,
+  Typography,
+} from 'antd';
 import { RecordTable } from '../../components/tables/RecordTable/Loadable';
 import { ContentCardsLayout } from '../../layout/ContentCardsLayout/Loadable';
 import { StatusTag } from '../../components/StatusTag/Loadable';
 import { RegisterModelButton } from '../../components/buttons/RegisterModelButton/Loadable';
 import { MarkdownEditor } from '../../components/MarkdownEditor/Loadable';
 import { secondsToTime, timestampToDate } from '../../../utils/time';
-import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 import axios from 'axios';
 import { RUN_URI } from '../../../constants';
-import { MarkdownPreview } from '../../components/MarkdownPreview/Loadable';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { github } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import 'katex/dist/katex.min.css';
+import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
+import { Helmet } from 'react-helmet-async';
 
 export function ExperimentRunPage() {
   const { Title } = Typography;
@@ -49,7 +57,12 @@ export function ExperimentRunPage() {
 
   return (
     <>
-      {experimentRunPageState.run ? (
+      <Helmet>
+        <title>HuoguoML | Experiment runs</title>
+        <meta name="description" content="Experiment runs" />
+      </Helmet>
+      {experimentRunPageState.error === undefined &&
+      experimentRunPageState.run ? (
         <ContentCardsLayout
           contentUri={['experiments', experimentName, runNr]}
           skipUri={['experiments']}
@@ -136,20 +149,34 @@ export function ExperimentRunPage() {
               record={experimentRunPageState.run.tags}
             />
           </>
-          <>
-            <Title level={2}>Requirements</Title>
-            <SyntaxHighlighter
-              style={github}
-              language={'bash'}
-              PreTag="div"
-              children={experimentRunPageState.run.model_definition?.requirements.join(
-                '\n',
-              )}
-            />
-          </>
+
+          {experimentRunPageState.run.model_definition && (
+            <>
+              <Title level={2}>Requirements</Title>
+              <SyntaxHighlighter
+                style={github}
+                language={'bash'}
+                PreTag="div"
+                children={
+                  experimentRunPageState.run.model_definition?.requirements.join(
+                    '\n',
+                  ) || ''
+                }
+              />
+            </>
+          )}
         </ContentCardsLayout>
       ) : (
-        <NotFoundPage />
+        <ContentCardLayout
+          contentUri={['experiments', experimentName, runNr]}
+          skipUri={['experiments']}
+        >
+          <Result
+            status="404"
+            title="404"
+            subTitle={experimentRunPageState.error}
+          />
+        </ContentCardLayout>
       )}
     </>
   );

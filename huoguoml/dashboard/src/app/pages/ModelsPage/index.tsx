@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useModelsPageSlice } from './slice';
 import { selectModelsPageState } from './slice/selectors';
 import { useHistory, useParams } from 'react-router-dom';
-import { Typography } from 'antd';
+import { Result, Typography } from 'antd';
 import { ContentCardsLayout } from '../../layout/ContentCardsLayout/Loadable';
 import { ModelsTable } from '../../components/tables/ModelsTable/Loadable';
-import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
+import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
+import { Helmet } from 'react-helmet-async';
 
 export function ModelsPage() {
   const { mlModelName } = useParams<Record<string, string>>();
@@ -28,7 +29,12 @@ export function ModelsPage() {
 
   return (
     <>
-      {modelsPageState.ml_models ? (
+      <Helmet>
+        <title>HuoguoML | Models</title>
+        <meta name="description" content="Models" />
+      </Helmet>
+
+      {modelsPageState.error === undefined && modelsPageState.ml_models ? (
         <ContentCardsLayout contentUri={['models', mlModelName]}>
           <Title level={1}>Model: {mlModelName}</Title>
 
@@ -41,7 +47,6 @@ export function ModelsPage() {
               onClick={toModelPage}
             />
           </>
-
           <>
             <Title level={2}>Staging models</Title>
             <ModelsTable
@@ -61,7 +66,9 @@ export function ModelsPage() {
           </>
         </ContentCardsLayout>
       ) : (
-        <NotFoundPage />
+        <ContentCardLayout contentUri={['models', mlModelName]}>
+          <Result status="404" title="404" subTitle={modelsPageState.error} />
+        </ContentCardLayout>
       )}
     </>
   );

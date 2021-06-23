@@ -3,12 +3,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useModelPageSlice } from './slice';
 import { selectModelPageState } from './slice/selectors';
 import { useHistory, useParams } from 'react-router-dom';
-import { Button, Col, Descriptions, Row, Space, Typography } from 'antd';
+import {
+  Button,
+  Col,
+  Descriptions,
+  Result,
+  Row,
+  Space,
+  Typography,
+} from 'antd';
 import { ContentCardLayout } from '../../layout/ContentCardLayout/Loadable';
-import { NotFoundPage } from '../../components/NotFoundPage/Loadable';
 import { timestampToDate } from '../../../utils/time';
 import { ModelTag } from '../../components/ModelTag/Loadable';
 import { modelTagToString } from '../../../utils';
+import { Helmet } from 'react-helmet-async';
 
 export function ModelPage() {
   const { Title } = Typography;
@@ -24,6 +32,7 @@ export function ModelPage() {
   }, [dispatch, mlModelName, mlModelVersion, actions]);
 
   let history = useHistory();
+
   function toModelComparePage() {
     history.push(
       `/models/${mlModelName}/compare/${
@@ -40,7 +49,11 @@ export function ModelPage() {
 
   return (
     <>
-      {modelPageState.ml_model || modelPageState.isLoading ? (
+      <Helmet>
+        <title>HuoguoML | Model</title>
+        <meta name="description" content="Model" />
+      </Helmet>
+      {modelPageState.error === undefined ? (
         <ContentCardLayout contentUri={['models', mlModelName, mlModelVersion]}>
           <Row justify={'space-between'} align={'top'}>
             <Col>
@@ -88,7 +101,9 @@ export function ModelPage() {
           </Descriptions>
         </ContentCardLayout>
       ) : (
-        <NotFoundPage />
+        <ContentCardLayout contentUri={['models', mlModelName, mlModelVersion]}>
+          <Result status="404" title="404" subTitle={modelPageState.error} />
+        </ContentCardLayout>
       )}
     </>
   );
